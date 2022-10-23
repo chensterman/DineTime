@@ -9,3 +9,4 @@ export 'package:dinetime_mobile_mvp/theme/components/inputtext.dart';
 export 'package:dinetime_mobile_mvp/theme/components/inputpassword.dart';
 export 'package:dinetime_mobile_mvp/theme/components/slidermodule.dart';
 export 'package:dinetime_mobile_mvp/theme/components/priceselector.dart';
+export 'package:dinetime_mobile_mvp/theme/components/progressbar.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystemdemo.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/getrestaurants.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: dineTimeColorScheme,
         textTheme: dineTimeTypography,
       ),
-      home: const MyHomePage(title: 'DineTime'),
+      home: const DesignSystem(),
     );
   }
 }
@@ -58,7 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(_restaurantList);
     return Scaffold(
       body: Form(
         key: _formKey,

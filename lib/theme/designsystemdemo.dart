@@ -1,3 +1,4 @@
+import 'package:dinetime_mobile_mvp/theme/components/bottomnavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 
@@ -25,11 +26,31 @@ class _DesignSystemState extends State<DesignSystem> {
   ];
   final List<bool> _selectedPrice = <bool>[false, false, false, false];
 
+  // BottomNavBar
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("DineTime Design System"),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.saved_search), label: 'My Lists'),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
@@ -164,6 +185,18 @@ class _DesignSystemState extends State<DesignSystem> {
                       });
                     },
                   ),
+                  const SizedBox(height: 20.0),
+                  const ProgressBar(percentCompletion: 0.0),
+                  const SizedBox(height: 20.0),
+                  const ProgressBar(percentCompletion: 0.2),
+                  const SizedBox(height: 20.0),
+                  const ProgressBar(percentCompletion: 0.4),
+                  const SizedBox(height: 20.0),
+                  const ProgressBar(percentCompletion: 0.6),
+                  const SizedBox(height: 20.0),
+                  const ProgressBar(percentCompletion: 0.8),
+                  const SizedBox(height: 20.0),
+                  const ProgressBar(percentCompletion: 1.0),
                 ],
               ),
             ),
