@@ -52,7 +52,7 @@ class _DesignSystemState extends State<DesignSystem> {
         onTap: _onItemTapped,
       ),
       body: Container(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Form(
           key: _formKey,
           child: Center(
@@ -206,6 +206,8 @@ class _DesignSystemState extends State<DesignSystem> {
                   const ProgressBar(percentCompletion: 0.8),
                   const SizedBox(height: 20.0),
                   const ProgressBar(percentCompletion: 1.0),
+                  const SizedBox(height: 20.0),
+                  const RestaurantCard(),
                   const SizedBox(height: 20.0),
                   ListCard(
                     listTitle: 'My Favorites',
