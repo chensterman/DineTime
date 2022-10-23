@@ -39,13 +39,17 @@ class _InputPasswordState extends State<InputPassword> {
         obscureText: passObscure,
         validator: widget.validator,
         onChanged: widget.onChanged,
+        style: Theme.of(context)
+            .textTheme
+            .bodyText2
+            ?.copyWith(color: Theme.of(context).colorScheme.primary),
         // Additional styling added to the input form field
         decoration: InputDecoration(
           // Centers the hinttext better
           contentPadding:
               const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           hintText: widget.hintText,
-          hintStyle: Theme.of(context).textTheme.bodyText1,
+          hintStyle: Theme.of(context).textTheme.bodyText2,
           // Border colors when normal and on error
           border: OutlineInputBorder(
               borderRadius: componentShape,

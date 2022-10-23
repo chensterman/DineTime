@@ -1,4 +1,3 @@
-import 'package:dinetime_mobile_mvp/theme/components/bottomnavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 
@@ -145,7 +144,7 @@ class _DesignSystemState extends State<DesignSystem> {
                   const SizedBox(height: 10),
                   InputText(
                     validator: (val) =>
-                        val!.isEmpty ? 'Please enter an something' : null,
+                        val!.isEmpty ? 'Please enter a something' : null,
                     onChanged: (val) {
                       _formKey.currentState!.validate();
                     },
@@ -160,6 +159,16 @@ class _DesignSystemState extends State<DesignSystem> {
                       _formKey.currentState!.validate();
                     },
                     hintText: 'Password Input',
+                  ),
+                  const SizedBox(height: 10),
+                  InputText(
+                    icon: const Icon(Icons.search),
+                    validator: (val) =>
+                        val!.isEmpty ? 'Please enter a something' : null,
+                    onChanged: (val) {
+                      _formKey.currentState!.validate();
+                    },
+                    hintText: 'Search Input',
                   ),
                   const SizedBox(height: 10),
                   SliderModule(
@@ -197,6 +206,19 @@ class _DesignSystemState extends State<DesignSystem> {
                   const ProgressBar(percentCompletion: 0.8),
                   const SizedBox(height: 20.0),
                   const ProgressBar(percentCompletion: 1.0),
+                  const SizedBox(height: 20.0),
+                  ListCard(
+                    listTitle: 'My Favorites',
+                    listNumItems: 60,
+                    onTap: () => {},
+                  ),
+                  const SizedBox(height: 20.0),
+                  ListCard(
+                    listTitle: 'Vegan Food',
+                    listNumItems: 22,
+                    listCreateDate: DateTime(2022, 9, 7),
+                    onTap: () => {},
+                  ),
                 ],
               ),
             ),

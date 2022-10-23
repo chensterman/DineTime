@@ -42,7 +42,7 @@ class InputText extends StatelessWidget {
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
             hintText: hintText,
             hintStyle: Theme.of(context).textTheme.bodyText2,
-            icon: icon,
+            prefixIcon: icon,
             // Border colors when normal and on error
             border: OutlineInputBorder(
                 borderRadius: componentShape,
