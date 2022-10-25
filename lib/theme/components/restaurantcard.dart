@@ -10,7 +10,7 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get size of screen
     Size size = MediaQuery.of(context).size;
-    double width = size.width * 0.95;
+    double width = size.width * 0.9;
     double height = size.height * 0.7;
     return ClipRRect(
       borderRadius: BorderRadius.circular(20.0),
