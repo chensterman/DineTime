@@ -63,21 +63,31 @@ class ListCard extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .subtitle1
-                              ?.copyWith(fontSize: 16.0)),
+                              ?.copyWith(fontSize: 14.0)),
                       if (listCreateDate != null)
                         Text("  -  ",
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1
-                                ?.copyWith(fontSize: 16.0)),
+                                ?.copyWith(fontSize: 14.0)),
                       if (listCreateDate != null)
                         Text("Created $difference days ago",
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1
-                                ?.copyWith(fontSize: 16.0)),
+                                ?.copyWith(fontSize: 14.0)),
                     ]),
                   ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Icon(Icons.arrow_forward_ios_rounded,
+                      color: Theme.of(context).colorScheme.onSurface),
                 ),
               ),
             ),

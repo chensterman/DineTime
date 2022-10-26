@@ -37,7 +37,7 @@ class _FindYourFoodState extends State<FindYourFood> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.saved_search), label: 'My Lists'),
+                icon: Icon(Icons.favorite_border_rounded), label: 'My Lists'),
           ],
         ));
   }
@@ -93,7 +93,101 @@ class _FindYourFoodState extends State<FindYourFood> {
               icon: Icon(Icons.search),
               hintText: 'Search for a restaurant or list',
             ),
+            const SizedBox(height: 20.0),
+            ListCard(
+              listTitle: 'My Favorites',
+              listNumItems: 60,
+              onTap: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          foodList(context, 60, null, 'My Favorites')),
+                )
+              },
+            ),
+            const SizedBox(height: 20.0),
+            ListCard(
+              listTitle: 'Vegan Food',
+              listNumItems: 22,
+              listCreateDate: DateTime(2022, 9, 7),
+              onTap: () => {},
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget foodList(BuildContext context, int listNumItems,
+      DateTime? listCreateDate, String listTitle) {
+    // Get the time difference from creation date if exists
+    int difference = 0;
+    if (listCreateDate != null) {
+      final now = DateTime.now();
+      difference = now.difference(listCreateDate).inDays;
+    }
+    double height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                InkWell(
+                  child: Row(children: [
+                    Icon(
+                      Icons.arrow_back_ios_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 32.0,
+                    ),
+                    Text('My Lists',
+                        style: Theme.of(context).textTheme.subtitle1),
+                  ]),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                InkWell(
+                  child: Icon(
+                    Icons.ios_share_rounded,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 32.0,
+                  ),
+                  onTap: () {},
+                ),
+              ]),
+              const SizedBox(height: 20.0),
+              Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    width: 100.0,
+                    height: 100.0,
+                    decoration: BoxDecoration(
+                      image: const DecorationImage(
+                        image: AssetImage('lib/assets/dinetime-orange.png'),
+                      ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(40.0),
+                    ),
+                  )),
+              const SizedBox(height: 10.0),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text("$listNumItems Items",
+                    style: Theme.of(context).textTheme.subtitle1),
+                if (listCreateDate != null)
+                  Text("  -  ", style: Theme.of(context).textTheme.subtitle1),
+                if (listCreateDate != null)
+                  Text("Created $difference days ago",
+                      style: Theme.of(context).textTheme.subtitle1),
+              ]),
+              Text(listTitle, style: Theme.of(context).textTheme.headline1),
+              const SizedBox(height: 10.0),
+            ],
+          ),
         ),
       ),
     );

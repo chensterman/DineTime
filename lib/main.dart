@@ -1,4 +1,4 @@
-import 'package:dinetime_mobile_mvp/views/fyf/fyf.dart';
+import 'package:dinetime_mobile_mvp/views/fyf.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystemdemo.dart';
