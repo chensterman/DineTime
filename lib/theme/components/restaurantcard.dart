@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Cards that display list items in saved.
+// Restaurant info display card
 class RestaurantCard extends StatelessWidget {
   const RestaurantCard({
     super.key,

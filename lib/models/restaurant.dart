@@ -2,23 +2,31 @@ import 'package:flutter/material.dart';
 
 // Restaurant data model
 class Restaurant {
-  final String? name;
-  final String? address;
-  final String? website;
+  // Location link?
   final String? phoneNumber;
+  final String? websiteURL;
   final ImageProvider<Object>? image;
+  final String? name;
+  final String? cuisine;
   final int? priceLevel;
-  final num? rating;
-  final bool? openNow;
+  // final String? dineIn;
+  // final double? rating;
+  // final int? numRatings;
+  final double? distance;
+  final String? openHours;
+  final List<ImageProvider<Object>>? featuredPhotos;
+  final List<String>? dietaryOptions;
 
   Restaurant({
-    this.name,
-    this.address,
-    this.website,
     this.phoneNumber,
+    this.websiteURL,
     this.image,
+    this.name,
+    this.cuisine,
     this.priceLevel,
-    this.rating,
-    this.openNow,
+    this.distance,
+    this.openHours,
+    this.featuredPhotos,
+    this.dietaryOptions,
   });
 }

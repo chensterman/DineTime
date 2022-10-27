@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Cards that display list items in saved.
+// Cards that display list items in saved
 class ListCard extends StatelessWidget {
   final ImageProvider<Object>? listImage;
   final String listTitle;
@@ -24,10 +24,12 @@ class ListCard extends StatelessWidget {
       final now = DateTime.now();
       difference = now.difference(listCreateDate!).inDays;
     }
+    // Card item
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
+      // Tappable portion of card
       child: InkWell(
         onTap: onTap,
         child: Row(
@@ -39,6 +41,7 @@ class ListCard extends StatelessWidget {
                   height: 50.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
+                      // Display image based on availability of user uploaded image
                       image: listImage != null
                           ? listImage!
                           : const AssetImage('lib/assets/dinetime-orange.png'),

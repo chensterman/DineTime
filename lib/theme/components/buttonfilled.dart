@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Filled button used across multiple forms.
+// Filled button used across multiple forms
 class ButtonFilled extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
