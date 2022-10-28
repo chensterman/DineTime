@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Bottom navigation bar.
+// Bottom navigation bar
 class BottomNavBar extends StatelessWidget {
   final List<BottomNavigationBarItem> items;
   final int currentIndex;
@@ -22,6 +22,7 @@ class BottomNavBar extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.25),
         child: BottomNavigationBar(
+          iconSize: 32.0,
           items: items,
           elevation: 0.0,
           type: BottomNavigationBarType.fixed,

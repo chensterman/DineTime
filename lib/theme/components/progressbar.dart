@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-// Progress bar indicator.
+// Progress bar indicator
 class ProgressBar extends StatelessWidget {
-  final double percentCompletion;
+  final double percentCompletion; // On scale 0.0 - 1.0
   const ProgressBar({
     super.key,
     required this.percentCompletion,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Outlined button used across multiple forms.
+// Outlined button used across multiple forms
 class ButtonOutlined extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
