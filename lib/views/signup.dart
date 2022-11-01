@@ -1,6 +1,10 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/views/fyf.dart';
+import 'package:dinetime_mobile_mvp/views/verifyemail.dart';
 import 'package:flutter/material.dart';
+import '../services/auth.dart';
 
+// Sign up page
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -11,6 +15,11 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   // Form validation
   final _formKey = GlobalKey<FormState>();
+
+  // Text input states
+  String email = '';
+  String password = '';
+  String confirmPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +44,78 @@ class _SignUpState extends State<SignUp> {
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                   const SizedBox(height: 30.0),
-                  const InputText(hintText: "Enter your email address"),
+                  // Email text input widget
+                  InputText(
+                    hintText: "Enter your email address",
+                    // Triggers error on button press below
+                    validator: (value) {
+                      if (value!.isEmpty || !value.contains('@')) {
+                        return "Please enter a valid email";
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        email = value;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 10.0),
-                  const InputPassword(hintText: "Create password"),
+                  // Password input text widget
+                  InputPassword(
+                    hintText: "Create your password",
+                    // Triggers error on button press below
+                    validator: (value) {
+                      if (value!.length < 8) {
+                        return "Password must be at least eight characters";
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        password = value;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 10.0),
-                  const InputPassword(hintText: "Confirm password"),
+                  // Confirm password input text widget
+                  InputPassword(
+                    hintText: "Confirm password",
+                    // Triggers error on button press below
+                    validator: (value) {
+                      if (value != password) {
+                        return "Passwords must match";
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        confirmPassword = value;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 30.0),
-                  const ButtonFilled(text: "Sign Up"),
+                  ButtonFilled(
+                    text: "Sign Up",
+                    // Firebase auth login and route to next page
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        // Sign in using Firebase
+                        // TODO: generate error dialog using status
+                        int status =
+                            await AuthService().signUp(email, password);
+                        if (status == 0) {
+                          // ignore: use_build_context_synchronously
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    VerifyEmail(email: email)),
+                          );
+                        }
+                      }
+                    },
+                  ),
                   const SizedBox(height: 10.0),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,

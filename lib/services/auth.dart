@@ -24,6 +24,7 @@ class AuthService {
       // Return 0 on success.
       return 0;
     } catch (e) {
+      print(e);
       // Return 1 on error.
       return 1;
     }
