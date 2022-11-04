@@ -82,20 +82,25 @@ class _SignInState extends State<SignIn> {
                     text: "Sign In",
                     // Firebase auth login and route to next page
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        // Sign in using Firebase
-                        // TODO: generate error dialog using status
-                        int status =
-                            await AuthService().signIn(email, password);
-                        if (status == 0) {
-                          // ignore: use_build_context_synchronously
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const FindYourFood()),
-                          );
-                        }
-                      }
+                      // if (_formKey.currentState!.validate()) {
+                      //   // Sign in using Firebase
+                      //   // TODO: generate error dialog using status
+                      //   int status =
+                      //       await AuthService().signIn(email, password);
+                      //   if (status == 0) {
+                      //     // ignore: use_build_context_synchronously
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => const FindYourFood()),
+                      //     );
+                      //   }
+                      // }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FindYourFood()),
+                      );
                     },
                   ),
                   const SizedBox(height: 10.0),
