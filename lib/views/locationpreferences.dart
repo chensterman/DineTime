@@ -1,6 +1,7 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/views/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 class LocationPreferences extends StatefulWidget {
   const LocationPreferences({Key? key}) : super(key: key);
@@ -61,11 +62,28 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                 const SizedBox(height: 60.0),
                 ButtonFilled(
                   text: "Allow Location",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Welcome()),
-                    );
+                  onPressed: () async {
+                    Location location = Location();
+                    bool serviceEnabled = await location.serviceEnabled();
+                    if (!serviceEnabled) {
+                      serviceEnabled = await location.requestService();
+                    }
+                    print(serviceEnabled);
+                    PermissionStatus permissionGranted =
+                        await location.hasPermission();
+                    print(permissionGranted);
+                    if (permissionGranted == PermissionStatus.denied) {
+                      print("test");
+                      permissionGranted = await location.requestPermission();
+                    }
+                    if (permissionGranted == PermissionStatus.granted &&
+                        mounted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Welcome()),
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 30.0),
@@ -73,7 +91,13 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Welcome()),
+                            );
+                          },
                           child: Text(
                             'Not Now',
                             style: Theme.of(context).textTheme.button?.copyWith(

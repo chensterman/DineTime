@@ -1,4 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/views/fyf.dart';
 import 'package:flutter/material.dart';
 
 class Welcome extends StatelessWidget {
@@ -40,7 +41,14 @@ class Welcome extends StatelessWidget {
                   const SizedBox(height: 60.0),
                   ButtonOutlined(
                     text: "Let's Go!",
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FindYourFood(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

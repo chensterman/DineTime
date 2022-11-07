@@ -100,27 +100,19 @@ class _SignUpState extends State<SignUp> {
                     text: "Sign Up",
                     // Firebase auth login and route to next page
                     onPressed: () async {
-                      // if (_formKey.currentState!.validate()) {
-                      //   // Sign in using Firebase
-                      //   // TODO: generate error dialog using status
-                      //   int status =
-                      //       await AuthService().signUp(email, password);
-                      //   if (status == 0) {
-                      //     // ignore: use_build_context_synchronously
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) =>
-                      //               VerifyEmail(email: email)),
-                      //     );
-                      //   }
-                      // }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VerifyEmail(email: email),
-                        ),
-                      );
+                      if (_formKey.currentState!.validate()) {
+                        // Sign in using Firebase
+                        int status =
+                            await AuthService().signUp(email, password);
+                        if (status == 0 && mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    VerifyEmail(email: email)),
+                          );
+                        }
+                      }
                     },
                   ),
                   const SizedBox(height: 10.0),

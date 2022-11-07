@@ -21,14 +21,14 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   @override
   void initState() {
-    // // Firebase function: sends verification email
-    // user = auth.currentUser!;
-    // user.sendEmailVerification();
+    // Firebase function: sends verification email
+    user = auth.currentUser!;
+    user.sendEmailVerification();
 
-    // // Check every 5 seconds for verification
-    // timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-    //   checkEmailVerified();
-    // });
+    // Check every 5 seconds for verification
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      checkEmailVerified();
+    });
     super.initState();
   }
 
@@ -67,7 +67,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                   Text(
-                    'test@gmail.com',
+                    widget.email,
                     style: Theme.of(context)
                         .textTheme
                         .subtitle1
@@ -75,12 +75,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   ),
                 ]),
                 const SizedBox(height: 30.0),
+                // TODO: Firebase limits how many times a new account can have this email sent.
                 ButtonOutlined(
                   text: 'Resend Email',
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const EmailVerified()));
-                  },
+                  onPressed: () {},
                 )
               ],
             ),

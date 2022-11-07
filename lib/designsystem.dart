@@ -3,6 +3,7 @@ library dine_time_design;
 
 export 'package:dinetime_mobile_mvp/theme/colorscheme.dart';
 export 'package:dinetime_mobile_mvp/theme/typography.dart';
+export 'package:dinetime_mobile_mvp/theme/components/dietaryselect.dart';
 export 'package:dinetime_mobile_mvp/theme/components/buttonfilled.dart';
 export 'package:dinetime_mobile_mvp/theme/components/buttonoutlined.dart';
 export 'package:dinetime_mobile_mvp/theme/components/inputtext.dart';
