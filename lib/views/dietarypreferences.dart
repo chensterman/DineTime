@@ -143,10 +143,16 @@ class _DietaryPreferencesState extends State<DietaryPreferences> {
                 ButtonFilled(
                   text: "Apply",
                   onPressed: () {
+                    Map dietaryData = {};
+                    for (int i = 0; i < listDiets.length; i++) {
+                      dietaryData[listDiets[i]] = selectedDiets[i];
+                    }
+                    Map<String, dynamic> userData = {'dietary': dietaryData};
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DiningPreferences(),
+                        builder: (context) =>
+                            DiningPreferences(userData: userData),
                       ),
                     );
                   },

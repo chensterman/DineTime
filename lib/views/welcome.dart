@@ -1,9 +1,16 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/auth.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/views/fyf.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Welcome extends StatelessWidget {
-  const Welcome({super.key});
+  final Map<String, dynamic> userData;
+  const Welcome({
+    super.key,
+    required this.userData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +48,21 @@ class Welcome extends StatelessWidget {
                   const SizedBox(height: 60.0),
                   ButtonOutlined(
                     text: "Let's Go!",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FindYourFood(),
-                        ),
-                      );
+                    onPressed: () async {
+                      User? currentUser = AuthService().getCurrentUser();
+                      int status = 1;
+                      if (currentUser != null) {
+                        DatabaseService(uid: currentUser.uid)
+                            .updateUser(userData);
+                      }
+                      if (status == 0) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FindYourFood(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ],

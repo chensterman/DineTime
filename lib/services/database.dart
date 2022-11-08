@@ -18,18 +18,32 @@ class DatabaseService {
 
   // Create user:
   //  Add user document to 'users' and initialize fields.
-  Future<void> createUser() async {
-    await userCollection
-        .doc(uid)
-        .set({
-          'cuisine': null,
-          'zipcode': null,
-          'distance-min': null,
-          'distance-max': null,
-          'price': null,
-          'dietary': null,
-        })
-        .then((value) => print("User added"))
-        .catchError((error) => print("Failed"));
+  Future<int> createUser() async {
+    try {
+      await userCollection.doc(uid).set({
+        'cuisine': null,
+        'zipcode': null,
+        'distance-min': null,
+        'distance-max': null,
+        'price': null,
+        'dietary': null,
+      });
+      return 0;
+    } catch (e) {
+      return 1;
+    }
+  }
+
+  Future<int> updateUser(Map<String, dynamic> userData) async {
+    try {
+      await userCollection
+          .doc(uid)
+          .update(userData)
+          .then((value) => print("User updated"))
+          .catchError((error) => print("Failed"));
+      return 0;
+    } catch (e) {
+      return 1;
+    }
   }
 }

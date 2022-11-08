@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
 class LocationPreferences extends StatefulWidget {
-  const LocationPreferences({Key? key}) : super(key: key);
+  final Map<String, dynamic> userData;
+  const LocationPreferences({
+    Key? key,
+    required this.userData,
+  }) : super(key: key);
 
   @override
   State<LocationPreferences> createState() => _LocationPreferencesState();
@@ -81,7 +85,8 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Welcome()),
+                            builder: (context) =>
+                                Welcome(userData: widget.userData)),
                       );
                     }
                   },
@@ -91,13 +96,7 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Welcome()),
-                            );
-                          },
+                          onTap: () {},
                           child: Text(
                             'Not Now',
                             style: Theme.of(context).textTheme.button?.copyWith(

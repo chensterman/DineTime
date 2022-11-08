@@ -3,7 +3,8 @@ import 'package:dinetime_mobile_mvp/views/locationpreferences.dart';
 import 'package:flutter/material.dart';
 
 class DiningPreferences extends StatefulWidget {
-  const DiningPreferences({Key? key}) : super(key: key);
+  final Map<String, dynamic> userData;
+  const DiningPreferences({Key? key, required this.userData}) : super(key: key);
 
   @override
   State<DiningPreferences> createState() => _DiningPreferencesState();
@@ -11,6 +12,8 @@ class DiningPreferences extends StatefulWidget {
 
 class _DiningPreferencesState extends State<DiningPreferences> {
   // Form state values
+  String cuisine = "";
+  String zipcode = "";
   RangeValues _sliderValues = const RangeValues(0.0, 50.0);
   static const List<Widget> _dollarSigns = <Widget>[
     Text('\$'),
@@ -44,14 +47,28 @@ class _DiningPreferencesState extends State<DiningPreferences> {
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 const SizedBox(height: 20.0),
-                const InputText(hintText: "What are you hungry for?"),
+                InputText(
+                  hintText: "What are you hungry for?",
+                  onChanged: (value) {
+                    setState(() {
+                      cuisine = value;
+                    });
+                  },
+                ),
                 const SizedBox(height: 30.0),
                 Text(
                   "Zipcode",
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 const SizedBox(height: 20.0),
-                const InputText(hintText: "Zipcode"),
+                InputText(
+                  hintText: "Zipcode",
+                  onChanged: ((value) {
+                    setState(() {
+                      zipcode = value;
+                    });
+                  }),
+                ),
                 const SizedBox(height: 30.0),
                 Text(
                   "Distance",
@@ -95,10 +112,19 @@ class _DiningPreferencesState extends State<DiningPreferences> {
                 ButtonFilled(
                   text: "Apply",
                   onPressed: () {
+                    Map priceData = {};
+                    for (int i = 0; i < _dollarSigns.length; i++) {
+                      priceData[_dollarSigns[i]] = _selectedPrice[i];
+                    }
+                    widget.userData['price'] = priceData;
+                    widget.userData['cuisine'] = cuisine;
+                    widget.userData['zipcode'] = zipcode;
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const LocationPreferences(),
+                        builder: (context) =>
+                            LocationPreferences(userData: widget.userData),
                       ),
                     );
                   },

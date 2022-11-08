@@ -1,7 +1,7 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/views/emailverified.dart';
-import 'package:dinetime_mobile_mvp/views/fyf.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/views/verifyemail.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth.dart';
 
@@ -104,6 +104,11 @@ class _SignUpState extends State<SignUp> {
                         // Sign in using Firebase
                         int status =
                             await AuthService().signUp(email, password);
+                        User? currentUser = AuthService().getCurrentUser();
+                        if (currentUser != null) {
+                          status = await DatabaseService(uid: currentUser.uid)
+                              .createUser();
+                        }
                         if (status == 0 && mounted) {
                           Navigator.push(
                             context,
