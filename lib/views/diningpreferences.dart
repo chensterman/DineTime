@@ -2,6 +2,10 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/views/locationpreferences.dart';
 import 'package:flutter/material.dart';
 
+// Page to input dining preference info
+// TODO:
+//  Form validation for certain fields
+//  What are we doing with zipcodes?
 class DiningPreferences extends StatefulWidget {
   final Map<String, dynamic> userData;
   const DiningPreferences({Key? key, required this.userData}) : super(key: key);
@@ -112,14 +116,20 @@ class _DiningPreferencesState extends State<DiningPreferences> {
                 ButtonFilled(
                   text: "Apply",
                   onPressed: () {
+                    // Add preferece info to user data map
+                    widget.userData['cuisine'] = cuisine;
+                    widget.userData['zipcode'] = zipcode;
                     Map priceData = {};
                     for (int i = 0; i < _dollarSigns.length; i++) {
                       priceData[_dollarSigns[i]] = _selectedPrice[i];
                     }
-                    widget.userData['price'] = priceData;
-                    widget.userData['cuisine'] = cuisine;
-                    widget.userData['zipcode'] = zipcode;
-
+                    widget.userData['prices'] = priceData;
+                    Map distanceData = {
+                      'min': _sliderValues.start,
+                      'max': _sliderValues.end,
+                    };
+                    widget.userData['distances'] = distanceData;
+                    // Go to next page and pass user data map in
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -130,6 +140,7 @@ class _DiningPreferencesState extends State<DiningPreferences> {
                   },
                 ),
                 const SizedBox(height: 30.0),
+                // Widget to go to previous page
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

@@ -3,6 +3,9 @@ import 'package:dinetime_mobile_mvp/views/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
+// Page to enable location settings
+// TODO:
+//  Error handling widget (for permission denied)
 class LocationPreferences extends StatefulWidget {
   final Map<String, dynamic> userData;
   const LocationPreferences({
@@ -67,19 +70,19 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                 ButtonFilled(
                   text: "Allow Location",
                   onPressed: () async {
+                    // Enable location service
                     Location location = Location();
                     bool serviceEnabled = await location.serviceEnabled();
                     if (!serviceEnabled) {
                       serviceEnabled = await location.requestService();
                     }
-                    print(serviceEnabled);
+                    // Get user permission for location tracking
                     PermissionStatus permissionGranted =
                         await location.hasPermission();
-                    print(permissionGranted);
                     if (permissionGranted == PermissionStatus.denied) {
-                      print("test");
                       permissionGranted = await location.requestPermission();
                     }
+                    // Go to next page if permission granted and pass user data map in
                     if (permissionGranted == PermissionStatus.granted &&
                         mounted) {
                       Navigator.push(
@@ -92,11 +95,19 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                   },
                 ),
                 const SizedBox(height: 30.0),
+                // Widget to push to next page on permission denied
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Welcome(userData: widget.userData)),
+                            );
+                          },
                           child: Text(
                             'Not Now',
                             style: Theme.of(context).textTheme.button?.copyWith(

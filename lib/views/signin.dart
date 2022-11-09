@@ -5,6 +5,9 @@ import 'package:dinetime_mobile_mvp/views/signup.dart';
 import 'package:flutter/material.dart';
 
 // Sign in page for the app
+// TODO:
+//  Error handling widget
+//  Progress indicator
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
@@ -83,15 +86,20 @@ class _SignInState extends State<SignIn> {
                     // Firebase auth login and route to next page
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Sign in using Firebase
-                        int status =
-                            await AuthService().signIn(email, password);
-                        if (status == 0 && mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const FindYourFood()),
-                          );
+                        // Attempt to sign into Firebase
+                        try {
+                          // Sign in using Firebase
+                          await AuthService().signIn(email, password);
+                          // Go to next page
+                          if (mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const FindYourFood()),
+                            );
+                          }
+                        } catch (e) {
+                          print(e);
                         }
                       }
                     },

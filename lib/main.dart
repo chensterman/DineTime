@@ -43,6 +43,7 @@ class Start extends StatelessWidget {
 
   @override
   Widget build(context) {
+    // Timer to display DineTime logo before routing to AuthStateCheck
     Timer(
       const Duration(seconds: 5),
       () => {
@@ -53,6 +54,7 @@ class Start extends StatelessWidget {
         )
       },
     );
+    // DineTime logo displayed
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: const Center(
@@ -71,6 +73,7 @@ class AuthStateCheck extends StatelessWidget {
   @override
   Widget build(context) {
     return StreamBuilder<User?>(
+      // Stream keeps track of user events
       stream: AuthService().user(),
       builder: ((context, snapshot) {
         if (snapshot.hasData) {

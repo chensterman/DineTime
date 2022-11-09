@@ -1,11 +1,13 @@
 import 'dart:async';
-import 'package:dinetime_mobile_mvp/theme/components/buttonoutlined.dart';
-import 'package:dinetime_mobile_mvp/views/emailverified.dart';
+import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/views/emailverified.dart';
 
-import '../theme/components/progressbar.dart';
-
+// Email verification page
+// TODO:
+//  Resend email is rate limited
 class VerifyEmail extends StatefulWidget {
   final String email;
   const VerifyEmail({Key? key, required this.email}) : super(key: key);
@@ -15,15 +17,13 @@ class VerifyEmail extends StatefulWidget {
 }
 
 class _VerifyEmailState extends State<VerifyEmail> {
-  final auth = FirebaseAuth.instance;
-  late User user;
+  User? user = AuthService().getCurrentUser();
   late Timer timer;
 
   @override
   void initState() {
-    // Firebase function: sends verification email
-    user = auth.currentUser!;
-    user.sendEmailVerification();
+    // Sends verification email if user not null
+    user != null ? user!.sendEmailVerification() : {};
 
     // Check every 5 seconds for verification
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
@@ -88,14 +88,13 @@ class _VerifyEmailState extends State<VerifyEmail> {
     );
   }
 
-  // Function to check that a user has responded to the verification email
+  // Check that a user has responded to the verification email
   Future<void> checkEmailVerified() async {
     // Reloads current user info from Firebase
-    user = auth.currentUser!;
-    await user.reload();
+    user != null ? user!.reload() : {};
 
     // Send to registration if verified
-    if (user.emailVerified) {
+    if (user != null && user!.emailVerified) {
       timer.cancel();
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(

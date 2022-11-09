@@ -5,6 +5,10 @@ import 'package:dinetime_mobile_mvp/views/fyf.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+// Page to conclude onboarding process
+// TODO:
+//  Error handling widget
+//  Progress indicator
 class Welcome extends StatelessWidget {
   final Map<String, dynamic> userData;
   const Welcome({
@@ -49,19 +53,21 @@ class Welcome extends StatelessWidget {
                   ButtonOutlined(
                     text: "Let's Go!",
                     onPressed: () async {
-                      User? currentUser = AuthService().getCurrentUser();
-                      int status = 1;
-                      if (currentUser != null) {
-                        DatabaseService(uid: currentUser.uid)
-                            .updateUser(userData);
-                      }
-                      if (status == 0) {
+                      // Attempt to update user data and go to FYF page
+                      try {
+                        User? currentUser = AuthService().getCurrentUser();
+                        currentUser != null
+                            ? DatabaseService(uid: currentUser.uid)
+                                .updateUser(userData)
+                            : {};
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const FindYourFood(),
                           ),
                         );
+                      } catch (e) {
+                        print(e);
                       }
                     },
                   ),

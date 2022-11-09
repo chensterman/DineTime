@@ -2,6 +2,7 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/views/dietarypreferences.dart';
 import 'package:flutter/material.dart';
 
+// Page confirming email has been verified
 class EmailVerified extends StatelessWidget {
   const EmailVerified({super.key});
 
@@ -44,6 +45,7 @@ class EmailVerified extends StatelessWidget {
                       ),
                     ]),
                 const SizedBox(height: 45.0),
+                // Go to next page on press
                 ButtonFilled(
                   text: "Continue",
                   onPressed: () {

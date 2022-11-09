@@ -1,11 +1,12 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/views/verifyemail.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth.dart';
 
 // Sign up page
+// TODO:
+//  Error handling widget
+//  Progress indicator
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -101,26 +102,27 @@ class _SignUpState extends State<SignUp> {
                     // Firebase auth login and route to next page
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Sign in using Firebase
-                        int status =
-                            await AuthService().signUp(email, password);
-                        User? currentUser = AuthService().getCurrentUser();
-                        if (currentUser != null) {
-                          status = await DatabaseService(uid: currentUser.uid)
-                              .createUser();
-                        }
-                        if (status == 0 && mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    VerifyEmail(email: email)),
-                          );
+                        // Attempt to sign up using Firebase
+                        try {
+                          // Sign user up
+                          await AuthService().signUp(email, password);
+                          // Go to next page
+                          if (mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      VerifyEmail(email: email)),
+                            );
+                          }
+                        } catch (e) {
+                          print(e);
                         }
                       }
                     },
                   ),
                   const SizedBox(height: 10.0),
+                  // Sign in page dialog
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[

@@ -2,6 +2,7 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/views/diningpreferences.dart';
 import 'package:flutter/material.dart';
 
+// Page to choose dietary preferences
 class DietaryPreferences extends StatefulWidget {
   const DietaryPreferences({Key? key}) : super(key: key);
 
@@ -143,11 +144,14 @@ class _DietaryPreferencesState extends State<DietaryPreferences> {
                 ButtonFilled(
                   text: "Apply",
                   onPressed: () {
+                    // Put selections into map
                     Map dietaryData = {};
                     for (int i = 0; i < listDiets.length; i++) {
                       dietaryData[listDiets[i]] = selectedDiets[i];
                     }
+                    // Add dietary selections to user data map
                     Map<String, dynamic> userData = {'dietary': dietaryData};
+                    // Go to next page and pass user data in
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -158,6 +162,7 @@ class _DietaryPreferencesState extends State<DietaryPreferences> {
                   },
                 ),
                 const SizedBox(height: 30.0),
+                // Widget to navigate to previous page
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

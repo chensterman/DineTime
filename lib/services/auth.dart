@@ -1,57 +1,48 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-// Authentication class:
-//  Contains all methods and data pertaining to user authentication.
+import 'database.dart';
+
+//  Contains all methods and data pertaining to user authentication
 class AuthService {
-  // Instantiate FirebaseAuth.
+  // Instantiate FirebaseAuth
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // Get current user info if logged in - returned null if not
   User? getCurrentUser() {
     return _auth.currentUser;
   }
 
-  // Stream that listens for authentication changes.
+  // Stream that listens for authentication changes
   Stream<User?> user() {
     return _auth.authStateChanges();
   }
 
-  // Method for signing up.
-  Future<int> signUp(String email, String password) async {
-    try {
-      // Obtain User object (FireAuth function).
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      User? user = result.user;
+  // Method for signing up
+  // Should be caught with try/catch for error handling
+  Future<void> signUp(String email, String password) async {
+    // Obtain User object (FireAuth function)
+    UserCredential result = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
 
-      // Store in database.
-
-      // Return 0 on success.
-      return 0;
-    } catch (e) {
-      print(e);
-      // Return 1 on error.
-      return 1;
-    }
+    // Store in database
+    User? user = result.user;
+    await DatabaseService(uid: user!.uid).createUser();
   }
 
-  // Method for singing in (returns status as int).
-  Future<int> signIn(String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      // Return 0 on success.
-      return 0;
-    } catch (error) {
-      // Return 1 on error.
-      return 1;
-    }
+  // Method for singing in
+  // Should be caught with try/catch for error handling
+  Future<void> signIn(String email, String password) async {
+    await _auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
-  // Method for signing out.
+  // Method for signing out
+  // Should be caught with try/catch for error handling
   Future<void> signOut() async {
     await _auth.signOut();
   }
 
-  // Method for sending password reset email.
+  // Method for sending password reset email
+  // Should be caught with try/catch for error handling
   Future<void> resetPassword(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
   }
