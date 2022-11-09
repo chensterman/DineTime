@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/views/locationpreferences.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/locationpreferences.dart';
 import 'package:flutter/material.dart';
 
 // Page to input dining preference info

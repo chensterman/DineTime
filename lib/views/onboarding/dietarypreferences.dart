@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/views/diningpreferences.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/diningpreferences.dart';
 import 'package:flutter/material.dart';
 
 // Page to choose dietary preferences
@@ -43,7 +43,7 @@ class _DietaryPreferencesState extends State<DietaryPreferences> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20.0),
-                const ProgressBar(percentCompletion: 0.6),
+                const ProgressBar(percentCompletion: 0.4),
                 const SizedBox(height: 60.0),
                 Text(
                   "Set your dietary preferences",

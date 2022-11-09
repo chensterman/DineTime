@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/views/dietarypreferences.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/dietarypreferences.dart';
 import 'package:flutter/material.dart';
 
 // Page confirming email has been verified

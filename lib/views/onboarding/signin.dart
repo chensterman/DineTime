@@ -1,13 +1,11 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/views/fyf.dart';
-import 'package:dinetime_mobile_mvp/views/signup.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // Sign in page for the app
-// TODO:
-//  Error handling widget
-//  Progress indicator
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
@@ -23,15 +21,24 @@ class _SignInState extends State<SignIn> {
   String email = '';
   String password = '';
 
+  // Loading state
+  bool isLoading = false;
+
+  // Error state
+  String? errorMessage;
+
   @override
   Widget build(BuildContext context) {
+    // Get screen size
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: Center(
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
           child: SingleChildScrollView(
             child: Container(
-              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+              padding: EdgeInsets.only(
+                  left: 30.0, right: 30.0, top: size.height * 0.2),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +82,7 @@ class _SignInState extends State<SignIn> {
                     },
                     onChanged: (value) {
                       setState(() {
-                        password = value;
+                        password = value.trim();
                       });
                     },
                   ),
@@ -86,6 +93,8 @@ class _SignInState extends State<SignIn> {
                     // Firebase auth login and route to next page
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        // Display loading indicator
+                        setState(() => isLoading = true);
                         // Attempt to sign into Firebase
                         try {
                           // Sign in using Firebase
@@ -98,13 +107,33 @@ class _SignInState extends State<SignIn> {
                                   builder: (context) => const FindYourFood()),
                             );
                           }
+                        } on FirebaseAuthException catch (e) {
+                          setState(() => errorMessage = e.message);
                         } catch (e) {
-                          print(e);
+                          setState(() => errorMessage =
+                              'An error occurred. Please try again later.');
                         }
+                        // Remove loading indicator
+                        setState(() => isLoading = false);
                       }
                     },
                   ),
                   const SizedBox(height: 10.0),
+                  // If error message is present
+                  errorMessage != null
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: Text(errorMessage!,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.copyWith(color: Colors.red)),
+                          ),
+                        )
+                      : Container(),
+                  // Sign up page dialog
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -131,6 +160,15 @@ class _SignInState extends State<SignIn> {
                           )),
                     ],
                   ),
+                  // Display on loading
+                  isLoading
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),

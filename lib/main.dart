@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/views/fyf.dart';
-import 'package:dinetime_mobile_mvp/views/signin.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:firebase_core/firebase_core.dart';

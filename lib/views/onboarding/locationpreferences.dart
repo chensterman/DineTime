@@ -1,11 +1,9 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/views/welcome.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
 // Page to enable location settings
-// TODO:
-//  Error handling widget (for permission denied)
 class LocationPreferences extends StatefulWidget {
   final Map<String, dynamic> userData;
   const LocationPreferences({
@@ -82,9 +80,8 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                     if (permissionGranted == PermissionStatus.denied) {
                       permissionGranted = await location.requestPermission();
                     }
-                    // Go to next page if permission granted and pass user data map in
-                    if (permissionGranted == PermissionStatus.granted &&
-                        mounted) {
+                    // Go to next page and pass user data map in
+                    if (mounted) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(

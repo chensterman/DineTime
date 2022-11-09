@@ -6,15 +6,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // Page to conclude onboarding process
-// TODO:
-//  Error handling widget
-//  Progress indicator
-class Welcome extends StatelessWidget {
+class Welcome extends StatefulWidget {
   final Map<String, dynamic> userData;
-  const Welcome({
-    super.key,
-    required this.userData,
-  });
+  const Welcome({Key? key, required this.userData}) : super(key: key);
+
+  @override
+  State<Welcome> createState() => _WelcomeState();
+}
+
+class _WelcomeState extends State<Welcome> {
+  // Loading state
+  bool isLoading = false;
+
+  // Error state
+  String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +58,14 @@ class Welcome extends StatelessWidget {
                   ButtonOutlined(
                     text: "Let's Go!",
                     onPressed: () async {
+                      // Display loading indicator
+                      setState(() => isLoading = true);
                       // Attempt to update user data and go to FYF page
                       try {
                         User? currentUser = AuthService().getCurrentUser();
                         currentUser != null
                             ? DatabaseService(uid: currentUser.uid)
-                                .updateUser(userData)
+                                .updateUser(widget.userData)
                             : {};
                         Navigator.push(
                           context,
@@ -67,10 +74,39 @@ class Welcome extends StatelessWidget {
                           ),
                         );
                       } catch (e) {
-                        print(e);
+                        setState(() => errorMessage =
+                            'An error occurred. Please try again later.');
                       }
+                      // Remove loading indicator
+                      setState(() => isLoading = false);
                     },
                   ),
+                  // If error message is present
+                  errorMessage != null
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: Text(errorMessage!,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.copyWith(color: Colors.white)),
+                          ),
+                        )
+                      : Container(),
+                  // Display on loading
+                  isLoading
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20.0),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: Colors.grey,
+                            ),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),

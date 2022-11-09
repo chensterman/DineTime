@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'database.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
 
 //  Contains all methods and data pertaining to user authentication
 class AuthService {
