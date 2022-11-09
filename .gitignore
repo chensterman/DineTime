@@ -1,3 +1,5 @@
 # Flutter generated plugin files
 .flutter-plugins
 .flutter-plugins-dependencies
+.dart_tool/
+build/

@@ -1,4 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class FindYourFood extends StatefulWidget {
@@ -58,7 +59,9 @@ class _FindYourFoodState extends State<FindYourFood> {
                   size: 32.0,
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                AuthService().signOut();
+              },
             )
           ],
         ),
