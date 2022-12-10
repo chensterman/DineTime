@@ -74,48 +74,51 @@ class _FindYourFoodState extends State<FindYourFood> {
       child: Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text('My Lists',
                   style: Theme.of(context)
                       .textTheme
                       .headline1
-                      ?.copyWith(fontSize: 28.0)),
-              InkWell(
-                child: Icon(
-                  Icons.add_circle_outline_rounded,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 32.0,
-                ),
-                onTap: () {},
-              )
+                      ?.copyWith(fontSize: 24.0)),
+
+              // InkWell(
+              //   child: Icon(
+              //     Icons.add_circle_outline_rounded,
+              //     color: Theme.of(context).colorScheme.primary,
+              //     size: 32.0,
+              //   ),
+              //   onTap: () {},
+              // )
             ]),
-            const SizedBox(height: 20.0),
-            const InputText(
-              icon: Icon(Icons.search),
-              hintText: 'Search for a restaurant or list',
+            // const SizedBox(height: 20.0),
+            // const InputText(
+            //   icon: Icon(Icons.search),
+            //   hintText: 'Search for a restaurant or list',
+            // ),
+            const SizedBox(height: 10.0),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('60 items',
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle1
+                      ?.copyWith(fontSize: 14.0)),
             ),
             const SizedBox(height: 20.0),
-            ListCard(
-              listTitle: 'My Favorites',
-              listNumItems: 60,
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          foodList(context, 60, null, 'My Favorites')),
-                )
-              },
-            ),
+            const FoodListCard(
+                listImage: AssetImage('lib/assets/location.png'),
+                listTitle: 'Steph Curry\'s Pop-Up',
+                listCuisine: 'Indian',
+                listDollars: 2,
+                listDistance: 1.6),
             const SizedBox(height: 20.0),
-            ListCard(
-              listTitle: 'Vegan Food',
-              listNumItems: 22,
-              listCreateDate: DateTime(2022, 9, 7),
-              onTap: () => {},
-            ),
+            const FoodListCard(
+                listImage: AssetImage('lib/assets/location.png'),
+                listTitle: 'Stephen\'s Bakery',
+                listCuisine: 'Dessert',
+                listDollars: 3,
+                listDistance: 3.4),
           ],
         ),
       ),
