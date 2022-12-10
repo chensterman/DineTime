@@ -32,8 +32,7 @@ class RestaurantCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: const DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(
-                            'https://media-cldnry.s-nbcnews.com/image/upload/newscms/2019_21/2870431/190524-classic-american-cheeseburger-ew-207p.jpg'),
+                        image: AssetImage('lib/assets/location.png'),
                       ),
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20.0),
