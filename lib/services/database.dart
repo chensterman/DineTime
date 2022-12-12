@@ -21,4 +21,9 @@ class DatabaseService {
   Future<void> updateUser(Map<String, dynamic> userData) async {
     await customerCollection.doc(uid).update(userData);
   }
+
+  // Stream of specific customer document
+  Stream<DocumentSnapshot> customerStream() {
+    return customerCollection.doc(uid).snapshots();
+  }
 }

@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
+import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/views/home/findyourfood.dart';
 import 'package:dinetime_mobile_mvp/views/home/savedfood.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -12,12 +16,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // BottomNavBar
   int _selectedIndex = 0;
+  User user = AuthService().getCurrentUser()!;
+
+  // Update selected index for BottomNavBar
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  // Get user location and update the user data
+  void _updateUserLocation() async {
+    GeoPoint? userLocation = await LocationService().getLocationData();
+    await DatabaseService(uid: user.uid).updateUser({
+      'geolocation': userLocation,
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _updateUserLocation();
   }
 
   @override
@@ -25,7 +45,9 @@ class _HomeState extends State<Home> {
     // Widget list for bottom nav bar
     final List<Widget> pages = <Widget>[
       const FindYourFood(),
-      const SavedFood(),
+      SavedFood(
+        customerId: user.uid,
+      ),
     ];
 
     double height = MediaQuery.of(context).size.height;
