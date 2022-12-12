@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/auth.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/welcome.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 // Page to enable location settings
 class LocationPreferences extends StatefulWidget {
@@ -43,24 +47,24 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                 ),
                 const SizedBox(height: 30.0),
                 Text(
-                  "You can change your location",
+                  "Location services must be enabled",
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 Text(
-                  "settings at any time",
+                  "in order to use DineTime",
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 const SizedBox(height: 30.0),
                 Text(
-                  "Allow DineTime to use your location to ",
+                  "DineTime uses your location to ",
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  "help you find local restaurants around ",
+                  "help you find local restaurants and pop-ups ",
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  "your area",
+                  "around your area",
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 const SizedBox(height: 60.0),
@@ -71,42 +75,57 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                     LocationService location = LocationService();
                     // Enable location service and get user permission for
                     // location tracking
-                    location.requestUserPermission();
-                    // Get user location data
-                    GeoPoint? userLocation = await location.getLocationData();
-                    // Go to next page and pass user data map in
-                    if (mounted) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Welcome(
-                            userData: {
-                              'geolocation': userLocation,
-                            },
+                    PermissionStatus locationPermission =
+                        await location.requestUserPermission();
+                    if (locationPermission == PermissionStatus.granted ||
+                        locationPermission == PermissionStatus.grantedLimited) {
+                      // On permission granted, get location data and
+                      // update database
+                      GeoPoint? userLocation = await location.getLocationData();
+                      User user = AuthService().getCurrentUser()!;
+                      await DatabaseService(uid: user.uid).updateUser({
+                        'geolocation': userLocation,
+                      });
+                      // Go to next page
+                      if (mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Welcome(),
                           ),
-                        ),
-                      );
+                        );
+                      }
+                    } else {
+                      // If permission denied, show dialog
+                      showDialog(
+                          context: context,
+                          builder: (context) => errorDialog());
                     }
                   },
                 ),
-                const SizedBox(height: 30.0),
-                // Widget to push to next page on permission denied
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {},
-                          child: Text(
-                            'Not Now',
-                            style: Theme.of(context).textTheme.button?.copyWith(
-                                color: Theme.of(context).colorScheme.primary),
-                          )),
-                    ]),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget errorDialog() {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: const Text(
+          "Please visit your settings and allow location services for DineTime."),
+      actions: <Widget>[
+        TextButton(
+          child: const Text("Ok"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
   }
 }

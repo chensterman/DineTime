@@ -12,7 +12,7 @@ class AuthService {
   }
 
   // Stream that listens for authentication changes
-  Stream<User?> user() {
+  Stream<User?> streamUserState() {
     return _auth.authStateChanges();
   }
 
