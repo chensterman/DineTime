@@ -1,14 +1,10 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/views/home/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // Page to conclude onboarding process
 class Welcome extends StatefulWidget {
-  final Map<String, dynamic> userData;
-  const Welcome({Key? key, required this.userData}) : super(key: key);
+  const Welcome({Key? key}) : super(key: key);
 
   @override
   State<Welcome> createState() => _WelcomeState();
@@ -57,56 +53,15 @@ class _WelcomeState extends State<Welcome> {
                   const SizedBox(height: 60.0),
                   ButtonOutlined(
                     text: "Let's Go!",
-                    onPressed: () async {
-                      // Display loading indicator
-                      setState(() => isLoading = true);
-                      // Attempt to update user data and go to FYF page
-                      try {
-                        User? currentUser = AuthService().getCurrentUser();
-                        currentUser != null
-                            ? DatabaseService(uid: currentUser.uid)
-                                .updateUser(widget.userData)
-                            : throw Exception;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Home(),
-                          ),
-                        );
-                      } catch (e) {
-                        setState(() => errorMessage =
-                            'An error occurred. Please try again later.');
-                      }
-                      // Remove loading indicator
-                      setState(() => isLoading = false);
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Home(),
+                        ),
+                      );
                     },
                   ),
-                  // If error message is present
-                  errorMessage != null
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20.0),
-                            child: Text(errorMessage!,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(color: Colors.white)),
-                          ),
-                        )
-                      : Container(),
-                  // Display on loading
-                  isLoading
-                      ? const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20.0),
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              backgroundColor: Colors.grey,
-                            ),
-                          ),
-                        )
-                      : Container(),
                 ],
               ),
             ),

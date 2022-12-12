@@ -79,7 +79,7 @@ class AuthStateCheck extends StatelessWidget {
   Widget build(context) {
     return StreamBuilder<User?>(
       // Stream keeps track of user events
-      stream: _auth.user(),
+      stream: _auth.streamUserState(),
       builder: ((context, snapshot) {
         if (snapshot.hasData) {
           User user = snapshot.data!;
