@@ -17,13 +17,16 @@ class VerifyEmail extends StatefulWidget {
 }
 
 class _VerifyEmailState extends State<VerifyEmail> {
-  User? user = AuthService().getCurrentUser();
+  late User user;
   late Timer timer;
 
   @override
   void initState() {
-    // Sends verification email if user not null
-    user != null ? user!.sendEmailVerification() : {};
+    // Safe to assume user is not null because in order to get to this page,
+    //  User had to have been created.
+    user = AuthService().getCurrentUser()!;
+    // Sends verification email
+    user.sendEmailVerification();
 
     // Check every 5 seconds for verification
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
@@ -74,12 +77,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         ?.copyWith(fontSize: 16.0),
                   ),
                 ]),
-                const SizedBox(height: 30.0),
-                // TODO: Firebase limits how many times a new account can have this email sent.
-                ButtonOutlined(
-                  text: 'Resend Email',
-                  onPressed: () {},
-                )
               ],
             ),
           ),
@@ -90,13 +87,13 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   // Check that a user has responded to the verification email
   Future<void> checkEmailVerified() async {
-    // Reloads current user info from Firebase
-    user != null ? user!.reload() : {};
+    // Reloads current user info from Firebase Authentication
+    user = AuthService().getCurrentUser()!;
+    await user.reload();
 
-    // Send to registration if verified
-    if (user != null && user!.emailVerified) {
+    // Send to onboarding if verified
+    if (user.emailVerified && mounted) {
       timer.cancel();
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const EmailVerified()));
     }

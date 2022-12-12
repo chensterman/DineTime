@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/views/onboarding/dietarypreferences.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/locationpreferences.dart';
 import 'package:flutter/material.dart';
 
 // Page confirming email has been verified
@@ -52,7 +52,7 @@ class EmailVerified extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DietaryPreferences(),
+                        builder: (context) => const LocationPreferences(),
                       ),
                     );
                   },

@@ -99,14 +99,8 @@ class _SignInState extends State<SignIn> {
                         try {
                           // Sign in using Firebase
                           await AuthService().signIn(email, password);
-                          // Go to next page
-                          if (mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const FindYourFood()),
-                            );
-                          }
+                          // At this point AuthStateCheck in main will route
+                          // to next page
                         } on FirebaseAuthException catch (e) {
                           setState(() => errorMessage = e.message);
                         } catch (e) {

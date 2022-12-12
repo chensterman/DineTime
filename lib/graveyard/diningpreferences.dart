@@ -130,13 +130,13 @@ class _DiningPreferencesState extends State<DiningPreferences> {
                     };
                     widget.userData['distances'] = distanceData;
                     // Go to next page and pass user data map in
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            LocationPreferences(userData: widget.userData),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) =>
+                    //         LocationPreferences(userData: widget.userData),
+                    //   ),
+                    // );
                   },
                 ),
                 const SizedBox(height: 30.0),

@@ -1,14 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/welcome.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 
 // Page to enable location settings
 class LocationPreferences extends StatefulWidget {
-  final Map<String, dynamic> userData;
   const LocationPreferences({
     Key? key,
-    required this.userData,
   }) : super(key: key);
 
   @override
@@ -68,25 +67,24 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                 ButtonFilled(
                   text: "Allow Location",
                   onPressed: () async {
-                    // Enable location service
-                    Location location = Location();
-                    bool serviceEnabled = await location.serviceEnabled();
-                    if (!serviceEnabled) {
-                      serviceEnabled = await location.requestService();
-                    }
-                    // Get user permission for location tracking
-                    PermissionStatus permissionGranted =
-                        await location.hasPermission();
-                    if (permissionGranted == PermissionStatus.denied) {
-                      permissionGranted = await location.requestPermission();
-                    }
+                    // Instantiate location service class
+                    LocationService location = LocationService();
+                    // Enable location service and get user permission for
+                    // location tracking
+                    location.requestUserPermission();
+                    // Get user location data
+                    GeoPoint? userLocation = await location.getLocationData();
                     // Go to next page and pass user data map in
                     if (mounted) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                Welcome(userData: widget.userData)),
+                          builder: (context) => Welcome(
+                            userData: {
+                              'geolocation': userLocation,
+                            },
+                          ),
+                        ),
                       );
                     }
                   },
@@ -97,14 +95,7 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Welcome(userData: widget.userData)),
-                            );
-                          },
+                          onTap: () {},
                           child: Text(
                             'Not Now',
                             style: Theme.of(context).textTheme.button?.copyWith(

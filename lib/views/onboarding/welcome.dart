@@ -66,7 +66,7 @@ class _WelcomeState extends State<Welcome> {
                         currentUser != null
                             ? DatabaseService(uid: currentUser.uid)
                                 .updateUser(widget.userData)
-                            : {};
+                            : throw Exception;
                         Navigator.push(
                           context,
                           MaterialPageRoute(

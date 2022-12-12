@@ -6,22 +6,19 @@ class DatabaseService {
   DatabaseService({required this.uid});
 
   // Access to 'users' collection
-  final CollectionReference userCollection =
-      FirebaseFirestore.instance.collection('users');
+  final CollectionReference customerCollection =
+      FirebaseFirestore.instance.collection('customers');
 
   // Add user document to 'users' collection and initialize fields
   Future<void> createUser() async {
-    await userCollection.doc(uid).set({
-      'cuisine': null,
-      'zipcode': null,
-      'distances': null,
-      'prices': null,
-      'diets': null,
+    await customerCollection.doc(uid).set({
+      'geolocation': null,
+      'saved_businesses': [],
     });
   }
 
   // Update user data
   Future<void> updateUser(Map<String, dynamic> userData) async {
-    await userCollection.doc(uid).update(userData);
+    await customerCollection.doc(uid).update(userData);
   }
 }

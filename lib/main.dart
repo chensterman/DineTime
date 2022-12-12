@@ -1,11 +1,15 @@
 import 'dart:async';
-import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/views/fyf.dart';
-import 'package:dinetime_mobile_mvp/views/onboarding/signin.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/locationpreferences.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/auth.dart';
+import 'package:dinetime_mobile_mvp/services/location.dart';
+import 'package:dinetime_mobile_mvp/views/fyf.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/signin.dart';
+import 'package:dinetime_mobile_mvp/views/onboarding/verifyemail.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:location/location.dart';
 import 'firebase_options.dart';
 
 // Main function starts the app
@@ -50,7 +54,7 @@ class Start extends StatelessWidget {
         // Route to the authentication checker widget
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const AuthStateCheck()),
+          MaterialPageRoute(builder: (context) => AuthStateCheck()),
         )
       },
     );
@@ -68,22 +72,74 @@ class Start extends StatelessWidget {
 
 // Widget that checks the state of Firebase authentication
 class AuthStateCheck extends StatelessWidget {
-  const AuthStateCheck({super.key});
+  AuthStateCheck({super.key});
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(context) {
     return StreamBuilder<User?>(
       // Stream keeps track of user events
-      stream: AuthService().user(),
+      stream: _auth.user(),
       builder: ((context, snapshot) {
         if (snapshot.hasData) {
-          // If logged in, route to FYF page
-          return const FindYourFood();
+          User user = snapshot.data!;
+          if (user.emailVerified) {
+            // If logged in and email is verified, run location permissions check
+            return LocationPermissionStateCheck();
+          } else {
+            // If logged in and email is not verified, route to onboarding
+            // process, starting with the email verification page
+            return VerifyEmail(email: user.email!);
+          }
         } else {
           // If not logged in, route to sign in page
           return const SignIn();
         }
       }),
+    );
+  }
+}
+
+// Widget that checks the state of location permission enablement
+class LocationPermissionStateCheck extends StatelessWidget {
+  LocationPermissionStateCheck({super.key});
+  final LocationService _location = LocationService();
+
+  @override
+  Widget build(context) {
+    return StreamBuilder<PermissionStatus>(
+      // Stream keeps track of the status of location permissions on the device
+      stream: _location.getLocationPermissionStatus(),
+      builder: ((context, snapshot) {
+        if (snapshot.hasData) {
+          PermissionStatus locationPermission = snapshot.data!;
+          if (locationPermission == PermissionStatus.denied) {
+            // If location permissions are denied, route to location preferences
+            // page from onboarding section
+            return const LocationPreferences();
+          } else {
+            // If location permissions are accepted, route to FYF homepage
+            return const FindYourFood();
+          }
+        } else {
+          // Loading screen if location permissions have not been returned yet
+          return const LoadingScreen();
+        }
+      }),
+    );
+  }
+}
+
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({super.key});
+
+  @override
+  Widget build(context) {
+    // Loading screen
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

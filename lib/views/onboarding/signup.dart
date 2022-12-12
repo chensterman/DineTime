@@ -116,15 +116,8 @@ class _SignUpState extends State<SignUp> {
                         try {
                           // Sign user up
                           await AuthService().signUp(email, password);
-                          // Go to next page
-                          if (mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      VerifyEmail(email: email)),
-                            );
-                          }
+                          // At this point AuthStateCheck in main will route
+                          // to next page
                         } on FirebaseAuthException catch (e) {
                           setState(() => errorMessage = e.message);
                         } catch (e) {
