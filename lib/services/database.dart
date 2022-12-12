@@ -5,7 +5,7 @@ class DatabaseService {
   final String uid;
   DatabaseService({required this.uid});
 
-  // Access to 'users' collection
+  // Access to 'customers' collection
   final CollectionReference customerCollection =
       FirebaseFirestore.instance.collection('customers');
 
