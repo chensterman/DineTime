@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
-import 'package:dinetime_mobile_mvp/views/fyf.dart';
+import 'package:dinetime_mobile_mvp/views/home/home.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/signin.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/verifyemail.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -119,7 +119,7 @@ class LocationPermissionStateCheck extends StatelessWidget {
             return const LocationPreferences();
           } else {
             // If location permissions are accepted, route to FYF homepage
-            return const FindYourFood();
+            return const Home();
           }
         } else {
           // Loading screen if location permissions have not been returned yet

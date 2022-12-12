@@ -1,7 +1,7 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
-import 'package:dinetime_mobile_mvp/views/fyf.dart';
+import 'package:dinetime_mobile_mvp/views/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +70,7 @@ class _WelcomeState extends State<Welcome> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const FindYourFood(),
+                            builder: (context) => const Home(),
                           ),
                         );
                       } catch (e) {
