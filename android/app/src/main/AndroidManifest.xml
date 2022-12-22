@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.itsdinetime.dinetime">
+    package="com.example.dmm">
    <application
         android:label="dmm"
         android:name="${applicationName}"
@@ -30,7 +30,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCUnjZGe8MoQ3uEjrzVZtE14Yjbu9uJ_1U"/>
     </application>
 </manifest>

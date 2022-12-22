@@ -1,6 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 
 class FindYourFood extends StatefulWidget {
@@ -21,9 +20,6 @@ class _FindYourFoodState extends State<FindYourFood> {
 
   @override
   Widget build(BuildContext context) {
-    AnalyticsService()
-        .getInstance()
-        .logScreenView(screenClass: 'FYF', screenName: 'FYFPage');
     // Widget list for bottom nav bar
     final List<Widget> pages = <Widget>[
       restaurantCards(context),

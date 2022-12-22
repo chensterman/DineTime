@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/locationpreferences.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
@@ -13,19 +12,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
 import 'firebase_options.dart';
 
-// Testing code, distance should be around 1940 miles
-LocationService testServ = LocationService();
-Future<String> testDist() async {
-  GeoPoint clark = const GeoPoint(47.622400, -122.343270);
-  GeoPoint test =
-      await testServ.addressToGeopoint('26500 Wixom Rd, Novi, MI 48374');
-  double testLat = test.latitude;
-  double testLong = test.longitude;
-  print('ohai dist: $testLat and $testLong');
-  double dist = testServ.distanceBetweenTwoPoints(clark, test);
-  return 'debugging okie: $dist';
-}
-
 // Main function starts the app
 void main() async {
   // Required initialization functions to be run for Firebase
@@ -33,8 +19,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // Testing distance calculator
-  print(await (testDist()));
   // Startup the base MyApp widget
   runApp(const MyApp());
 }
@@ -42,6 +26,7 @@ void main() async {
 // The base widget for the app using the MatieralApp class
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
