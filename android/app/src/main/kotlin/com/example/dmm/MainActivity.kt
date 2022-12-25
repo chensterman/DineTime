@@ -1,4 +1,4 @@
-package com.example.dmm
+package com.itsdinetime.dinetime
 
 import io.flutter.embedding.android.FlutterActivity
 
