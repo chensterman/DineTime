@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:95378834531:android:28054adc19e8ebb128e456",
         "android_client_info": {
-          "package_name": "com.example.dmm"
+          "package_name": "com.itsdinetime.dinetime"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "95378834531-n6sa5cka689u1iutsdmr78fuadpmk8ct.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.dmm"
+                "bundle_id": "com.itsdinetime.dinetime"
               }
             }
           ]

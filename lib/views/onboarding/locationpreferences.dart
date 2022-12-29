@@ -83,7 +83,7 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                       // update database
                       GeoPoint? userLocation = await location.getLocationData();
                       User user = AuthService().getCurrentUser()!;
-                      await DatabaseService(uid: user.uid).updateUser({
+                      await DatabaseService().updateCustomer(user.uid, {
                         'geolocation': userLocation,
                       });
                       // Go to next page

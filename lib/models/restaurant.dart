@@ -107,6 +107,7 @@ class PopUpLocation {
   Timestamp locationDateStart;
   Timestamp locationDateEnd;
   Timestamp dateAdded;
+  GeoPoint geocode;
 
   PopUpLocation({
     required this.locationId,
@@ -114,5 +115,6 @@ class PopUpLocation {
     required this.locationDateStart,
     required this.locationDateEnd,
     required this.dateAdded,
+    required this.geocode,
   });
 }

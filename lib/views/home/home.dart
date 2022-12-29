@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   // Get user location and update the user data
   void _updateUserLocation() async {
     GeoPoint? userLocation = await LocationService().getLocationData();
-    await DatabaseService(uid: user.uid).updateUser({
+    await DatabaseService().updateCustomer(user.uid, {
       'geolocation': userLocation,
     });
   }
@@ -66,8 +66,8 @@ class _HomeState extends State<Home> {
                   size: 32.0,
                 ),
               ),
-              onTap: () {
-                AuthService().signOut();
+              onTap: () async {
+                await AuthService().signOut();
               },
             )
           ],

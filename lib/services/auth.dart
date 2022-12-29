@@ -25,7 +25,7 @@ class AuthService {
 
     // Store in database
     User? user = result.user;
-    await DatabaseService(uid: user!.uid).createUser();
+    await DatabaseService().createCustomer(user!.uid);
   }
 
   // Method for singing in

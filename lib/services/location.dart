@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 
@@ -41,5 +43,39 @@ class LocationService {
     } catch (e) {
       return null;
     }
+  }
+
+  double geopointToRadians(double geopoint) {
+    double conversionFactor = pi / 180;
+    return conversionFactor * geopoint;
+  }
+
+  double distanceBetweenTwoPoints(GeoPoint p1, GeoPoint p2) {
+    double radLat1 = geopointToRadians(p1.latitude);
+    double radLong1 = geopointToRadians(p1.longitude);
+    double radLat2 = geopointToRadians(p2.latitude);
+    double radLong2 = geopointToRadians(p2.longitude);
+
+    // Haversine Formula
+    double distLat = radLat2 - radLat1;
+    double distLong = radLong2 - radLong1;
+    double ans = pow(sin(distLat / 2), 2) +
+        cos(radLat1) * cos(radLat2) * pow(sin(distLong / 2), 2);
+    ans = 2 * asin(sqrt(ans));
+
+    // Radius of earth in miles
+    double radiusOfEarth = 3956;
+    ans = ans * radiusOfEarth;
+    num mod = pow(10.0, 1);
+    ans = ((ans * mod).round().toDouble() / mod);
+    return ans;
+  }
+
+  Future<GeoPoint> addressToGeopoint(String address) async {
+    // Continue Geocoding
+    List<geocoding.Location> location =
+        await geocoding.locationFromAddress(address);
+    var geoPoint = GeoPoint(location[0].latitude, location[0].longitude);
+    return geoPoint;
   }
 }
