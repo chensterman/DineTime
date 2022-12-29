@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
-import 'package:dinetime_mobile_mvp/views/fyf.dart';
+import 'package:dinetime_mobile_mvp/views/home/home.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/signin.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/verifyemail.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,18 +13,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
 import 'firebase_options.dart';
 
-// Testing code, distance should be around 1940 miles
-LocationService testServ = LocationService();
-Future<String> testDist() async {
-  GeoPoint clark = const GeoPoint(47.622400, -122.343270);
-  GeoPoint test =
-      await testServ.addressToGeopoint('26500 Wixom Rd, Novi, MI 48374');
-  double testLat = test.latitude;
-  double testLong = test.longitude;
-  print('ohai dist: $testLat and $testLong');
-  double dist = testServ.distanceBetweenTwoPoints(clark, test);
-  return 'debugging okie: $dist';
-}
+// // Testing code, distance should be around 1940 miles
+// LocationService testServ = LocationService();
+// Future<String> testDist() async {
+//   GeoPoint clark = const GeoPoint(47.622400, -122.343270);
+//   GeoPoint test =
+//       await testServ.addressToGeopoint('26500 Wixom Rd, Novi, MI 48374');
+//   double testLat = test.latitude;
+//   double testLong = test.longitude;
+//   print('Test Geocode: $testLat and $testLong');
+//   double dist = testServ.distanceBetweenTwoPoints(clark, test);
+//   return 'Test Geo Dist: $dist';
+// }
 
 // Main function starts the app
 void main() async {
@@ -34,7 +34,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // Testing distance calculator
-  print(await (testDist()));
+  // print(await (testDist()));
+  // GeoPoint? test = await LocationService().getLocationData();
+  // print(test);
   // Startup the base MyApp widget
   runApp(const MyApp());
 }
@@ -134,27 +136,13 @@ class LocationPermissionStateCheck extends StatelessWidget {
             return const LocationPreferences();
           } else {
             // If location permissions are accepted, route to FYF homepage
-            return const FindYourFood();
+            return const Home();
           }
         } else {
           // Loading screen if location permissions have not been returned yet
           return const LoadingScreen();
         }
       }),
-    );
-  }
-}
-
-class LoadingScreen extends StatelessWidget {
-  const LoadingScreen({super.key});
-
-  @override
-  Widget build(context) {
-    // Loading screen
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
     );
   }
 }

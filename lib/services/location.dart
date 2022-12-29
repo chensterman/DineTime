@@ -1,6 +1,5 @@
 import 'dart:math';
-
-import 'package:geocoding/geocoding.dart' as geoLoc;
+import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 
@@ -48,7 +47,7 @@ class LocationService {
 
   double geopointToRadians(double geopoint) {
     double conversionFactor = pi / 180;
-    return (conversionFactor * geopoint);
+    return conversionFactor * geopoint;
   }
 
   double distanceBetweenTwoPoints(GeoPoint p1, GeoPoint p2) {
@@ -67,12 +66,15 @@ class LocationService {
     // Radius of earth in miles
     double radiusOfEarth = 3956;
     ans = ans * radiusOfEarth;
+    num mod = pow(10.0, 1);
+    ans = ((ans * mod).round().toDouble() / mod);
     return ans;
   }
 
   Future<GeoPoint> addressToGeopoint(String address) async {
     // Continue Geocoding
-    List<geoLoc.Location> location = await geoLoc.locationFromAddress(address);
+    List<geocoding.Location> location =
+        await geocoding.locationFromAddress(address);
     var geoPoint = GeoPoint(location[0].latitude, location[0].longitude);
     return geoPoint;
   }
