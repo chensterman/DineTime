@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   }
 
   // Get user location and update the user data
-  void _updateUserLocation() async {
+  Future<void> _updateUserLocation() async {
     GeoPoint? userLocation = await LocationService().getLocationData();
     await DatabaseService().updateCustomer(user.uid, {
       'geolocation': userLocation,
@@ -36,8 +36,8 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    super.initState();
     _updateUserLocation();
+    super.initState();
   }
 
   @override
