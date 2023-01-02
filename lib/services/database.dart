@@ -69,15 +69,17 @@ class DatabaseService {
     String? website = restaurantData['website'];
     // Refactor location data into a list of PopUpLocation objects
     List<PopUpLocation> restaurantLocationData = [];
-    for (Object location in restaurantLocationDataRaw) {
-      Map<String, dynamic> locationMap = location as Map<String, dynamic>;
-      restaurantLocationData.add(PopUpLocation(
-          locationId: locationMap['location_id'],
-          locationAddress: locationMap['address'],
-          locationDateStart: locationMap['date_start'],
-          locationDateEnd: locationMap['date_end'],
-          dateAdded: locationMap['date_added'],
-          geocode: locationMap['geocode']));
+    if (restaurantLocationDataRaw.isNotEmpty) {
+      for (Object location in restaurantLocationDataRaw) {
+        Map<String, dynamic> locationMap = location as Map<String, dynamic>;
+        restaurantLocationData.add(PopUpLocation(
+            locationId: locationMap['location_id'],
+            locationAddress: locationMap['address'],
+            locationDateStart: locationMap['date_start'],
+            locationDateEnd: locationMap['date_end'],
+            dateAdded: locationMap['date_added'],
+            geocode: locationMap['geocode']));
+      }
     }
     // Construct and return RestaurantPreview object
     return RestaurantPreview(

@@ -228,7 +228,7 @@ class FoodListCard extends StatelessWidget {
                 children: [
                   restaurantPreview!.instagramHandle != null
                       ? Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(6.0),
                           child: InkWell(
                             onTap: () => launchUrl(Uri.parse(
                                 'https://www.instagram.com/${restaurantPreview!.instagramHandle!}')),
@@ -249,7 +249,7 @@ class FoodListCard extends StatelessWidget {
                       : Container(),
                   restaurantPreview!.website != null
                       ? Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(6.0),
                           child: InkWell(
                             onTap: () => launchUrl(Uri.parse(
                                 'https://${restaurantPreview!.website!}')),
@@ -268,6 +268,9 @@ class FoodListCard extends StatelessWidget {
                           ),
                         )
                       : Container(),
+                  const SizedBox(
+                    width: 8.0,
+                  )
                 ],
               ),
             ],
