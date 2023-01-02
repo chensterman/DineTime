@@ -1,233 +1,182 @@
-import 'package:dinetime_mobile_mvp/views/fyf.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:dinetime_mobile_mvp/provider/card_provider.dart';
+import 'package:dinetime_mobile_mvp/views/tinder_card.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystemdemo.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/services/getrestaurants.dart';
-import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 
-void main() {
-  runApp(const MyApp());
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  static final String title = 'Tinder Clone';
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DineTime Demo',
-      theme: ThemeData(
-        colorScheme: dineTimeColorScheme,
-        textTheme: dineTimeTypography,
-      ),
-      home: FindYourFood(),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (context) => CardProvider(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: title,
+          home: MainPage(),
+          theme: ThemeData(
+            colorScheme: dineTimeColorScheme,
+            textTheme: dineTimeTypography,
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                textStyle: TextStyle(fontSize: 32),
+                elevation: 8,
+                primary: Colors.white,
+                shape: CircleBorder(),
+                minimumSize: Size.square(80),
+              ),
+            ),
+          ),
+        ),
+      );
 }
 
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-//   final String title;
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => _MainPageState();
+}
 
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
+class _MainPageState extends State<MainPage> {
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
-// class _MyHomePageState extends State<MyHomePage> {
-//   // Form validation
-//   final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        bottomNavigationBar: BottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_border_rounded), label: 'My Lists'),
+          ],
+        ),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).colorScheme.background,
+          centerTitle: true,
+          title: Container(
+            height: 40.0,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  'lib/assets/Group.png',
+                  height: 24.0,
+                  width: 24.0,
+                ),
+                const SizedBox(width: 8.0),
+                Text(
+                  'Bellevue, WA 98004',
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.headline1?.copyWith(
+                        fontSize: 15.0,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Image.asset(
+                'lib/assets/notification_bell.png',
+                width: 24.0,
+                height: 24.0,
+              ),
+              onPressed: () {},
+            )
+          ],
+        ),
+        body: SafeArea(
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [Expanded(child: buildCards())],
+            ),
+          ),
+        ),
+      );
 
-//   // Price selector values
-//   static const List<Widget> _dollarSigns = <Widget>[
-//     Text('\$'),
-//     Text('\$\$'),
-//     Text('\$\$\$'),
-//     Text('\$\$\$\$'),
-//   ];
-//   final List<bool> _selectedPrice = <bool>[false, false, false, false];
+  Widget buildCards() {
+    final provider = Provider.of<CardProvider>(context);
+    final users = provider.users;
 
-//   // Slider values
-//   RangeValues _sliderValues = const RangeValues(0.0, 100.0);
+    return users.isEmpty
+        ? SizedBox(
+            height: 10,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: const Text(
+                'Restart',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () {
+                final provider =
+                    Provider.of<CardProvider>(context, listen: false);
 
-//   // Text input values
-//   String textInput = "";
+                provider.resetUsers();
+              },
+            ),
+          )
+        : Stack(
+            children: users
+                .map((user) => TinderCard(
+                      user: user,
+                      isFront: users.last == user,
+                    ))
+                .toList(),
+          );
+  }
 
-//   // Restaurant data
-//   List<Restaurant>? _restaurantList;
-//   bool _isLoading = false;
+  MaterialStateProperty<Color> getColor(
+      Color color, Color colorPressed, bool force) {
+    getColor(Set<MaterialState> states) {
+      if (force || states.contains(MaterialState.pressed)) {
+        return colorPressed;
+      } else {
+        return color;
+      }
+    }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Form(
-//         key: _formKey,
-//         child: Center(
-//           child: SingleChildScrollView(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 const SizedBox(height: 20),
-//                 const SizedBox(
-//                     width: 100.0,
-//                     height: 100.0,
-//                     child: Image(
-//                         image: AssetImage('lib/assets/dinetime-orange.png'))),
-//                 const SizedBox(height: 10),
-//                 Text(
-//                   widget.title,
-//                   style: Theme.of(context).textTheme.headline1?.copyWith(
-//                         color: Theme.of(context).colorScheme.primary,
-//                       ),
-//                 ),
-//                 const SizedBox(height: 50),
-//                 PriceSelector(
-//                   isSelected: _selectedPrice,
-//                   children: _dollarSigns,
-//                   onPressed: (int index) {
-//                     setState(() {
-//                       // The button that is tapped is set to true, and the others to false.
-//                       for (int i = 0; i < _selectedPrice.length; i++) {
-//                         _selectedPrice[i] = i == index;
-//                       }
-//                     });
-//                   },
-//                 ),
-//                 const SizedBox(height: 20),
-//                 SliderModule(
-//                   values: _sliderValues,
-//                   min: 0.0,
-//                   max: 100.0,
-//                   units: 'mi',
-//                   onChanged: (RangeValues values) {
-//                     setState(() {
-//                       _sliderValues = values;
-//                     });
-//                   },
-//                 ),
-//                 const SizedBox(height: 20),
-//                 Container(
-//                   constraints: const BoxConstraints(maxWidth: 300.0),
-//                   child: InputText(
-//                     hintText: 'I\'m hungry for...',
-//                     onChanged: (val) {
-//                       setState(() => textInput = val);
-//                     },
-//                   ),
-//                 ),
-//                 const SizedBox(height: 20),
-//                 Container(
-//                   constraints: const BoxConstraints(maxWidth: 300.0),
-//                   child: ButtonFilled(
-//                     text: 'Find Your Food!',
-//                     onPressed: () async {
-//                       setState(() {
-//                         _isLoading = true;
-//                       });
-//                       Location location = Location();
-//                       bool serviceEnabled = await location.serviceEnabled();
-//                       if (!serviceEnabled) {
-//                         serviceEnabled = await location.requestService();
-//                       }
-//                       PermissionStatus permissionGranted =
-//                           await location.hasPermission();
-//                       if (permissionGranted == PermissionStatus.denied) {
-//                         permissionGranted = await location.requestPermission();
-//                       }
-//                       LocationData locationData = await location.getLocation();
-//                       dynamic restaurantData = await GetRestaurants().getPlaces(
-//                           locationData.latitude!,
-//                           locationData.longitude!,
-//                           1500,
-//                           textInput,
-//                           4);
-//                       setState(() {
-//                         if (restaurantData['status'] == 200) {
-//                           _restaurantList = restaurantData['restaurants'];
-//                         }
-//                         _isLoading = false;
-//                       });
-//                     },
-//                   ),
-//                 ),
-//                 const SizedBox(height: 20),
-//                 if (_isLoading) const CircularProgressIndicator(),
-//                 if (_restaurantList != null)
-//                   for (Restaurant restaurant in _restaurantList!)
-//                     Container(
-//                       constraints: const BoxConstraints(maxWidth: 450.0),
-//                       child: Card(
-//                         shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(20),
-//                         ),
-//                         margin: const EdgeInsets.all(8.0),
-//                         child: Row(
-//                           children: [
-//                             Padding(
-//                               padding: const EdgeInsets.all(12.0),
-//                               child: CircleAvatar(
-//                                 radius: 50.0,
-//                                 backgroundImage: restaurant.image,
-//                                 backgroundColor: Colors.white,
-//                               ),
-//                             ),
-//                             Padding(
-//                               padding: const EdgeInsets.all(8.0),
-//                               child: SizedBox(
-//                                 child: Column(
-//                                   crossAxisAlignment: CrossAxisAlignment.start,
-//                                   children: [
-//                                     Text(
-//                                         restaurant.name != null
-//                                             ? restaurant.name!
-//                                             : "N/A",
-//                                         style: Theme.of(context)
-//                                             .textTheme
-//                                             .bodyText1
-//                                             ?.copyWith(
-//                                               fontWeight: FontWeight.bold,
-//                                             )),
-//                                     Row(children: [
-//                                       Text("Price Level: ",
-//                                           style: Theme.of(context)
-//                                               .textTheme
-//                                               .bodyText1),
-//                                       Text(
-//                                           restaurant.priceLevel != null
-//                                               ? "\$" * restaurant.priceLevel!
-//                                               : "N/A",
-//                                           style: Theme.of(context)
-//                                               .textTheme
-//                                               .subtitle1),
-//                                     ]),
-//                                     Row(children: [
-//                                       Text("Rating: ",
-//                                           style: Theme.of(context)
-//                                               .textTheme
-//                                               .bodyText1),
-//                                       Text(
-//                                           restaurant.rating != null
-//                                               ? restaurant.rating!.toString()
-//                                               : "N/A",
-//                                           style: Theme.of(context)
-//                                               .textTheme
-//                                               .subtitle1),
-//                                     ]),
-//                                   ],
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                 const SizedBox(height: 20),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+    return MaterialStateProperty.resolveWith(getColor);
+  }
+
+  MaterialStateProperty<BorderSide> getBorder(
+      Color color, Color colorPressed, bool force) {
+    getBorder(Set<MaterialState> states) {
+      if (force || states.contains(MaterialState.pressed)) {
+        return const BorderSide(color: Colors.transparent);
+      } else {
+        return BorderSide(color: color, width: 2);
+      }
+    }
+
+    return MaterialStateProperty.resolveWith(getBorder);
+  }
+}

@@ -13,3 +13,4 @@ export 'package:dinetime_mobile_mvp/theme/components/progressbar.dart';
 export 'package:dinetime_mobile_mvp/theme/components/bottomnavbar.dart';
 export 'package:dinetime_mobile_mvp/theme/components/listcard.dart';
 export 'package:dinetime_mobile_mvp/theme/components/restaurantcard.dart';
+export 'package:dinetime_mobile_mvp/theme/components/mediacircles.dart';

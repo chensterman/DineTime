@@ -17,6 +17,16 @@ class _FindYourFoodState extends State<FindYourFood> {
     });
   }
 
+  String dropdownvalue = '';
+
+  var items = [
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+  ];
+
   @override
   Widget build(BuildContext context) {
     // Widget list for bottom nav bar
@@ -46,19 +56,39 @@ class _FindYourFoodState extends State<FindYourFood> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: height * 0.08,
-          backgroundColor: Theme.of(context).colorScheme.onPrimary,
-          actions: [
-            InkWell(
-              child: Container(
-                padding: const EdgeInsets.only(right: 40.0),
-                child: Icon(
-                  Icons.filter,
-                  color: Theme.of(context).colorScheme.onBackground,
-                  size: 32.0,
+          elevation: 0,
+          backgroundColor: Theme.of(context).colorScheme.background,
+          centerTitle: true,
+          title: Container(
+            height: 40.0,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  'lib/assets/Group.png',
+                  height: 24.0,
+                  width: 24.0,
                 ),
+                const SizedBox(width: 8.0),
+                Text(
+                  'Bellevue, WA 98004',
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.headline1?.copyWith(
+                        fontSize: 15.0,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Image.asset(
+                'lib/assets/notification_bell.png',
+                width: 24.0,
+                height: 24.0,
               ),
-              onTap: () {},
+              onPressed: () {},
             )
           ],
         ),
