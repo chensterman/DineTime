@@ -56,6 +56,32 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           toolbarHeight: height * 0.08,
           backgroundColor: Theme.of(context).colorScheme.onPrimary,
+          title: Row(
+            children: [
+              Container(
+                width: 25.0,
+                height: 25.0,
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('lib/assets/location.png'),
+                  ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Text(
+                "Bellevue, WA 98004",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    ?.copyWith(fontSize: 18.0),
+              ),
+            ],
+          ),
           actions: [
             InkWell(
               child: Container(
