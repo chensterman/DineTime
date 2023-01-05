@@ -85,73 +85,80 @@ class _TinderCardState extends State<TinderCard> {
       );
 
   Widget buildCard() => buildCardShadow(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 10.0,
-                  spreadRadius: 5.0,
-                  offset: Offset(0, 10),
-                ),
-              ],
-              image: DecorationImage(
-                image: AssetImage(widget.user.urlImage),
-                //widget.user.urlImage),
-                fit: BoxFit.cover,
-                alignment: Alignment(-0.3, 0),
-              ),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: 800.0,
             ),
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color.fromARGB(177, 0, 0, 0),
-                    Colors.transparent,
-                    Color.fromARGB(226, 0, 0, 0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 10.0,
+                      spreadRadius: 5.0,
+                      offset: Offset(0, 10),
+                    ),
                   ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.0, 0.5, 1],
+                  image: DecorationImage(
+                    image: AssetImage(widget.user.urlImage),
+                    //widget.user.urlImage),
+                    fit: BoxFit.cover,
+                    alignment: Alignment(-0.3, 0),
+                  ),
                 ),
-              ),
-              padding: EdgeInsets.all(30),
-              child: Column(
-                children: [
-                  // buildDietaryOpt(),
-                  // buildMenu(),
-                  // buildUpcomingLoc()
-                  // Food Card 2
-                  // buildSocials(),
-                  // SizedBox(height: 15),
-                  // buildNameLower(),
-                  // SizedBox(height: 5),
-                  // buildCuisineDetailsLower(),
-                  // SizedBox(height: 20),
-                  // buildLocationLower(),
-                  // SizedBox(height: 14),
-                  // buildDateLower(),
-                  // SizedBox(height: 25),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.fromARGB(177, 0, 0, 0),
+                        Colors.transparent,
+                        Color.fromARGB(226, 0, 0, 0),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [0.0, 0.5, 1],
+                    ),
+                  ),
+                  padding: EdgeInsets.all(30),
+                  child: Column(
+                    children: [
+                      // buildDietaryOpt(),
+                      // buildMenu(),
+                      // buildUpcomingLoc()
+                      // // Food Card 2
+                      // buildSocials(),
+                      // SizedBox(height: 15),
+                      // buildNameLower(),
+                      // SizedBox(height: 5),
+                      // buildCuisineDetailsLower(),
+                      // SizedBox(height: 20),
+                      // buildLocationLower(),
+                      // SizedBox(height: 14),
+                      // buildDateLower(),
+                      // SizedBox(height: 25),
 
-                  // buildAboutStory(),
-                  // buildPhotoGallery(),
+                      // buildAboutStory(),
+                      // buildPhotoGallery(),
 
-                  // Main food card
-                  buildRefresh(),
-                  Spacer(),
-                  buildLogo(),
-                  const SizedBox(height: 12),
-                  buildName(),
-                  const SizedBox(height: 5),
-                  buildCuisineDetails(),
-                  const SizedBox(height: 20),
-                  buildLocation(),
-                  const SizedBox(height: 4),
-                  buildDate(),
-                ],
+                      // Main food card
+                      buildRefresh(),
+                      Spacer(),
+                      buildLogo(),
+                      const SizedBox(height: 12),
+                      buildName(),
+                      const SizedBox(height: 5),
+                      buildCuisineDetails(),
+                      const SizedBox(height: 20),
+                      buildLocation(),
+                      const SizedBox(height: 4),
+                      buildDate(),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -262,7 +269,7 @@ class _TinderCardState extends State<TinderCard> {
   Widget buildLocation() => Row(
         children: [
           Image.asset(
-            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/location_white.png',
+            'lib/assets/location_white.png',
             width: 18,
             height: 18,
           ),
@@ -280,7 +287,7 @@ class _TinderCardState extends State<TinderCard> {
   Widget buildLocationLower() => Row(
         children: [
           Image.asset(
-            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/location_arrow_orange.png',
+            'lib/assets/location_arrow_orange.png',
             width: 18,
             height: 18,
           ),
@@ -292,7 +299,7 @@ class _TinderCardState extends State<TinderCard> {
           ),
           Spacer(),
           Image.asset(
-            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/time_orange.png',
+            '/lib/assets/time_orange.png',
             width: 18,
             height: 18,
           ),
@@ -334,7 +341,7 @@ class _TinderCardState extends State<TinderCard> {
                   provider.resetUsers();
                 },
                 child: Image.asset(
-                  '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/reload.png',
+                  'lib/assets/reload.png',
                   width: 200,
                   height: 50,
                 ),
@@ -389,7 +396,7 @@ class _TinderCardState extends State<TinderCard> {
   Widget buildDate() => Row(
         children: [
           Image.asset(
-            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/calendar.png',
+            'lib/assets/calendar.png',
             width: 15,
             height: 15,
           ),
@@ -424,7 +431,7 @@ class _TinderCardState extends State<TinderCard> {
           ),
           Spacer(),
           Image.asset(
-            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/link.png',
+            'lib/assets/link.png',
             width: 20,
             height: 20,
           ),
@@ -433,7 +440,7 @@ class _TinderCardState extends State<TinderCard> {
   Widget buildDateLower() => Row(
         children: [
           Image.asset(
-            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/calendar_orange.png',
+            'lib/assets/calendar_orange.png',
             width: 15,
             height: 15,
           ),
@@ -457,7 +464,7 @@ class _TinderCardState extends State<TinderCard> {
                 style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(), elevation: 0.8),
                 child: Image.asset(
-                  '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/orange_instagram.png',
+                  'lib/assets/orange_instagram.png',
                   width: 100,
                   height: 100,
                 ),
@@ -474,7 +481,7 @@ class _TinderCardState extends State<TinderCard> {
                 style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(), elevation: 0.8),
                 child: Image.asset(
-                  '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/world2.png',
+                  'lib/assets/world2.png',
                   width: 200,
                   height: 200,
                 ),
@@ -491,7 +498,7 @@ class _TinderCardState extends State<TinderCard> {
                 style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(), elevation: 0.8),
                 child: Image.asset(
-                  '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/email.png',
+                  'lib/assets/email.png',
                   width: 200,
                   height: 200,
                 ),
@@ -500,7 +507,7 @@ class _TinderCardState extends State<TinderCard> {
           ),
           Spacer(),
           Image.asset(
-            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/link_orange.png',
+            'lib/assets/link_orange.png',
             width: 20,
             height: 20,
           ),
@@ -662,7 +669,7 @@ class _TinderCardState extends State<TinderCard> {
                       child: Row(
                         children: [
                           Image.asset(
-                            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/vegan.png',
+                            'lib/assets/vegan.png',
                             width: 15,
                             height: 15,
                           ),
@@ -693,7 +700,7 @@ class _TinderCardState extends State<TinderCard> {
                       child: Row(
                         children: [
                           Image.asset(
-                            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/nut_free.png',
+                            'lib/assets/nut_free.png',
                             width: 15,
                             height: 15,
                           ),
@@ -724,7 +731,7 @@ class _TinderCardState extends State<TinderCard> {
                       child: Row(
                         children: [
                           Image.asset(
-                            '/Users/jpalamand/DineTime/dinetime_mobile_mvp/lib/assets/vegetarian.png',
+                            'lib/assets/vegetarian.png',
                             width: 15,
                             height: 15,
                           ),
