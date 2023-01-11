@@ -123,26 +123,6 @@ class _FindYourFoodState extends State<FindYourFood> {
               icon: Icon(Icons.search),
               hintText: 'Search for a restaurant or list',
             ),
-            const SizedBox(height: 20.0),
-            ListCard(
-              listTitle: 'My Favorites',
-              listNumItems: 60,
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          foodList(context, 60, null, 'My Favorites')),
-                )
-              },
-            ),
-            const SizedBox(height: 20.0),
-            ListCard(
-              listTitle: 'Vegan Food',
-              listNumItems: 22,
-              listCreateDate: DateTime(2022, 9, 7),
-              onTap: () => {},
-            ),
           ],
         ),
       ),

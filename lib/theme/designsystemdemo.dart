@@ -209,18 +209,6 @@ class _DesignSystemState extends State<DesignSystem> {
                   const SizedBox(height: 20.0),
                   const RestaurantCard(),
                   const SizedBox(height: 20.0),
-                  ListCard(
-                    listTitle: 'My Favorites',
-                    listNumItems: 60,
-                    onTap: () => {},
-                  ),
-                  const SizedBox(height: 20.0),
-                  ListCard(
-                    listTitle: 'Vegan Food',
-                    listNumItems: 22,
-                    listCreateDate: DateTime(2022, 9, 7),
-                    onTap: () => {},
-                  ),
                 ],
               ),
             ),

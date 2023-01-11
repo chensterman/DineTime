@@ -152,20 +152,18 @@ class _TinderCardState extends State<TinderCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      child: Scrollbar(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  mainBackground(width, height),
-                  mainDetails(width, height),
-                ],
-              ),
-              additionalDetails(),
-            ],
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                mainBackground(width, height),
+                mainDetails(width, height),
+              ],
+            ),
+            additionalDetails(),
+          ],
         ),
       ),
     );
@@ -208,15 +206,17 @@ class _TinderCardState extends State<TinderCard> {
           children: [
             logo(),
             const SizedBox(height: 12),
+            links(),
+            const SizedBox(height: 12),
             name(),
             const SizedBox(height: 5),
             cuisineDetails(),
             const SizedBox(height: 20),
             nextLocation(),
-            const SizedBox(height: 4),
+            const SizedBox(height: 5),
             nextDate(),
-            const SizedBox(height: 12),
-            links(),
+            const SizedBox(height: 5),
+            nextTime(),
           ],
         ),
       ),
@@ -226,13 +226,28 @@ class _TinderCardState extends State<TinderCard> {
   Widget additionalDetails() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(children: [
-        aboutAndStory(),
-        photoGallery(),
-        dietaryOptions(),
-        menuItems(),
-        upcomingLocations(),
-      ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          aboutAndStory(),
+          const SizedBox(height: 10.0),
+          const Divider(),
+          const SizedBox(height: 10.0),
+          photoGallery(),
+          const SizedBox(height: 10.0),
+          const Divider(),
+          const SizedBox(height: 10.0),
+          dietaryOptions(),
+          const SizedBox(height: 10.0),
+          const Divider(),
+          const SizedBox(height: 10.0),
+          menuItems(),
+          const SizedBox(height: 10.0),
+          const Divider(),
+          const SizedBox(height: 10.0),
+          upcomingLocations(),
+        ],
+      ),
     );
   }
 
@@ -240,7 +255,6 @@ class _TinderCardState extends State<TinderCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
         Text(
           'About & Story',
           style: Theme.of(context).textTheme.headline1?.copyWith(
@@ -248,7 +262,7 @@ class _TinderCardState extends State<TinderCard> {
                 fontFamily: 'Lato',
               ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           widget.user.about,
           style: Theme.of(context).textTheme.bodyText2?.copyWith(
@@ -264,7 +278,6 @@ class _TinderCardState extends State<TinderCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
         Text(
           'Photo Gallery',
           style: Theme.of(context).textTheme.headline1?.copyWith(
@@ -272,45 +285,48 @@ class _TinderCardState extends State<TinderCard> {
                 fontFamily: 'Lato',
               ),
         ),
-        SizedBox(height: 10),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white.withOpacity(0.5),
-              image: DecorationImage(
-                  image: AssetImage(widget.user.photo1),
-                  fit: BoxFit.cover,
-                  opacity: 0.8),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white.withOpacity(0.5),
+                image: DecorationImage(
+                    image: AssetImage(widget.user.photo1),
+                    fit: BoxFit.cover,
+                    opacity: 0.8),
+              ),
             ),
-          ),
-          Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white.withOpacity(0.5),
-              image: DecorationImage(
-                  image: AssetImage(widget.user.photo2),
-                  fit: BoxFit.cover,
-                  opacity: 0.8),
+            Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white.withOpacity(0.5),
+                image: DecorationImage(
+                    image: AssetImage(widget.user.photo2),
+                    fit: BoxFit.cover,
+                    opacity: 0.8),
+              ),
             ),
-          ),
-          Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white.withOpacity(0.5),
-              image: DecorationImage(
-                  image: AssetImage(widget.user.photo3),
-                  fit: BoxFit.cover,
-                  opacity: 0.8),
+            Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white.withOpacity(0.5),
+                image: DecorationImage(
+                    image: AssetImage(widget.user.photo3),
+                    fit: BoxFit.cover,
+                    opacity: 0.8),
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ],
     );
   }
@@ -319,7 +335,6 @@ class _TinderCardState extends State<TinderCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
         Text(
           'Dietary Options',
           style: Theme.of(context).textTheme.headline1?.copyWith(
@@ -327,7 +342,7 @@ class _TinderCardState extends State<TinderCard> {
                 fontFamily: 'Lato',
               ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -422,7 +437,6 @@ class _TinderCardState extends State<TinderCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
         Text(
           'Our Menu',
           style: Theme.of(context).textTheme.headline1?.copyWith(
@@ -430,85 +444,81 @@ class _TinderCardState extends State<TinderCard> {
                 fontFamily: 'Lato',
               ),
         ),
-        SizedBox(height: 20),
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 2),
-              width: 332,
-              height: 104,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Color.fromARGB(95, 158, 158, 158), width: 2),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Column(
-                children: [
-                  Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(children: [
-                                  Text(
-                                    widget.user.menu1,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline1
-                                        ?.copyWith(
-                                          fontSize: 12.0,
-                                          fontFamily: 'Lato',
-                                        ),
-                                  ),
-                                  SizedBox(width: 30),
-                                  Text(
-                                    '\$' + widget.user.menuprice1,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline1
-                                        ?.copyWith(
-                                            fontSize: 12.0,
-                                            fontFamily: 'Lato',
-                                            color: dineTimeColorScheme.primary),
-                                  ),
-                                ]),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  widget.user.menudesc1,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      ?.copyWith(
-                                        fontSize: 10.0,
+        const SizedBox(height: 10),
+        Container(
+          padding: EdgeInsets.only(left: 5, right: 2),
+          width: 332,
+          height: 104,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                  color: Color.fromARGB(95, 158, 158, 158), width: 2),
+              borderRadius: BorderRadius.circular(7)),
+          child: Column(
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(children: [
+                              Text(
+                                widget.user.menu1,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    ?.copyWith(
+                                      fontSize: 12.0,
+                                      fontFamily: 'Lato',
+                                    ),
+                              ),
+                              SizedBox(width: 30),
+                              Text(
+                                '\$' + widget.user.menuprice1,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    ?.copyWith(
+                                        fontSize: 12.0,
                                         fontFamily: 'Lato',
-                                      ),
-                                ),
-                              ],
+                                        color: dineTimeColorScheme.primary),
+                              ),
+                            ]),
+                            const SizedBox(
+                              height: 5,
                             ),
-                          ),
-                          Container(
-                            height: 60,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white.withOpacity(0.5),
-                              image: DecorationImage(
-                                  image: AssetImage(widget.user.menuph1),
-                                  fit: BoxFit.cover,
-                                  opacity: 0.8),
+                            Text(
+                              widget.user.menudesc1,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(
+                                    fontSize: 10.0,
+                                    fontFamily: 'Lato',
+                                  ),
                             ),
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          ],
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 60,
+                        width: 90,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white.withOpacity(0.5),
+                          image: DecorationImage(
+                              image: AssetImage(widget.user.menuph1),
+                              fit: BoxFit.cover,
+                              opacity: 0.8),
+                        ),
+                      ),
+                    ],
+                  )),
+            ],
+          ),
         ),
       ],
     );
@@ -518,7 +528,6 @@ class _TinderCardState extends State<TinderCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
         Text(
           'Upcoming Locations',
           style: Theme.of(context).textTheme.headline1?.copyWith(
@@ -526,22 +535,97 @@ class _TinderCardState extends State<TinderCard> {
                 fontFamily: 'Lato',
               ),
         ),
-        SizedBox(height: 20),
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 2),
-              width: 332,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Color.fromARGB(95, 158, 158, 158), width: 2),
-                  borderRadius: BorderRadius.circular(7)),
-            ),
-          ],
-        ),
+        const SizedBox(height: 10.0),
+        upcomingLocationCard(),
+        const SizedBox(height: 10.0),
+        upcomingLocationCard(),
+        const SizedBox(height: 10.0),
+        upcomingLocationCard(),
       ],
+    );
+  }
+
+  Widget upcomingLocationCard() {
+    return ListCard(
+      height: 60.0,
+      width: double.infinity,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text("DATE"),
+          ),
+          Expanded(
+            flex: 6,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Text overflow works by wrapping text under Flexible widget
+                    Flexible(
+                      child: Text(
+                        "Location Name",
+                        style: Theme.of(context).textTheme.headline1?.copyWith(
+                              fontSize: 14.0,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Flexible(
+                      child: Text(
+                        "distance - time",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            ?.copyWith(fontSize: 12.0),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 35.0,
+                  height: 35.0,
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      // Display image based on availability of user uploaded image
+                      image: AssetImage('lib/assets/instagram.png'),
+                    ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(40.0),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 35.0,
+                  height: 35.0,
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      // Display image based on availability of user uploaded image
+                      image: AssetImage('lib/assets/instagram.png'),
+                    ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(40.0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -567,6 +651,26 @@ class _TinderCardState extends State<TinderCard> {
         SizedBox(width: 5),
         Text(
           widget.user.location,
+          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              fontSize: 12.0,
+              color: dineTimeColorScheme.background,
+              fontFamily: 'Lato'),
+        ),
+      ],
+    );
+  }
+
+  Widget nextTime() {
+    return Row(
+      children: [
+        Icon(
+          Icons.access_time_rounded,
+          size: 18.0,
+          color: Colors.white,
+        ),
+        SizedBox(width: 5),
+        Text(
+          "3:00 - 6:00 PM PST",
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
               fontSize: 12.0,
               color: dineTimeColorScheme.background,
