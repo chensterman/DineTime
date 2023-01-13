@@ -8,7 +8,7 @@ class Restaurant {
   ImageProvider<Object> restaurantLogo;
   int pricing;
   List<GalleryImage> gallery;
-  Menu menu;
+  List<MenuItem> menu;
   List<PopUpLocation> upcomingLocations;
   String? bio;
   String? cuisine;
@@ -62,21 +62,6 @@ class GalleryImage {
   GalleryImage({
     required this.imageId,
     required this.image,
-    required this.dateAdded,
-  });
-}
-
-// Menu data model for restaurants
-class Menu {
-  String menuId;
-  String menuName;
-  List<MenuItem> menuItems;
-  Timestamp dateAdded;
-
-  Menu({
-    required this.menuId,
-    required this.menuName,
-    required this.menuItems,
     required this.dateAdded,
   });
 }
