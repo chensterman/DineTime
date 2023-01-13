@@ -122,9 +122,8 @@ class CardProvider extends ChangeNotifier {
   }
 
   Future resetUsers() async {
-    List<Restaurant> _restaurants = await DatabaseService()
+    _restaurants = await DatabaseService()
         .getRestaurantsSwipe('03xUN3CqYlRNwukQAorq1G748h62');
-    print(_restaurants);
 
     notifyListeners();
   }

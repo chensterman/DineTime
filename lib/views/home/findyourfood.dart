@@ -34,6 +34,7 @@ class _FindYourFoodState extends State<FindYourFood> {
   Widget buildCards(BuildContext context) {
     final provider = Provider.of<CardProvider>(context);
     final restaurants = provider.restaurants;
+    print(restaurants);
 
     return restaurants.isEmpty
         ? SizedBox(
