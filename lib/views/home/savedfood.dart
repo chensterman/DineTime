@@ -1,3 +1,5 @@
+import 'package:dinetime_mobile_mvp/theme/components/foodcard.dart';
+import 'package:dinetime_mobile_mvp/views/home/foodcarddisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +18,7 @@ class SavedFood extends StatefulWidget {
 }
 
 class _SavedFoodState extends State<SavedFood> {
+  final double _cardHeight = 75.0;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -49,10 +52,8 @@ class _SavedFoodState extends State<SavedFood> {
                     );
                   }
                   // Return widget to process all document references
-                  return FoodListCardProcess(
-                      customerGeoPoint: data['geolocation'],
-                      restaurantRef: data['saved_businesses'][index - 1]
-                          ['restaurant_ref']);
+                  return foodListCardProcess(data['geolocation'],
+                      data['saved_businesses'][index - 1]['restaurant_ref']);
                 },
               );
             } else {
@@ -61,20 +62,9 @@ class _SavedFoodState extends State<SavedFood> {
           }),
         ));
   }
-}
 
-// Widget that contains the FutureBuilder to process saved restaurant document references
-class FoodListCardProcess extends StatelessWidget {
-  final GeoPoint customerGeoPoint;
-  final DocumentReference restaurantRef;
-  const FoodListCardProcess({
-    super.key,
-    required this.customerGeoPoint,
-    required this.restaurantRef,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget foodListCardProcess(
+      GeoPoint customerGeoPoint, DocumentReference restaurantRef) {
     return FutureBuilder(
       // Future to retrieve document data of restaurant reference
       future: DatabaseService().getRestaurantPreview(restaurantRef.id),
@@ -82,39 +72,24 @@ class FoodListCardProcess extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           // On loaded, process into FoodListCard
           RestaurantPreview restaurantPreview = snapshot.data!;
-          return FoodListCard(
-            isLoading: false,
-            customerGeoPoint: customerGeoPoint,
-            restaurantPreview: restaurantPreview,
+          return foodListCard(
+            false,
+            customerGeoPoint,
+            restaurantPreview,
           );
         } else if (snapshot.hasError) {
           // On error
           return const Text('Error');
         } else {
           // While still loading, return loading version of FoodListCard
-          return const FoodListCard(isLoading: true);
+          return foodListCard(true, null, null);
         }
       },
     );
   }
-}
 
-// Cards that display list items in saved
-class FoodListCard extends StatelessWidget {
-  final bool isLoading;
-  final GeoPoint? customerGeoPoint;
-  final RestaurantPreview? restaurantPreview;
-  const FoodListCard({
-    super.key,
-    required this.isLoading,
-    this.customerGeoPoint,
-    this.restaurantPreview,
-  });
-
-  final double _cardHeight = 75.0;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget foodListCard(bool isLoading, GeoPoint? customerGeoPoint,
+      RestaurantPreview? restaurantPreview) {
     if (isLoading) {
       // Loading version of FoodListCard
       return loadingFoodListCard();
@@ -128,7 +103,7 @@ class FoodListCard extends StatelessWidget {
               customerGeoPoint!, upcomingLocations[0].geocode)
           : null;
       // Card item
-      return fullFoodListCard(context, distance);
+      return fullFoodListCard(context, distance, restaurantPreview);
     }
   }
 
@@ -155,17 +130,28 @@ class FoodListCard extends StatelessWidget {
   }
 
   // Full version of the FoodListCard
-  Widget fullFoodListCard(BuildContext context, double? distance) {
+  Widget fullFoodListCard(BuildContext context, double? distance,
+      RestaurantPreview? restaurantPreview) {
     String infoText = distance != null
-        ? '${restaurantPreview!.cuisine!} - ${'\$' * restaurantPreview!.pricing} - $distance mi'
-        : '${restaurantPreview!.cuisine!} - ${'\$' * restaurantPreview!.pricing}';
+        ? '${restaurantPreview!.cuisine!} - ${'\$' * restaurantPreview.pricing} - $distance mi'
+        : '${restaurantPreview!.cuisine!} - ${'\$' * restaurantPreview.pricing}';
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       // Tappable portion of card
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          if (mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => FoodCardDisplay(
+                        restaurantId: restaurantPreview.restaurantId,
+                      )),
+            );
+          }
+        },
         child: SizedBox(
           height: _cardHeight,
           child: Row(
@@ -268,6 +254,27 @@ class FoodListCard extends StatelessWidget {
                           ),
                         )
                       : Container(),
+                  Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: InkWell(
+                      onTap: () async {
+                        await DatabaseService().deleteCustomerSaved(
+                            widget.customerId, restaurantPreview.restaurantId);
+                      },
+                      child: Container(
+                        width: 30.0,
+                        height: 30.0,
+                        decoration: BoxDecoration(
+                          image: const DecorationImage(
+                            // Display image based on availability of user uploaded image
+                            image: AssetImage('lib/assets/instagram.png'),
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     width: 8.0,
                   )

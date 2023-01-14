@@ -27,13 +27,14 @@ class _FoodCardState extends State<FoodCard> {
   @override
   void initState() {
     super.initState();
+    if (widget.isFront) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final size = MediaQuery.of(context).size;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final size = MediaQuery.of(context).size;
-
-      final provider = Provider.of<CardProvider>(context, listen: false);
-      provider.setScreenSize(size);
-    });
+        final provider = Provider.of<CardProvider>(context, listen: false);
+        provider.setScreenSize(size);
+      });
+    }
   }
 
   @override
