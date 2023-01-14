@@ -18,7 +18,6 @@ class CardProvider extends ChangeNotifier {
   double get angle => _angle;
 
   String customerId;
-
   CardProvider({required this.customerId}) {
     resetUsers();
   }
@@ -40,7 +39,7 @@ class CardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void endPosition() {
+  void endPosition(String restaurantId) {
     _isDragging = false;
     notifyListeners();
 
@@ -48,6 +47,7 @@ class CardProvider extends ChangeNotifier {
 
     switch (status) {
       case CardStatus.like:
+        DatabaseService().addCustomerSaved(customerId, restaurantId);
         like();
         break;
       case CardStatus.dislike:
@@ -122,8 +122,7 @@ class CardProvider extends ChangeNotifier {
   }
 
   Future resetUsers() async {
-    _restaurants = await DatabaseService()
-        .getRestaurantsSwipe('03xUN3CqYlRNwukQAorq1G748h62');
+    _restaurants = await DatabaseService().getRestaurantsSwipe(customerId);
 
     notifyListeners();
   }

@@ -44,6 +44,15 @@ class DatabaseService {
     await customerCollection.doc(customerId).update(customerData);
   }
 
+  // Add saved restaurant to customer
+  Future<void> addCustomerSaved(String customerId, String restaurantId) async {
+    await customerCollection.doc(customerId).update({
+      'saved_businesses': FieldValue.arrayUnion([
+        {'restaurant_ref': restaurantCollection.doc(restaurantId)}
+      ])
+    });
+  }
+
   // Stream of specific customer document
   Stream<DocumentSnapshot> customerStream(String customerId) {
     return customerCollection.doc(customerId).snapshots();
@@ -78,7 +87,8 @@ class DatabaseService {
             locationDateStart: locationMap['date_start'],
             locationDateEnd: locationMap['date_end'],
             dateAdded: locationMap['date_added'],
-            geocode: locationMap['geocode']));
+            geocode: locationMap['geocode'],
+            name: locationMap['name']));
       }
     }
     // Construct and return RestaurantPreview object
@@ -159,7 +169,8 @@ class DatabaseService {
             locationDateStart: locationRaw['date_start'],
             locationDateEnd: locationRaw['date_end'],
             dateAdded: locationRaw['date_added'],
-            geocode: locationRaw['geocode']));
+            geocode: locationRaw['geocode'],
+            name: locationRaw['name']));
       }
 
       // Add Restaurant object to list

@@ -93,6 +93,7 @@ class PopUpLocation {
   Timestamp locationDateEnd;
   Timestamp dateAdded;
   GeoPoint geocode;
+  String name;
 
   PopUpLocation({
     required this.locationId,
@@ -101,5 +102,6 @@ class PopUpLocation {
     required this.locationDateEnd,
     required this.dateAdded,
     required this.geocode,
+    required this.name,
   });
 }

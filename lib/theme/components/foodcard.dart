@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +81,7 @@ class _FoodCardState extends State<FoodCard> {
         onPanEnd: (details) {
           final provider = Provider.of<CardProvider>(context, listen: false);
 
-          provider.endPosition();
+          provider.endPosition(widget.restaurant.restaurantId);
         },
       );
 
@@ -159,6 +160,7 @@ class _FoodCardState extends State<FoodCard> {
             Stack(
               children: [
                 mainBackground(width, height),
+                mainBackgroundShadow(width, height),
                 mainDetails(width, height),
               ],
             ),
@@ -174,21 +176,30 @@ class _FoodCardState extends State<FoodCard> {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        image: const DecorationImage(
+        image: DecorationImage(
+          image: widget.restaurant.menu[0].itemPhoto!,
           fit: BoxFit.cover,
-          image: AssetImage('lib/assets/food1.png'),
         ),
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.0),
+      ),
+    );
+  }
+
+  Widget mainBackgroundShadow(double width, double height) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
         gradient: const LinearGradient(
           colors: [
-            Color.fromARGB(177, 0, 0, 0),
             Colors.transparent,
-            Color.fromARGB(226, 0, 0, 0),
+            Color.fromARGB(255, 0, 0, 0),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          stops: [0.0, 0.5, 1],
+          stops: [0.5, 1],
         ),
       ),
     );
@@ -527,27 +538,31 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget upcomingLocations() {
+    List<PopUpLocation> popUpLocations = widget.restaurant.upcomingLocations;
+    List<Widget> columnChildren = [
+      Text(
+        'Upcoming Locations',
+        style: Theme.of(context).textTheme.headline1?.copyWith(
+              fontSize: 20.0,
+              fontFamily: 'Lato',
+            ),
+      ),
+    ];
+    for (PopUpLocation popUpLocation in popUpLocations) {
+      columnChildren.add(const SizedBox(
+        height: 10.0,
+      ));
+      columnChildren.add(upcomingLocationCard(
+          popUpLocation.locationDateStart, popUpLocation.name, 2.0));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Upcoming Locations',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 20.0,
-                fontFamily: 'Lato',
-              ),
-        ),
-        const SizedBox(height: 10.0),
-        upcomingLocationCard(),
-        const SizedBox(height: 10.0),
-        upcomingLocationCard(),
-        const SizedBox(height: 10.0),
-        upcomingLocationCard(),
-      ],
+      children: columnChildren,
     );
   }
 
-  Widget upcomingLocationCard() {
+  Widget upcomingLocationCard(
+      Timestamp dateStart, String name, double distance) {
     return ListCard(
       height: 60.0,
       width: double.infinity,
@@ -555,7 +570,8 @@ class _FoodCardState extends State<FoodCard> {
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
-            child: Text("DATE"),
+            child:
+                Text('${dateStart.toDate().month}/${dateStart.toDate().day}'),
           ),
           Expanded(
             flex: 6,
@@ -569,17 +585,17 @@ class _FoodCardState extends State<FoodCard> {
                     // Text overflow works by wrapping text under Flexible widget
                     Flexible(
                       child: Text(
-                        "Location Name",
+                        name,
                         style: Theme.of(context).textTheme.headline1?.copyWith(
-                              fontSize: 14.0,
-                            ),
+                            fontSize: 14.0,
+                            color: Theme.of(context).colorScheme.onSurface),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const SizedBox(height: 5.0),
                     Flexible(
                       child: Text(
-                        "distance - time",
+                        "$distance mi - ${dateStart.toDate().hour}:${dateStart.toDate().minute} ${dateStart.toDate().timeZoneName}",
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1
@@ -650,9 +666,9 @@ class _FoodCardState extends State<FoodCard> {
           width: 18,
           height: 18,
         ),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Text(
-          widget.restaurant.upcomingLocations[0].locationAddress,
+          widget.restaurant.upcomingLocations[0].name,
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
               fontSize: 12.0,
               color: dineTimeColorScheme.background,
@@ -665,12 +681,12 @@ class _FoodCardState extends State<FoodCard> {
   Widget nextTime() {
     return Row(
       children: [
-        Icon(
+        const Icon(
           Icons.access_time_rounded,
           size: 18.0,
           color: Colors.white,
         ),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Text(
           "3:00 - 6:00 PM PST",
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
@@ -717,6 +733,22 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget nextDate() {
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    String nextDate =
+        '${months[widget.restaurant.upcomingLocations[0].locationDateStart.toDate().month - 1]} ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().day}, ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().year}';
     return Row(
       children: [
         Image.asset(
@@ -726,7 +758,7 @@ class _FoodCardState extends State<FoodCard> {
         ),
         const SizedBox(width: 5),
         Text(
-          widget.restaurant.upcomingLocations[0].locationDateStart.toString(),
+          nextDate,
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
               fontSize: 12.0,
               color: dineTimeColorScheme.background,
@@ -768,7 +800,9 @@ class _FoodCardState extends State<FoodCard> {
             child: ElevatedButton(
               onPressed: followLink,
               style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(), elevation: 0.8),
+                  backgroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 0.8),
               child: Image.asset(
                 'lib/assets/orange_instagram.png',
                 width: 100,
@@ -785,7 +819,9 @@ class _FoodCardState extends State<FoodCard> {
             child: ElevatedButton(
               onPressed: followLink,
               style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(), elevation: 0.8),
+                  backgroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 0.8),
               child: Image.asset(
                 'lib/assets/world2.png',
                 width: 200,
@@ -802,7 +838,9 @@ class _FoodCardState extends State<FoodCard> {
             child: ElevatedButton(
               onPressed: followLink,
               style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(), elevation: 0.8),
+                  backgroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 0.8),
               child: Image.asset(
                 'lib/assets/email.png',
                 width: 200,
