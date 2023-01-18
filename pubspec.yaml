@@ -31,6 +31,8 @@ environment:
 dependencies:
   swipe_cards: ^1.0.0
   flutter_swipable: 
+  carousel_slider: 
+  dots_indicator:
   flutter:
     sdk: flutter
 
@@ -44,6 +46,7 @@ dependencies:
   location: ^4.4.0
   provider: ^6.0.1
   url_launcher: ^6.1.7
+
 
 dev_dependencies:
   flutter_test:

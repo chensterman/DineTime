@@ -1,16 +1,25 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:dinetime_mobile_mvp/models/user.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/additionalwidgets/menu.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/additionalwidgets/aboutandstory.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/additionalwidgets/photogallery.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/additionalwidgets/dietaryoptions.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/additionalwidgets/links.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/additionalwidgets/divider.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/maincardwidgets/logo.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/maincardwidgets/name.dart';
+import 'package:dinetime_mobile_mvp/views/tinderwidgets/maincardwidgets/cuisinedetails.dart';
 import 'package:dinetime_mobile_mvp/provider/card_provider.dart';
+import 'package:dinetime_mobile_mvp/models/user.dart';
+import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/link.dart';
 
 class TinderCard extends StatefulWidget {
   final User user;
   final bool isFront;
+  // final List _menu = []
 
   const TinderCard({
     Key? key,
@@ -92,55 +101,32 @@ class _TinderCardState extends State<TinderCard> {
     switch (status) {
       case CardStatus.like:
         final child = stamp(
-          angle: -0.5,
           color: Colors.green,
-          text: 'LIKE',
+          text: 'lib/assets/like_logo.png',
           opacity: opacity,
         );
 
-        return Positioned(top: 64, left: 50, child: child);
+        return Positioned(top: 290, left: 10, child: child);
       case CardStatus.dislike:
         final child = stamp(
-          angle: 0.5,
           color: Colors.red,
-          text: 'NOPE',
+          text: 'lib/assets/dislike_logo.png',
           opacity: opacity,
         );
 
-        return Positioned(top: 64, right: 50, child: child);
+        return Positioned(top: 290, right: 10, child: child);
       default:
         return Container();
     }
   }
 
   Widget stamp({
-    double angle = 0,
     required Color color,
     required String text,
     required double opacity,
   }) {
     return Opacity(
-      opacity: opacity,
-      child: Transform.rotate(
-        angle: angle,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color, width: 4),
-          ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: color,
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
+        opacity: opacity, child: Image.asset(text, height: 70, width: 70));
   }
 
   Widget buildCard(BuildContext context) {
@@ -204,13 +190,19 @@ class _TinderCardState extends State<TinderCard> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            logo(),
+            Logo(
+              logopath: widget.user.logoImage,
+            ),
             const SizedBox(height: 12),
-            links(),
+            const Links(),
             const SizedBox(height: 12),
-            name(),
+            Name(name: widget.user.name),
             const SizedBox(height: 5),
-            cuisineDetails(),
+            CuisineDetails(
+              cuisine: widget.user.cuisine,
+              cost: widget.user.cost,
+              distance: widget.user.distance,
+            ),
             const SizedBox(height: 20),
             nextLocation(),
             const SizedBox(height: 5),
@@ -229,19 +221,26 @@ class _TinderCardState extends State<TinderCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          aboutAndStory(),
+          AboutandStory(about: widget.user.about),
+          const SizedBox(height: 20.0),
+          const WidgetDivider(),
+          const SizedBox(height: 20.0),
+          PhotoGallery(
+              photo1: widget.user.photo1,
+              photo2: widget.user.photo2,
+              photo3: widget.user.photo3),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          photoGallery(),
+          DietaryOptions(
+            dietary1: widget.user.dietary1,
+            dietary2: widget.user.dietary2,
+            dietary3: widget.user.dietary3,
+          ),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          dietaryOptions(),
-          const SizedBox(height: 10.0),
-          const Divider(),
-          const SizedBox(height: 10.0),
-          menuItems(),
+          menu(),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
@@ -251,189 +250,7 @@ class _TinderCardState extends State<TinderCard> {
     );
   }
 
-  Widget aboutAndStory() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'About & Story',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 20.0,
-                fontFamily: 'Lato',
-              ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          widget.user.about,
-          style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                fontSize: 12.0,
-                fontFamily: 'Lato',
-              ),
-        ),
-      ],
-    );
-  }
-
-  Widget photoGallery() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Photo Gallery',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 20.0,
-                fontFamily: 'Lato',
-              ),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white.withOpacity(0.5),
-                image: DecorationImage(
-                    image: AssetImage(widget.user.photo1),
-                    fit: BoxFit.cover,
-                    opacity: 0.8),
-              ),
-            ),
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white.withOpacity(0.5),
-                image: DecorationImage(
-                    image: AssetImage(widget.user.photo2),
-                    fit: BoxFit.cover,
-                    opacity: 0.8),
-              ),
-            ),
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white.withOpacity(0.5),
-                image: DecorationImage(
-                    image: AssetImage(widget.user.photo3),
-                    fit: BoxFit.cover,
-                    opacity: 0.8),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget dietaryOptions() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Dietary Options',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 20.0,
-                fontFamily: 'Lato',
-              ),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 2),
-              width: 85,
-              height: 25,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Color.fromARGB(95, 158, 158, 158), width: 2),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'lib/assets/vegan.png',
-                    width: 15,
-                    height: 15,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    widget.user.dietary1,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                        fontFamily: 'Lato'),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 2),
-              width: 95,
-              height: 25,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Color.fromARGB(95, 158, 158, 158), width: 2),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'lib/assets/nut_free.png',
-                    width: 15,
-                    height: 15,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    widget.user.dietary2,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                        fontFamily: 'Lato'),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 2),
-              width: 110,
-              height: 25,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Color.fromARGB(95, 158, 158, 158), width: 2),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'lib/assets/vegetarian.png',
-                    width: 15,
-                    height: 15,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    widget.user.dietary3,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                        fontFamily: 'Lato'),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget menuItems() {
+  Widget menu() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -444,83 +261,373 @@ class _TinderCardState extends State<TinderCard> {
                 fontFamily: 'Lato',
               ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         Container(
           padding: EdgeInsets.only(left: 5, right: 2),
-          width: 332,
-          height: 104,
+          width: 360,
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                  color: Color.fromARGB(95, 158, 158, 158), width: 2),
+                  color: Color.fromARGB(95, 158, 158, 158), width: 1),
               borderRadius: BorderRadius.circular(7)),
-          child: Column(
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(children: [
-                              Text(
-                                widget.user.menu1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    ?.copyWith(
-                                      fontSize: 12.0,
-                                      fontFamily: 'Lato',
-                                    ),
-                              ),
-                              SizedBox(width: 30),
-                              Text(
-                                '\$' + widget.user.menuprice1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    ?.copyWith(
-                                        fontSize: 12.0,
-                                        fontFamily: 'Lato',
-                                        color: dineTimeColorScheme.primary),
-                              ),
-                            ]),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              widget.user.menudesc1,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(
-                                    fontSize: 10.0,
-                                    fontFamily: 'Lato',
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 60,
-                        width: 90,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white.withOpacity(0.5),
-                          image: DecorationImage(
-                              image: AssetImage(widget.user.menuph1),
-                              fit: BoxFit.cover,
-                              opacity: 0.8),
-                        ),
-                      ),
-                    ],
-                  )),
-            ],
+          child: Expanded(
+            child: Column(children: [
+              MenuOptions(
+                  price: widget.user.menuprice1,
+                  image: widget.user.menuph1,
+                  itemName: widget.user.menu1,
+                  itemDesc: widget.user.menudesc1),
+              Divider(color: Color.fromARGB(95, 158, 158, 158), height: 1),
+              MenuOptions(
+                  price: widget.user.menuprice2,
+                  image: widget.user.menuph2,
+                  itemName: widget.user.menu2,
+                  itemDesc: widget.user.menudesc2),
+              Divider(color: Color.fromARGB(95, 158, 158, 158), height: 1),
+              MenuOptions(
+                  price: widget.user.menuprice3,
+                  image: widget.user.menuph3,
+                  itemName: widget.user.menu3,
+                  itemDesc: widget.user.menudesc3),
+              Divider(color: Color.fromARGB(95, 158, 158, 158), height: 1),
+              menuButton()
+            ]),
           ),
         ),
       ],
+    );
+  }
+
+  Widget menuButton() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+      child: InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(25),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.68,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Row(
+                              children: [
+                                const Image(
+                                    image:
+                                        AssetImage('lib/assets/back_arrow.png'),
+                                    height: 15,
+                                    width: 15),
+                                const SizedBox(width: 10),
+                                Text(
+                                  "Go Back",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      ?.copyWith(
+                                          fontSize: 15.0,
+                                          fontFamily: 'Lato',
+                                          color: dineTimeColorScheme.primary),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Row(
+                            children: [
+                              Text(
+                                "Menu",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    ?.copyWith(
+                                      fontSize: 25.0,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.57,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: CupertinoScrollbar(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  MenuOptions(
+                                      price: widget.user.menuprice1,
+                                      image: widget.user.menuph1,
+                                      itemName: widget.user.menu1,
+                                      itemDesc: widget.user.menudesc1),
+                                  Divider(
+                                      color: Color.fromARGB(95, 158, 158, 158),
+                                      height: 1),
+                                  MenuOptions(
+                                      price: widget.user.menuprice2,
+                                      image: widget.user.menuph2,
+                                      itemName: widget.user.menu2,
+                                      itemDesc: widget.user.menudesc2),
+                                  Divider(
+                                      color: Color.fromARGB(95, 158, 158, 158),
+                                      height: 1),
+                                  MenuOptions(
+                                      price: widget.user.menuprice3,
+                                      image: widget.user.menuph3,
+                                      itemName: widget.user.menu3,
+                                      itemDesc: widget.user.menudesc3),
+                                  Divider(
+                                      color: Color.fromARGB(95, 158, 158, 158),
+                                      height: 1),
+                                  MenuOptions(
+                                      price: widget.user.menuprice1,
+                                      image: widget.user.menuph1,
+                                      itemName: widget.user.menu1,
+                                      itemDesc: widget.user.menudesc1),
+                                  Divider(
+                                      color: Color.fromARGB(95, 158, 158, 158),
+                                      height: 1),
+                                  MenuOptions(
+                                      price: widget.user.menuprice2,
+                                      image: widget.user.menuph2,
+                                      itemName: widget.user.menu2,
+                                      itemDesc: widget.user.menudesc2),
+                                  Divider(
+                                      color: Color.fromARGB(95, 158, 158, 158),
+                                      height: 1),
+                                  MenuOptions(
+                                      price: widget.user.menuprice3,
+                                      image: widget.user.menuph3,
+                                      itemName: widget.user.menu3,
+                                      itemDesc: widget.user.menudesc3),
+                                  Divider(
+                                      color: Color.fromARGB(95, 158, 158, 158),
+                                      height: 1),
+                                  MenuOptions(
+                                      price: widget.user.menuprice2,
+                                      image: widget.user.menuph2,
+                                      itemName: widget.user.menu2,
+                                      itemDesc: widget.user.menudesc2),
+                                  Divider(
+                                      color: Color.fromARGB(95, 158, 158, 158),
+                                      height: 1),
+                                  MenuOptions(
+                                      price: widget.user.menuprice3,
+                                      image: widget.user.menuph3,
+                                      itemName: widget.user.menu3,
+                                      itemDesc: widget.user.menudesc3),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            width: 250,
+            height: 25,
+            decoration: BoxDecoration(
+              color: dineTimeColorScheme.primary.withOpacity(0.2),
+              shape: BoxShape.rectangle,
+            ),
+            child: Center(
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "View full menu",
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          fontSize: 10.0,
+                          color: dineTimeColorScheme.primary,
+                          fontFamily: 'Lato'),
+                    ),
+                    SizedBox(width: 5),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: dineTimeColorScheme.primary,
+                      size: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget locationsButton() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+      child: InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(25),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.68,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Row(
+                                children: [
+                                  const Image(
+                                      image: AssetImage(
+                                          'lib/assets/back_arrow.png'),
+                                      height: 15,
+                                      width: 15),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    "Go Back",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        ?.copyWith(
+                                            fontSize: 15.0,
+                                            fontFamily: 'Lato',
+                                            color: dineTimeColorScheme.primary),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Upcoming Locations",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline1
+                                      ?.copyWith(
+                                        fontSize: 25.0,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.57,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: CupertinoScrollbar(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                    upcomingLocationCard(),
+                                    const SizedBox(height: 10.0),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              width: 250,
+              height: 22,
+              decoration: BoxDecoration(
+                color: dineTimeColorScheme.primary.withOpacity(0.2),
+                shape: BoxShape.rectangle,
+              ),
+              child: Center(
+                  child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "View all upcoming locations",
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          fontSize: 10.0,
+                          color: dineTimeColorScheme.primary,
+                          fontFamily: 'Lato'),
+                    ),
+                    SizedBox(width: 5),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: dineTimeColorScheme.primary,
+                      size: 10,
+                    ),
+                  ],
+                ),
+              )),
+            ),
+          )),
     );
   }
 
@@ -535,12 +642,18 @@ class _TinderCardState extends State<TinderCard> {
                 fontFamily: 'Lato',
               ),
         ),
-        const SizedBox(height: 10.0),
+        const SizedBox(height: 20.0),
         upcomingLocationCard(),
         const SizedBox(height: 10.0),
         upcomingLocationCard(),
         const SizedBox(height: 10.0),
         upcomingLocationCard(),
+        const SizedBox(height: 10.0),
+        upcomingLocationCard(),
+        const SizedBox(height: 10.0),
+        Center(
+          child: locationsButton(),
+        )
       ],
     );
   }
@@ -629,17 +742,6 @@ class _TinderCardState extends State<TinderCard> {
     );
   }
 
-  Widget name() {
-    return Text(
-      widget.user.name,
-      style: Theme.of(context).textTheme.headline1?.copyWith(
-            fontSize: 28.0,
-            color: dineTimeColorScheme.background,
-            fontFamily: 'Lato',
-          ),
-    );
-  }
-
   Widget nextLocation() {
     return Row(
       children: [
@@ -677,39 +779,6 @@ class _TinderCardState extends State<TinderCard> {
               fontFamily: 'Lato'),
         ),
       ],
-    );
-  }
-
-  Widget logo() {
-    return Container(
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: dineTimeColorScheme.primary, width: 4),
-      ),
-      child: ClipOval(
-        child: Image.asset(widget.user.logoImage),
-      ),
-    );
-  }
-
-  Widget cuisineDetails() {
-    return RichText(
-      text: TextSpan(
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              fontSize: 12.0,
-              color: dineTimeColorScheme.background,
-              fontFamily: 'Lato'),
-          children: [
-            TextSpan(text: widget.user.cuisine),
-            const TextSpan(
-                text: '   ·   ', style: TextStyle(fontWeight: FontWeight.bold)),
-            TextSpan(text: widget.user.cost),
-            const TextSpan(
-                text: '   ·   ', style: TextStyle(fontWeight: FontWeight.bold)),
-            TextSpan(text: widget.user.distance),
-          ]),
     );
   }
 
@@ -753,89 +822,5 @@ class _TinderCardState extends State<TinderCard> {
       ],
     );
   }
-
-  Widget links() {
-    return Row(
-      children: [
-        Link(
-          uri: Uri.parse('instagram.com'),
-          builder: (context, followLink) => SizedBox(
-            width: 52,
-            height: 35,
-            child: ElevatedButton(
-              onPressed: followLink,
-              style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(), elevation: 0.8),
-              child: Image.asset(
-                'lib/assets/orange_instagram.png',
-                width: 100,
-                height: 100,
-              ),
-            ),
-          ),
-        ),
-        Link(
-          uri: Uri.parse('instagram.com'),
-          builder: (context, followLink) => SizedBox(
-            width: 52,
-            height: 35,
-            child: ElevatedButton(
-              onPressed: followLink,
-              style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(), elevation: 0.8),
-              child: Image.asset(
-                'lib/assets/world2.png',
-                width: 200,
-                height: 200,
-              ),
-            ),
-          ),
-        ),
-        Link(
-          uri: Uri.parse('instagram.com'),
-          builder: (context, followLink) => SizedBox(
-            width: 52,
-            height: 35,
-            child: ElevatedButton(
-              onPressed: followLink,
-              style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(), elevation: 0.8),
-              child: Image.asset(
-                'lib/assets/email.png',
-                width: 200,
-                height: 200,
-              ),
-            ),
-          ),
-        ),
-        const Spacer(),
-        Image.asset(
-          'lib/assets/link.png',
-          width: 20,
-          height: 20,
-        ),
-      ],
-    );
-  }
-
-  Widget buildRefresh() => Row(
-        children: [
-          Container(
-              width: 50,
-              height: 50,
-              child: InkWell(
-                onTap: () {
-                  final provider =
-                      Provider.of<CardProvider>(context, listen: false);
-
-                  provider.resetUsers();
-                },
-                child: Image.asset(
-                  'lib/assets/reload.png',
-                  width: 200,
-                  height: 50,
-                ),
-              )),
-        ],
-      );
 }
+// write another widget of an image

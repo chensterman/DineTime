@@ -24,6 +24,10 @@ class User {
   final String menuph2;
   final String menuprice2;
   final String menudesc2;
+  final String menu3;
+  final String menuph3;
+  final String menuprice3;
+  final String menudesc3;
   final String upcominglocationdate1;
   final String upcominglocation1;
   final String upcominglocationdist1;
@@ -59,6 +63,10 @@ class User {
     required this.menuph2,
     required this.menuprice2,
     required this.menudesc2,
+    required this.menu3,
+    required this.menuph3,
+    required this.menuprice3,
+    required this.menudesc3,
     required this.upcominglocation1,
     required this.upcominglocationdate1,
     required this.upcominglocationdist1,
