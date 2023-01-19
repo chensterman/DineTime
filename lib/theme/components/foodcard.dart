@@ -805,7 +805,7 @@ class _FoodCardState extends State<FoodCard> {
                   shape: const CircleBorder(),
                   elevation: 0.8),
               child: Image.asset(
-                'lib/assets/orange_instagram.png',
+                'lib/assets/instagram_orange.png',
                 width: 100,
                 height: 100,
               ),
