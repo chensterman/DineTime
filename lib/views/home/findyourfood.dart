@@ -1,6 +1,6 @@
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/services/analytics_service.dart';
-import 'package:dinetime_mobile_mvp/theme/components/foodcard.dart';
+import 'package:dinetime_mobile_mvp/views/home/foodcard.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:provider/provider.dart';
