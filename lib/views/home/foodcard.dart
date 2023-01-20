@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/theme/components/photocarousel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
@@ -287,6 +288,28 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget photoGallery() {
+    List<r.GalleryImage> gallery = widget.restaurant.gallery;
+    List<Widget> galleryChildren = [];
+    num count = 0;
+    for (r.GalleryImage galleryImage in gallery) {
+      galleryChildren.add(
+        Container(
+          height: 100,
+          width: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white.withOpacity(0.5),
+            image: DecorationImage(
+                image: galleryImage.image, fit: BoxFit.cover, opacity: 0.8),
+          ),
+        ),
+      );
+      galleryChildren.add(SizedBox(width: 25));
+      count += 1;
+      if (count == 3) {
+        break;
+      }
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -297,47 +320,76 @@ class _FoodCardState extends State<FoodCard> {
                 fontFamily: 'Lato',
               ),
         ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white.withOpacity(0.5),
-                image: DecorationImage(
-                    image: widget.restaurant.gallery[0].image,
-                    fit: BoxFit.cover,
-                    opacity: 0.8),
-              ),
-            ),
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white.withOpacity(0.5),
-                image: DecorationImage(
-                    image: widget.restaurant.gallery[0].image,
-                    fit: BoxFit.cover,
-                    opacity: 0.8),
-              ),
-            ),
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white.withOpacity(0.5),
-                image: DecorationImage(
-                    image: widget.restaurant.gallery[0].image,
-                    fit: BoxFit.cover,
-                    opacity: 0.8),
-              ),
-            ),
-          ],
+        const SizedBox(height: 20.0),
+        InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(25),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Row(
+                                children: [
+                                  const Image(
+                                      image: AssetImage(
+                                          'lib/assets/back_arrow.png'),
+                                      height: 15,
+                                      width: 15),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    "Go Back",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        ?.copyWith(
+                                            fontSize: 15.0,
+                                            fontFamily: 'Lato',
+                                            color: dineTimeColorScheme.primary),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: Column(
+                              children: [
+                                PhotoCarousel(
+                                  images: gallery.map((e) => e.image).toList(),
+                                  descriptions: gallery
+                                      .map((e) => e.imageDescription)
+                                      .toList(),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: galleryChildren,
+          ),
         ),
       ],
     );
@@ -852,6 +904,10 @@ class _FoodCardState extends State<FoodCard> {
 
   Widget upcomingLocationCard(
       Timestamp dateStart, String name, double distance) {
+    String period = dateStart.toDate().hour > 12 ? "PM" : "AM";
+    num hour = dateStart.toDate().hour % 12;
+    num minute = dateStart.toDate().minute;
+    String timeZoneName = dateStart.toDate().timeZoneName;
     return ListCard(
       height: 60.0,
       width: double.infinity,
@@ -884,7 +940,7 @@ class _FoodCardState extends State<FoodCard> {
                     const SizedBox(height: 5.0),
                     Flexible(
                       child: Text(
-                        "$distance mi - ${dateStart.toDate().hour}:${dateStart.toDate().minute} ${dateStart.toDate().timeZoneName}",
+                        "$distance mi - $hour:$minute $period $timeZoneName",
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1
@@ -968,6 +1024,12 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget nextTime() {
+    r.PopUpLocation nextPopUpLocation = widget.restaurant.upcomingLocations[0];
+    Timestamp dateStart = nextPopUpLocation.locationDateStart;
+    String period = dateStart.toDate().hour > 12 ? "PM" : "AM";
+    num hour = dateStart.toDate().hour % 12;
+    num minute = dateStart.toDate().minute;
+    String timeZoneName = dateStart.toDate().timeZoneName;
     return Row(
       children: [
         const Icon(
@@ -977,7 +1039,7 @@ class _FoodCardState extends State<FoodCard> {
         ),
         const SizedBox(width: 5),
         Text(
-          "3:00 - 6:00 PM PST",
+          "$hour:$minute $period $timeZoneName",
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
               fontSize: 12.0,
               color: dineTimeColorScheme.background,
@@ -1112,7 +1174,7 @@ class _FoodCardState extends State<FoodCard> {
                   shape: const CircleBorder(),
                   elevation: 0.8),
               child: Image.asset(
-                'lib/assets/world2.png',
+                'lib/assets/world_orange.png',
                 width: 200,
                 height: 200,
               ),

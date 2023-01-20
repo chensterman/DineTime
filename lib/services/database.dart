@@ -135,6 +135,7 @@ class DatabaseService {
       gallery.add(r.GalleryImage(
           imageId: imageRaw['photo_id'],
           image: await getPhoto(imageRaw['photo_location']),
+          imageDescription: imageRaw['photo_description'],
           dateAdded: imageRaw['date_added']));
     }
 

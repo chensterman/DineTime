@@ -56,11 +56,13 @@ class RestaurantPreview {
 // Gallery image data model for restaurants
 class GalleryImage {
   String imageId;
+  String imageDescription;
   ImageProvider<Object> image;
   Timestamp dateAdded;
 
   GalleryImage({
     required this.imageId,
+    required this.imageDescription,
     required this.image,
     required this.dateAdded,
   });

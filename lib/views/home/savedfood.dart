@@ -1,4 +1,4 @@
-import 'package:dinetime_mobile_mvp/theme/components/foodcard.dart';
+import 'package:dinetime_mobile_mvp/views/home/foodcard.dart';
 import 'package:dinetime_mobile_mvp/views/home/foodcarddisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -224,7 +224,8 @@ class _SavedFoodState extends State<SavedFood> {
                               decoration: BoxDecoration(
                                 image: const DecorationImage(
                                   // Display image based on availability of user uploaded image
-                                  image: AssetImage('lib/assets/instagram.png'),
+                                  image: AssetImage(
+                                      'lib/assets/instagram_orange.png'),
                                 ),
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(40.0),
@@ -245,7 +246,8 @@ class _SavedFoodState extends State<SavedFood> {
                               decoration: BoxDecoration(
                                 image: const DecorationImage(
                                   // Display image based on availability of user uploaded image
-                                  image: AssetImage('lib/assets/inbox.png'),
+                                  image:
+                                      AssetImage('lib/assets/world_orange.png'),
                                 ),
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(40.0),
