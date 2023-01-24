@@ -850,12 +850,6 @@ class _FoodCardState extends State<FoodCard> {
             ),
           ),
         ),
-        const Spacer(),
-        Image.asset(
-          'lib/assets/link.png',
-          width: 20,
-          height: 20,
-        ),
       ],
     );
   }

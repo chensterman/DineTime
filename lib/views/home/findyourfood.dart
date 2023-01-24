@@ -58,10 +58,12 @@ class _FindYourFoodState extends State<FindYourFood> {
           )
         : Stack(
             children: restaurants
-                .map((restaurant) => FoodCard(
-                      restaurant: restaurant,
-                      isFront: restaurants.last == restaurant,
-                    ))
+                .map(
+                  (restaurant) => FoodCard(
+                    restaurant: restaurant,
+                    isFront: restaurants.last == restaurant,
+                  ),
+                )
                 .toList(),
           );
   }

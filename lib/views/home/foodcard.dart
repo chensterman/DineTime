@@ -155,19 +155,23 @@ class _FoodCardState extends State<FoodCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Stack(
-              children: [
-                mainBackground(width, height),
-                mainBackgroundShadow(width, height),
-                mainDetails(width, height),
-              ],
-            ),
-            additionalDetails(),
-          ],
+      child: SizedBox(
+        height: height,
+        width: width,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Stack(
+                children: [
+                  mainBackground(width, height),
+                  mainBackgroundShadow(width, height),
+                  mainDetails(width, height),
+                ],
+              ),
+              additionalDetails(),
+            ],
+          ),
         ),
       ),
     );
@@ -916,7 +920,7 @@ class _FoodCardState extends State<FoodCard> {
                 Text('${dateStart.toDate().month}/${dateStart.toDate().day}'),
           ),
           Expanded(
-            flex: 6,
+            flex: 5,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
@@ -950,40 +954,28 @@ class _FoodCardState extends State<FoodCard> {
               ),
             ),
           ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 35.0,
-                  height: 35.0,
-                  decoration: BoxDecoration(
-                    image: const DecorationImage(
-                      // Display image based on availability of user uploaded image
-                      image: AssetImage('lib/assets/instagram.png'),
-                    ),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40.0),
+          Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: InkWell(
+              onTap: () => launchUrl(Uri.parse('https://www.google.com')),
+              child: Container(
+                width: 30.0,
+                height: 30.0,
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    // Display image based on availability of user uploaded image
+                    fit: BoxFit.fill,
+                    image: AssetImage('lib/assets/location_grey.png'),
                   ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(40.0),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 35.0,
-                  height: 35.0,
-                  decoration: BoxDecoration(
-                    image: const DecorationImage(
-                      // Display image based on availability of user uploaded image
-                      image: AssetImage('lib/assets/instagram.png'),
-                    ),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40.0),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
+          const SizedBox(
+            width: 20.0,
+          )
         ],
       ),
     );
@@ -1196,12 +1188,6 @@ class _FoodCardState extends State<FoodCard> {
               ),
             ),
           ),
-        ),
-        const Spacer(),
-        Image.asset(
-          'lib/assets/link.png',
-          width: 20,
-          height: 20,
         ),
       ],
     );
