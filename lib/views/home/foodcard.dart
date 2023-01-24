@@ -332,8 +332,8 @@ class _FoodCardState extends State<FoodCard> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(25),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
                       child: Column(
                         children: [
                           Align(
@@ -365,18 +365,15 @@ class _FoodCardState extends State<FoodCard> {
                             ),
                           ),
                           const SizedBox(height: 40),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            child: Column(
-                              children: [
-                                PhotoCarousel(
-                                  images: gallery.map((e) => e.image).toList(),
-                                  descriptions: gallery
-                                      .map((e) => e.imageDescription)
-                                      .toList(),
-                                )
-                              ],
-                            ),
+                          Column(
+                            children: [
+                              PhotoCarousel(
+                                images: gallery.map((e) => e.image).toList(),
+                                descriptions: gallery
+                                    .map((e) => e.imageDescription)
+                                    .toList(),
+                              )
+                            ],
                           ),
                         ],
                       ),
@@ -502,8 +499,8 @@ class _FoodCardState extends State<FoodCard> {
     List<Widget> columnChildren = [];
     num count = 0;
     for (r.MenuItem menuItem in menu) {
-      columnChildren.add(menuOption(
-          menuItem.itemName, menuItem.itemDescription!, menuItem.itemPrice));
+      columnChildren.add(menuOption(menuItem.itemName,
+          menuItem.itemDescription!, menuItem.itemPrice, menuItem.itemPhoto));
       columnChildren.add(
         const Divider(
           color: Color.fromARGB(95, 158, 158, 158),
@@ -545,7 +542,8 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
-  Widget menuOption(String itemName, String itemDesc, num price) {
+  Widget menuOption(String itemName, String itemDesc, num price,
+      ImageProvider<Object>? itemImage) {
     return Column(
       children: [
         Padding(
@@ -601,7 +599,8 @@ class _FoodCardState extends State<FoodCard> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white.withOpacity(0.5),
                     image: DecorationImage(
-                        image: AssetImage("lib/assets/dinetime-orange.png"),
+                        image: itemImage ??
+                            const AssetImage("lib/assets/dinetime-orange.png"),
                         fit: BoxFit.cover,
                         opacity: 0.8),
                   ),
@@ -621,11 +620,13 @@ class _FoodCardState extends State<FoodCard> {
       columnChildren.add(const SizedBox(
         height: 10.0,
       ));
-      columnChildren.add(menuOption(
-          menuItem.itemName, menuItem.itemDescription!, menuItem.itemPrice));
-      const Divider(
-        color: Color.fromARGB(95, 158, 158, 158),
-        height: 1,
+      columnChildren.add(menuOption(menuItem.itemName,
+          menuItem.itemDescription!, menuItem.itemPrice, menuItem.itemPhoto));
+      columnChildren.add(
+        const Divider(
+          color: Color.fromARGB(95, 158, 158, 158),
+          height: 1,
+        ),
       );
     }
     return Padding(
@@ -641,8 +642,8 @@ class _FoodCardState extends State<FoodCard> {
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(25),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5,
                     child: Column(
                       children: [
                         Align(
@@ -691,14 +692,10 @@ class _FoodCardState extends State<FoodCard> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.5,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: Scrollbar(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: columnChildren,
-                              ),
+                        Scrollbar(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: columnChildren,
                             ),
                           ),
                         ),
@@ -802,65 +799,65 @@ class _FoodCardState extends State<FoodCard> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(25),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Row(
+                                children: [
+                                  const Image(
+                                      image: AssetImage(
+                                          'lib/assets/back_arrow.png'),
+                                      height: 15,
+                                      width: 15),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    "Go Back",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        ?.copyWith(
+                                            fontSize: 15.0,
+                                            fontFamily: 'Lato',
+                                            color: dineTimeColorScheme.primary),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.center,
                             child: Row(
                               children: [
-                                const Image(
-                                    image:
-                                        AssetImage('lib/assets/back_arrow.png'),
-                                    height: 15,
-                                    width: 15),
-                                const SizedBox(width: 10),
                                 Text(
-                                  "Go Back",
+                                  "Upcoming Locations",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle1
+                                      .headline1
                                       ?.copyWith(
-                                          fontSize: 15.0,
-                                          fontFamily: 'Lato',
-                                          color: dineTimeColorScheme.primary),
+                                        fontSize: 25.0,
+                                      ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Row(
-                            children: [
-                              Text(
-                                "Upcoming Locations",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    ?.copyWith(
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: Scrollbar(
+                          const SizedBox(height: 20),
+                          Scrollbar(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: columnChildren,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );

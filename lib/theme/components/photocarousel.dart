@@ -48,7 +48,7 @@ class _PhotoCarouselState extends State<PhotoCarousel> {
             );
           }),
           options: CarouselOptions(
-            height: 300,
+            height: 250,
             onPageChanged: (index, reason) {
               setState(() {
                 _currentPage = index;
