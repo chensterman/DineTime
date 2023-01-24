@@ -19,6 +19,9 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   User user = AuthService().getCurrentUser()!;
 
+  // User's address displayed at top of the application
+  String displayAddress = "";
+
   // Update selected index for BottomNavBar
   void _onItemTapped(int index) {
     setState(() {
@@ -26,22 +29,31 @@ class _HomeState extends State<Home> {
     });
   }
 
-  // Get user location and update the user data
-  void _updateUserLocation() async {
+  // Get user location, update the user data, and create address
+  Future<String> _updateUserLocation() async {
     GeoPoint? userLocation = await LocationService().getLocationData();
     await DatabaseService().updateCustomer(user.uid, {
       'geolocation': userLocation,
     });
+    String? address = "";
+    if (userLocation != null) {
+      address = await LocationService().geopointToAddress(userLocation);
+    }
+    if (address != null) {
+      displayAddress = address;
+    }
+    return displayAddress;
   }
 
   @override
   void initState() {
-    super.initState();
     _updateUserLocation();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     // Widget list for bottom nav bar
     final List<Widget> pages = <Widget>[
       const FindYourFood(),
@@ -49,30 +61,61 @@ class _HomeState extends State<Home> {
         customerId: user.uid,
       ),
     ];
-
-    double height = MediaQuery.of(context).size.height;
-    // Main page widget (contains nav bar pages as well)
-    return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: height * 0.08,
-          backgroundColor: Theme.of(context).colorScheme.onPrimary,
-          actions: [
-            InkWell(
-              child: Container(
-                padding: const EdgeInsets.only(right: 40.0),
-                child: Icon(
-                  Icons.logout,
-                  color: Theme.of(context).colorScheme.onBackground,
-                  size: 32.0,
+    final List<PreferredSizeWidget> appBar = <PreferredSizeWidget>[
+      AppBar(
+        shadowColor: dineTimeColorScheme.onPrimary,
+        toolbarHeight: height * 0.08,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Row(
+          children: [
+            Container(
+                color: dineTimeColorScheme.onPrimary, height: height * .08),
+            Container(
+              width: 25.0,
+              height: 25.0,
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('lib/assets/location.png'),
                 ),
+                color: dineTimeColorScheme.onPrimary,
+                borderRadius: BorderRadius.circular(20.0),
               ),
-              onTap: () async {
-                await AuthService().signOut();
-              },
-            )
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            FutureBuilder(
+                future: _updateUserLocation(),
+                builder: (context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Text(
+                      displayAddress,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1
+                          ?.copyWith(fontSize: 18.0),
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Text('Error');
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                }),
           ],
         ),
-        body: pages.elementAt(_selectedIndex),
+      ),
+    ];
+    // Main page widget (contains nav bar pages as well)
+    return Scaffold(
+        extendBodyBehindAppBar: false,
+        appBar: _selectedIndex == 0 ? appBar.elementAt(_selectedIndex) : null,
+        body: _selectedIndex == 0
+            ? pages.elementAt(_selectedIndex)
+            : Padding(
+                padding: const EdgeInsets.only(top: 45),
+                child: pages.elementAt(_selectedIndex)),
         bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,

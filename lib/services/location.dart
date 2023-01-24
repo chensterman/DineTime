@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
+import 'package:us_states/us_states.dart';
 
 // Contains all methods and data pertaining to user device location
 class LocationService {
@@ -71,11 +72,26 @@ class LocationService {
     return ans;
   }
 
-  Future<GeoPoint> addressToGeopoint(String address) async {
-    // Continue Geocoding
+  // Converts address to Geopoint
+  Future<GeoPoint?> addressToGeopoint(String address) async {
     List<geocoding.Location> location =
         await geocoding.locationFromAddress(address);
     var geoPoint = GeoPoint(location[0].latitude, location[0].longitude);
     return geoPoint;
+  }
+
+  Future<String?> geopointToAddress(GeoPoint geoPoint) async {
+    List<geocoding.Placemark> location = await geocoding
+        .placemarkFromCoordinates(geoPoint.latitude, geoPoint.longitude);
+    String locationStr = "";
+    if (location[0]!.locality!.isNotEmpty) {
+      locationStr = locationStr + location[0].locality.toString();
+    }
+    if (location[0]!.administrativeArea!.isNotEmpty &&
+        location[0]!.postalCode!.isNotEmpty) {
+      locationStr =
+          "$locationStr, ${USStates.getAbbreviation(location[0].administrativeArea.toString())} ${location[0].postalCode}";
+    }
+    return locationStr;
   }
 }
