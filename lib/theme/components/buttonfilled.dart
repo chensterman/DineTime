@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 class ButtonFilled extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
+  final bool? fullyEntered;
   const ButtonFilled({
     super.key,
     required this.text,
+    this.fullyEntered,
     this.onPressed,
   });
 
@@ -15,7 +17,9 @@ class ButtonFilled extends StatelessWidget {
     // Button styled with pimary colors on ElevatedButton class for filled effect
     ButtonStyle style = ElevatedButton.styleFrom(
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: fullyEntered == null || fullyEntered!
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.onSurface,
         textStyle: Theme.of(context).textTheme.button,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),

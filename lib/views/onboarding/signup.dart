@@ -26,6 +26,35 @@ class _SignUpState extends State<SignUp> {
   // Error state
   String? errorMessage;
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _verifyController = TextEditingController();
+  bool _isFullyEntered = false;
+
+  bool _checkFullyEntered() {
+    if (_emailController.text == '') return false;
+    if (_passwordController.text == '') return false;
+    if (_verifyController.text == '') return false;
+    return true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(() {
+      _isFullyEntered = _checkFullyEntered();
+      setState(() {});
+    });
+    _passwordController.addListener(() {
+      _isFullyEntered = _checkFullyEntered();
+      setState(() {});
+    });
+    _verifyController.addListener(() {
+      _isFullyEntered = _checkFullyEntered();
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get screen size
@@ -54,6 +83,7 @@ class _SignUpState extends State<SignUp> {
                   const SizedBox(height: 30.0),
                   // Email text input widget
                   InputText(
+                    editingController: _emailController,
                     hintText: "Enter your email address",
                     // Triggers error on button press below
                     validator: (value) {
@@ -71,6 +101,7 @@ class _SignUpState extends State<SignUp> {
                   const SizedBox(height: 10.0),
                   // Password input text widget
                   InputPassword(
+                    editingController: _passwordController,
                     hintText: "Create your password",
                     // Triggers error on button press below
                     validator: (value) {
@@ -88,6 +119,7 @@ class _SignUpState extends State<SignUp> {
                   const SizedBox(height: 10.0),
                   // Confirm password input text widget
                   InputPassword(
+                    editingController: _verifyController,
                     hintText: "Confirm password",
                     // Triggers error on button press below
                     validator: (value) {
@@ -106,27 +138,30 @@ class _SignUpState extends State<SignUp> {
                   const SizedBox(height: 30.0),
                   ButtonFilled(
                     text: "Sign Up",
+                    fullyEntered: _isFullyEntered,
                     // Firebase auth login and route to next page
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        // Display loading indicator
-                        setState(() => isLoading = true);
-                        // Attempt to sign up using Firebase
-                        try {
-                          // Sign user up
-                          await AuthService().signUp(email, password);
-                          // At this point AuthStateCheck in main will route
-                          // to next page
-                        } on FirebaseAuthException catch (e) {
-                          setState(() => errorMessage = e.message);
-                        } catch (e) {
-                          setState(() => errorMessage =
-                              'An error occurred. Please try again later.');
-                        }
-                        // Remove loading indicator
-                        setState(() => isLoading = false);
-                      }
-                    },
+                    onPressed: _isFullyEntered
+                        ? () async {
+                            if (_formKey.currentState!.validate()) {
+                              // Display loading indicator
+                              setState(() => isLoading = true);
+                              // Attempt to sign up using Firebase
+                              try {
+                                // Sign user up
+                                await AuthService().signUp(email, password);
+                                // At this point AuthStateCheck in main will route
+                                // to next page
+                              } on FirebaseAuthException catch (e) {
+                                setState(() => errorMessage = e.message);
+                              } catch (e) {
+                                setState(() => errorMessage =
+                                    'An error occurred. Please try again later.');
+                              }
+                              // Remove loading indicator
+                              setState(() => isLoading = false);
+                            }
+                          }
+                        : () {},
                   ),
                   const SizedBox(height: 10.0),
                   // If error message is present

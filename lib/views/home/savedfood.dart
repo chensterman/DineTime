@@ -5,6 +5,7 @@ import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 // Widget that displays list of saved restaurants for logged in customer
 class SavedFood extends StatefulWidget {
@@ -21,6 +22,7 @@ class _SavedFoodState extends State<SavedFood> {
     double height = MediaQuery.of(context).size.height;
     return Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),
+        color: Colors.white,
         child: StreamBuilder<DocumentSnapshot>(
           // Customer document stream
           stream: DatabaseService().customerStream(widget.customerId),
@@ -41,10 +43,16 @@ class _SavedFoodState extends State<SavedFood> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Favorites",
-                            style: Theme.of(context).textTheme.headline1),
-                        Text('${data['saved_businesses'].length} items',
-                            style: Theme.of(context).textTheme.subtitle1),
+                        Padding(
+                            padding: const EdgeInsets.only(left: 27),
+                            child: Text("My Favorites",
+                                style: Theme.of(context).textTheme.headline1)),
+                        Padding(
+                            padding:
+                                const EdgeInsets.only(left: 27, bottom: 20),
+                            child: Text(
+                                '${data['saved_businesses'].length} items',
+                                style: Theme.of(context).textTheme.subtitle1)),
                       ],
                     );
                   }
@@ -110,6 +118,9 @@ class FoodListCard extends StatelessWidget {
     this.customerGeoPoint,
     this.restaurantPreview,
   });
+  // Function called when user hits delete button
+  // TODO: connect this to backend
+  void deleteFavorite() {}
 
   final double _cardHeight = 75.0;
 
@@ -134,149 +145,222 @@ class FoodListCard extends StatelessWidget {
 
   // Loading version of the FoodListCard
   Widget loadingFoodListCard() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: SizedBox(
-        height: _cardHeight,
-        child: const Padding(
-          padding: EdgeInsets.all(12.0),
-          child: SizedBox(
-            width: 50.0,
-            height: 50.0,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-        ),
-      ),
-    );
+    return Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: SizedBox(
+            width: 70,
+            height: 70,
+            child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 233, 233, 233)
+                          .withOpacity(0.5),
+                      blurRadius: 30,
+                      offset: const Offset(0, 5), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SizedBox(
+                    height: _cardHeight,
+                    child: const Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: SizedBox(
+                        width: 50.0,
+                        height: 50.0,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ))));
   }
 
   // Full version of the FoodListCard
   Widget fullFoodListCard(BuildContext context, double? distance) {
     String infoText = distance != null
-        ? '${restaurantPreview!.cuisine!} - ${'\$' * restaurantPreview!.pricing} - $distance mi'
-        : '${restaurantPreview!.cuisine!} - ${'\$' * restaurantPreview!.pricing}';
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      // Tappable portion of card
-      child: InkWell(
-        onTap: () {},
+        ? '${restaurantPreview!.cuisine!} · ${'\$' * restaurantPreview!.pricing} · $distance mi'
+        : '${restaurantPreview!.cuisine!} · ${'\$' * restaurantPreview!.pricing}';
+    return Padding(
+        padding: const EdgeInsets.only(left: 20),
         child: SizedBox(
-          height: _cardHeight,
-          child: Row(
-            children: [
-              // Restaurant logo
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Container(
-                  width: 50.0,
-                  height: 50.0,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      // TODO: Display image based on availability of user uploaded image
-                      image: restaurantPreview!.restaurantLogo,
+            width: 70,
+            height: 70,
+            child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          Color.fromARGB(255, 233, 233, 233).withOpacity(0.5),
+                      blurRadius: 30,
+                      offset: const Offset(0, 5), // changes position of shadow
                     ),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40.0),
-                  ),
+                  ],
                 ),
-              ),
-              // Name, cuisine, pricing, distance portion
-              Expanded(
-                flex: 6,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Text overflow works by wrapping text under Flexible widget
-                        Flexible(
-                          child: Text(
-                            restaurantPreview!.restaurantName,
-                            style:
-                                Theme.of(context).textTheme.headline1?.copyWith(
-                                      fontSize: 14.0,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                  ),
+                  // Tappable portion of card
+                  child: InkWell(
+                    onTap: () {},
+                    child: SizedBox(
+                      height: _cardHeight,
+                      child: Row(
+                        children: <Widget>[
+                          // Restaurant logo
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Container(
+                              width: 50.0,
+                              height: 50.0,
+                              decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 10,
+                                        color:
+                                            Color.fromARGB(255, 231, 231, 231),
+                                        spreadRadius: 5)
+                                  ]),
+                              child: CircleAvatar(
+                                radius: 25.0,
+                                backgroundImage:
+                                    restaurantPreview!.restaurantLogo,
+                              ),
+                            ),
+                          ),
+                          // Name, cuisine, pricing, distance portion
+                          Expanded(
+                            flex: 6,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Text overflow works by wrapping text under Flexible widget
+                                    Flexible(
+                                      child: Text(
+                                        restaurantPreview!.restaurantName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline1
+                                            ?.copyWith(
+                                              fontSize: 14.0,
+                                            ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                            overflow: TextOverflow.ellipsis,
+                                    const SizedBox(height: 5.0),
+                                    Flexible(
+                                      child: Text(
+                                        infoText,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.copyWith(fontSize: 12.0),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 5.0),
-                        Flexible(
-                          child: Text(
-                            infoText,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(fontSize: 12.0),
-                            overflow: TextOverflow.ellipsis,
+                          // Instagram link, website link (only shown if exists)
+                          Row(
+                            children: [
+                              restaurantPreview!.instagramHandle != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: InkWell(
+                                        onTap: () => launchUrl(Uri.parse(
+                                            'https://www.instagram.com/${restaurantPreview!.instagramHandle!}')),
+                                        child: Container(
+                                          width: 30.0,
+                                          height: 30.0,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 5),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                    blurRadius: 10,
+                                                    color: Color.fromARGB(
+                                                        255, 224, 224, 224),
+                                                    spreadRadius: 5)
+                                              ]),
+                                          child: const CircleAvatar(
+                                            radius: 40.0,
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: AssetImage(
+                                                'lib/assets/instagram.png'),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                              restaurantPreview!.website != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: InkWell(
+                                        onTap: () => launchUrl(Uri.parse(
+                                            'https://${restaurantPreview!.website!}')),
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 0),
+                                          child: Container(
+                                            width: 30.0,
+                                            height: 30.0,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                image: const DecorationImage(
+                                                  image: AssetImage(
+                                                      'lib/assets/website.png'),
+                                                ),
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 7),
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                      blurRadius: 10,
+                                                      color: Color.fromARGB(
+                                                          255, 231, 231, 231),
+                                                      spreadRadius: 5)
+                                                ]),
+                                            child: const CircleAvatar(
+                                              radius: 50.0,
+                                              backgroundColor: Colors.white,
+                                              backgroundImage: AssetImage(
+                                                  'lib/assets/website.png'),
+                                            ),
+                                          ),
+                                        ),
+                                      ))
+                                  : Container(),
+                              const SizedBox(
+                                width: 8.0,
+                              )
+                            ],
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              // Instagram link, website link (only shown if exists)
-              Row(
-                children: [
-                  restaurantPreview!.instagramHandle != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: InkWell(
-                            onTap: () => launchUrl(Uri.parse(
-                                'https://www.instagram.com/${restaurantPreview!.instagramHandle!}')),
-                            child: Container(
-                              width: 30.0,
-                              height: 30.0,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  // Display image based on availability of user uploaded image
-                                  image: AssetImage('lib/assets/instagram.png'),
-                                ),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(40.0),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  restaurantPreview!.website != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: InkWell(
-                            onTap: () => launchUrl(Uri.parse(
-                                'https://${restaurantPreview!.website!}')),
-                            child: Container(
-                              width: 30.0,
-                              height: 30.0,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  // Display image based on availability of user uploaded image
-                                  image: AssetImage('lib/assets/inbox.png'),
-                                ),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(40.0),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  const SizedBox(
-                    width: 8.0,
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+                ))));
   }
 }
