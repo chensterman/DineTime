@@ -19,14 +19,12 @@ class _FindYourFoodState extends State<FindYourFood> {
         .getInstance()
         .logScreenView(screenClass: 'FYF', screenName: 'FYFPage');
     return Scaffold(
-      body: Center(
-        child: ChangeNotifierProvider(
-          create: (context) =>
-              CardProvider(customerId: '03xUN3CqYlRNwukQAorq1G748h62'),
-          builder: (context, child) {
-            return buildCards(context);
-          },
-        ),
+      body: ChangeNotifierProvider(
+        create: (context) =>
+            CardProvider(customerId: '03xUN3CqYlRNwukQAorq1G748h62'),
+        builder: (context, child) {
+          return buildCards(context);
+        },
       ),
     );
   }

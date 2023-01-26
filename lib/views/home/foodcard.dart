@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:dinetime_mobile_mvp/theme/components/photocarousel.dart';
@@ -62,6 +61,7 @@ class _FoodCardState extends State<FoodCard> {
               duration: Duration(milliseconds: milliseconds),
               transform: rotatedMatrix..translate(position.dx, position.dy),
               child: Stack(
+                alignment: Alignment.center,
                 children: [
                   buildCard(context),
                   buildStamps(),
@@ -151,13 +151,15 @@ class _FoodCardState extends State<FoodCard> {
     Size size = MediaQuery.of(context).size;
     double width = size.width * 0.9;
     double height = size.height * 0.7;
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: SizedBox(
-        height: height,
-        width: width,
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+              color: Theme.of(context).colorScheme.onSurface, width: 1),
+          borderRadius: BorderRadius.circular(20)),
+      child: Center(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,7 +185,9 @@ class _FoodCardState extends State<FoodCard> {
       height: height,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: widget.restaurant.menu[0].itemPhoto!,
+          image: widget.restaurant.menu.isEmpty
+              ? const AssetImage("lib/assets/dinetime-orange.png")
+              : widget.restaurant.menu[0].itemPhoto!,
           fit: BoxFit.cover,
         ),
         color: Colors.white,
@@ -229,11 +233,17 @@ class _FoodCardState extends State<FoodCard> {
             const SizedBox(height: 5),
             cuisineDetails(),
             const SizedBox(height: 20),
-            nextLocation(),
+            widget.restaurant.upcomingLocations.isNotEmpty
+                ? nextLocation()
+                : Container(),
             const SizedBox(height: 5),
-            nextDate(),
+            widget.restaurant.upcomingLocations.isNotEmpty
+                ? nextDate()
+                : Container(),
             const SizedBox(height: 5),
-            nextTime(),
+            widget.restaurant.upcomingLocations.isNotEmpty
+                ? nextTime()
+                : Container(),
           ],
         ),
       ),
@@ -764,8 +774,8 @@ class _FoodCardState extends State<FoodCard> {
       columnChildren.add(const SizedBox(
         height: 10.0,
       ));
-      columnChildren.add(upcomingLocationCard(
-          popUpLocation.locationDateStart, popUpLocation.name, 2.0));
+      columnChildren.add(upcomingLocationCard(popUpLocation.locationDateStart,
+          popUpLocation.name, 2.0, popUpLocation.locationAddress));
       count += 1;
       if (count == 3) {
         break;
@@ -787,8 +797,8 @@ class _FoodCardState extends State<FoodCard> {
       columnChildren.add(const SizedBox(
         height: 10.0,
       ));
-      columnChildren.add(upcomingLocationCard(
-          popUpLocation.locationDateStart, popUpLocation.name, 2.0));
+      columnChildren.add(upcomingLocationCard(popUpLocation.locationDateStart,
+          popUpLocation.name, 2.0, popUpLocation.locationAddress));
     }
     return Padding(
       padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
@@ -904,7 +914,7 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget upcomingLocationCard(
-      Timestamp dateStart, String name, double distance) {
+      Timestamp dateStart, String name, double distance, String address) {
     String period = dateStart.toDate().hour > 12 ? "PM" : "AM";
     num hour = dateStart.toDate().hour % 12;
     num minute = dateStart.toDate().minute;
@@ -957,7 +967,8 @@ class _FoodCardState extends State<FoodCard> {
           Padding(
             padding: const EdgeInsets.all(6.0),
             child: InkWell(
-              onTap: () => launchUrl(Uri.parse('https://www.google.com')),
+              onTap: () => launchUrl(Uri.parse(
+                  'https://www.google.com/maps/search/?api=1&query=${address}')),
               child: Container(
                 width: 30.0,
                 height: 30.0,
@@ -1164,25 +1175,6 @@ class _FoodCardState extends State<FoodCard> {
                   elevation: 0.8),
               child: Image.asset(
                 'lib/assets/world_orange.png',
-                width: 200,
-                height: 200,
-              ),
-            ),
-          ),
-        ),
-        Link(
-          uri: Uri.parse('instagram.com'),
-          builder: (context, followLink) => SizedBox(
-            width: 52,
-            height: 35,
-            child: ElevatedButton(
-              onPressed: followLink,
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: const CircleBorder(),
-                  elevation: 0.8),
-              child: Image.asset(
-                'lib/assets/email.png',
                 width: 200,
                 height: 200,
               ),
