@@ -66,7 +66,7 @@ class Start extends StatelessWidget {
   Widget build(context) {
     // Timer to display DineTime logo before routing to AuthStateCheck
     Timer(
-      const Duration(seconds: 5),
+      const Duration(seconds: 1),
       () => {
         // Route to the authentication checker widget
         Navigator.push(

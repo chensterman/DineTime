@@ -8,7 +8,7 @@ class Restaurant {
   ImageProvider<Object> restaurantLogo;
   int pricing;
   List<GalleryImage> gallery;
-  Menu menu;
+  List<MenuItem> menu;
   List<PopUpLocation> upcomingLocations;
   String? bio;
   String? cuisine;
@@ -56,27 +56,14 @@ class RestaurantPreview {
 // Gallery image data model for restaurants
 class GalleryImage {
   String imageId;
+  String imageDescription;
   ImageProvider<Object> image;
   Timestamp dateAdded;
 
   GalleryImage({
     required this.imageId,
+    required this.imageDescription,
     required this.image,
-    required this.dateAdded,
-  });
-}
-
-// Menu data model for restaurants
-class Menu {
-  String menuId;
-  String menuName;
-  List<MenuItem> menuItems;
-  Timestamp dateAdded;
-
-  Menu({
-    required this.menuId,
-    required this.menuName,
-    required this.menuItems,
     required this.dateAdded,
   });
 }
@@ -108,6 +95,7 @@ class PopUpLocation {
   Timestamp locationDateEnd;
   Timestamp dateAdded;
   GeoPoint geocode;
+  String name;
 
   PopUpLocation({
     required this.locationId,
@@ -116,5 +104,6 @@ class PopUpLocation {
     required this.locationDateEnd,
     required this.dateAdded,
     required this.geocode,
+    required this.name,
   });
 }

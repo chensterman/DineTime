@@ -1,4 +1,4 @@
-
+import 'package:dinetime_mobile_mvp/views/home/foodcarddisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,7 +6,6 @@ import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 // Widget that displays list of saved restaurants for logged in customer
 class SavedFood extends StatefulWidget {
@@ -212,7 +211,15 @@ class FoodListCard extends StatelessWidget {
                   ),
                   // Tappable portion of card
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FoodCardDisplay(
+                                  restaurantId: restaurantPreview!.restaurantId,
+                                )),
+                      );
+                    },
                     child: SizedBox(
                       height: _cardHeight,
                       child: Row(
