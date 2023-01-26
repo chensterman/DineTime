@@ -15,6 +15,7 @@ class RestaurantCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20.0),
       child: Container(
+        color: Colors.white,
         width: width,
         height: height,
         child: Card(
