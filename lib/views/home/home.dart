@@ -61,56 +61,9 @@ class _HomeState extends State<Home> {
         customerId: user.uid,
       ),
     ];
-    final List<PreferredSizeWidget> appBar = <PreferredSizeWidget>[
-      AppBar(
-        shadowColor: dineTimeColorScheme.onPrimary,
-        toolbarHeight: height * 0.08,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: Row(
-          children: [
-            Container(
-                color: dineTimeColorScheme.onPrimary, height: height * .08),
-            Container(
-              width: 25.0,
-              height: 25.0,
-              decoration: BoxDecoration(
-                image: const DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('lib/assets/location.png'),
-                ),
-                color: dineTimeColorScheme.onPrimary,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-            ),
-            const SizedBox(
-              width: 10.0,
-            ),
-            FutureBuilder(
-                future: _updateUserLocation(),
-                builder: (context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(
-                      displayAddress,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1
-                          ?.copyWith(fontSize: 18.0),
-                    );
-                  } else if (snapshot.hasError) {
-                    return const Text('Error');
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                }),
-          ],
-        ),
-      ),
-    ];
     // Main page widget (contains nav bar pages as well)
     return Scaffold(
         extendBodyBehindAppBar: false,
-        appBar: _selectedIndex == 0 ? appBar.elementAt(_selectedIndex) : null,
         body: _selectedIndex == 0
             ? pages.elementAt(_selectedIndex)
             : Padding(
@@ -125,7 +78,9 @@ class _HomeState extends State<Home> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.favorite_border_rounded), label: 'My Lists'),
+              icon: Icon(Icons.favorite_border_rounded),
+              label: 'My Lists',
+            ),
           ],
         ));
   }

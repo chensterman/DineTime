@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/link.dart';
 
 class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
@@ -38,54 +37,56 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   @override
-  Widget build(BuildContext context) => SizedBox.expand(
-        child: widget.isFront ? buildFrontCard() : buildCard(context),
-      );
+  Widget build(BuildContext context) {
+    return widget.isFront ? buildFrontCard() : buildCard(context);
+  }
 
-  Widget buildFrontCard() => GestureDetector(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final provider = Provider.of<CardProvider>(context);
-            final position = provider.position;
-            final milliseconds = provider.isDragging ? 0 : 400;
+  Widget buildFrontCard() {
+    return GestureDetector(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final provider = Provider.of<CardProvider>(context);
+          final position = provider.position;
+          final milliseconds = provider.isDragging ? 0 : 400;
 
-            final center = constraints.smallest.center(Offset.zero);
-            final angle = provider.angle * pi / 180;
-            final rotatedMatrix = Matrix4.identity()
-              ..translate(center.dx, center.dy)
-              ..rotateZ(angle)
-              ..translate(-center.dx, -center.dy);
+          final center = constraints.smallest.center(Offset.zero);
+          final angle = provider.angle * pi / 180;
+          final rotatedMatrix = Matrix4.identity()
+            ..translate(center.dx, center.dy)
+            ..rotateZ(angle)
+            ..translate(-center.dx, -center.dy);
 
-            return AnimatedContainer(
-              curve: Curves.easeInOut,
-              duration: Duration(milliseconds: milliseconds),
-              transform: rotatedMatrix..translate(position.dx, position.dy),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  buildCard(context),
-                  buildStamps(),
-                ],
-              ),
-            );
-          },
-        ),
-        onPanStart: (details) {
-          final provider = Provider.of<CardProvider>(context, listen: false);
-
-          provider.startPosition(details);
+          return AnimatedContainer(
+            curve: Curves.easeInOut,
+            duration: Duration(milliseconds: milliseconds),
+            transform: rotatedMatrix..translate(position.dx, position.dy),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                buildCard(context),
+                buildStamps(),
+              ],
+            ),
+          );
         },
-        onPanUpdate: (details) {
-          final provider = Provider.of<CardProvider>(context, listen: false);
+      ),
+      onPanStart: (details) {
+        final provider = Provider.of<CardProvider>(context, listen: false);
 
-          provider.updatePosition(details);
-        },
-        onPanEnd: (details) {
-          final provider = Provider.of<CardProvider>(context, listen: false);
+        provider.startPosition(details);
+      },
+      onPanUpdate: (details) {
+        final provider = Provider.of<CardProvider>(context, listen: false);
 
-          provider.endPosition(widget.restaurant.restaurantId);
-        },
-      );
+        provider.updatePosition(details);
+      },
+      onPanEnd: (details) {
+        final provider = Provider.of<CardProvider>(context, listen: false);
+
+        provider.endPosition(widget.restaurant.restaurantId);
+      },
+    );
+  }
 
   Widget buildStamps() {
     final provider = Provider.of<CardProvider>(context);
@@ -95,62 +96,39 @@ class _FoodCardState extends State<FoodCard> {
     switch (status) {
       case CardStatus.like:
         final child = stamp(
-          angle: -0.5,
           color: Colors.green,
-          text: 'LIKE',
+          text: 'lib/assets/like_logo.png',
           opacity: opacity,
         );
 
-        return Positioned(top: 64, left: 50, child: child);
+        return Positioned(top: 290, left: 10, child: child);
       case CardStatus.dislike:
         final child = stamp(
-          angle: 0.5,
           color: Colors.red,
-          text: 'NOPE',
+          text: 'lib/assets/dislike_logo.png',
           opacity: opacity,
         );
 
-        return Positioned(top: 64, right: 50, child: child);
+        return Positioned(top: 290, right: 10, child: child);
       default:
         return Container();
     }
   }
 
   Widget stamp({
-    double angle = 0,
     required Color color,
     required String text,
     required double opacity,
   }) {
     return Opacity(
-      opacity: opacity,
-      child: Transform.rotate(
-        angle: angle,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color, width: 4),
-          ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: color,
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
+        opacity: opacity, child: Image.asset(text, height: 70, width: 70));
   }
 
   Widget buildCard(BuildContext context) {
     // Get size of screen
     Size size = MediaQuery.of(context).size;
     double width = size.width * 0.9;
-    double height = size.height * 0.7;
+    double height = size.height * 0.75;
     return Container(
       height: height,
       width: width,
@@ -227,8 +205,6 @@ class _FoodCardState extends State<FoodCard> {
           children: [
             logo(),
             const SizedBox(height: 12),
-            links(),
-            const SizedBox(height: 12),
             name(),
             const SizedBox(height: 5),
             cuisineDetails(),
@@ -282,12 +258,79 @@ class _FoodCardState extends State<FoodCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'About & Story',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 20.0,
-                fontFamily: 'Lato',
-              ),
+        Row(
+          children: [
+            Text(
+              'About & Story',
+              style: Theme.of(context).textTheme.headline1?.copyWith(
+                    fontSize: 20.0,
+                    fontFamily: 'Lato',
+                  ),
+            ),
+            widget.restaurant.instagramHandle != null
+                ? Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: InkWell(
+                      onTap: () => launchUrl(Uri.parse(
+                          'https://www.instagram.com/${widget.restaurant.instagramHandle!}')),
+                      child: Container(
+                        width: 30.0,
+                        height: 30.0,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 5),
+                            boxShadow: const [
+                              BoxShadow(
+                                  blurRadius: 10,
+                                  color: Color.fromARGB(255, 224, 224, 224),
+                                  spreadRadius: 5)
+                            ]),
+                        child: const CircleAvatar(
+                          radius: 40.0,
+                          backgroundColor: Colors.white,
+                          backgroundImage:
+                              AssetImage('lib/assets/instagram.png'),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            widget.restaurant.website != null
+                ? Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: InkWell(
+                      onTap: () => launchUrl(
+                          Uri.parse('https://${widget.restaurant.website!}')),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 0),
+                        child: Container(
+                          width: 30.0,
+                          height: 30.0,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              image: const DecorationImage(
+                                image: AssetImage('lib/assets/website.png'),
+                              ),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 7),
+                              boxShadow: const [
+                                BoxShadow(
+                                    blurRadius: 10,
+                                    color: Color.fromARGB(255, 231, 231, 231),
+                                    spreadRadius: 5)
+                              ]),
+                          child: const CircleAvatar(
+                            radius: 50.0,
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                AssetImage('lib/assets/website.png'),
+                          ),
+                        ),
+                      ),
+                    ))
+                : Container(),
+          ],
         ),
         const SizedBox(height: 10),
         Text(
@@ -1132,51 +1175,6 @@ class _FoodCardState extends State<FoodCard> {
                     fontSize: 12.0,
                     color: dineTimeColorScheme.background,
                     fontFamily: 'Lato'),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget links() {
-    return Row(
-      children: [
-        Link(
-          uri: Uri.parse('instagram.com'),
-          builder: (context, followLink) => SizedBox(
-            width: 52,
-            height: 35,
-            child: ElevatedButton(
-              onPressed: followLink,
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: const CircleBorder(),
-                  elevation: 0.8),
-              child: Image.asset(
-                'lib/assets/instagram_orange.png',
-                width: 100,
-                height: 100,
-              ),
-            ),
-          ),
-        ),
-        Link(
-          uri: Uri.parse('instagram.com'),
-          builder: (context, followLink) => SizedBox(
-            width: 52,
-            height: 35,
-            child: ElevatedButton(
-              onPressed: followLink,
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: const CircleBorder(),
-                  elevation: 0.8),
-              child: Image.asset(
-                'lib/assets/world_orange.png',
-                width: 200,
-                height: 200,
               ),
             ),
           ),

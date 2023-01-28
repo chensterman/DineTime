@@ -1,5 +1,7 @@
+import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/services/analytics_service.dart';
+import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/views/home/foodcard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,12 +20,55 @@ class _FindYourFoodState extends State<FindYourFood> {
         .getInstance()
         .logScreenView(screenClass: 'FYF', screenName: 'FYFPage');
     return Scaffold(
-      body: ChangeNotifierProvider(
-        create: (context) =>
-            CardProvider(customerId: '03xUN3CqYlRNwukQAorq1G748h62'),
-        builder: (context, child) {
-          return buildCards(context);
-        },
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    await AuthService().signOut();
+                  },
+                  child: Container(
+                    width: 20.0,
+                    height: 20.0,
+                    decoration: BoxDecoration(
+                      image: const DecorationImage(
+                        fit: BoxFit.contain,
+                        image:
+                            AssetImage('lib/assets/location_arrow_black.png'),
+                      ),
+                      color: dineTimeColorScheme.onPrimary,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  "Bellevue, WA 98004",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1
+                      ?.copyWith(fontSize: 18.0),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ChangeNotifierProvider(
+              create: (context) =>
+                  CardProvider(customerId: '03xUN3CqYlRNwukQAorq1G748h62'),
+              builder: (context, child) {
+                return buildCards(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -33,27 +78,13 @@ class _FindYourFoodState extends State<FindYourFood> {
     final restaurants = provider.restaurants;
 
     return restaurants.isEmpty
-        ? SizedBox(
-            height: 10,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: const Text(
-                'Restart',
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                final provider =
-                    Provider.of<CardProvider>(context, listen: false);
-
-                provider.resetUsers();
-              },
+        ? const Expanded(
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
           )
         : Stack(
+            alignment: Alignment.center,
             children: restaurants
                 .map(
                   (restaurant) => FoodCard(
