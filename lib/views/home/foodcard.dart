@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/link.dart';
 
 class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
