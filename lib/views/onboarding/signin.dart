@@ -1,4 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/main.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -136,6 +137,7 @@ class _SignInState extends State<SignIn> {
                               }
                               // Remove loading indicator
                               setState(() => isLoading = false);
+                              Navigator.pop(context);
                             }
                           }
                         : () {},
@@ -165,11 +167,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignUp()),
-                            );
+                            Navigator.pop(context);
                           },
                           child: Text(
                             'Sign up',

@@ -1,4 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/main.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/services/analytics_service.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
