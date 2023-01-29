@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
+import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:flutter/material.dart';
 
 enum CardStatus { like, dislike }
@@ -47,10 +48,13 @@ class CardProvider extends ChangeNotifier {
 
     switch (status) {
       case CardStatus.like:
+        // Add analytics code here
+        Analytics().getInstance().logEvent(name: "like_restaurant");
         DatabaseService().addCustomerSaved(customerId, restaurantId);
         like();
         break;
       case CardStatus.dislike:
+        Analytics().getInstance().logEvent(name: "dislike_restaurant");
         dislike();
         break;
       default:
@@ -67,7 +71,7 @@ class CardProvider extends ChangeNotifier {
   }
 
   double getStatusOpacity() {
-    final delta = 100;
+    const delta = 100;
     final pos = max(_position.dx.abs(), _position.dy.abs());
     final opacity = pos / delta;
 

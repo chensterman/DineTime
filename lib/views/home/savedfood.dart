@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
+import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 
 // Widget that displays list of saved restaurants for logged in customer
@@ -19,6 +20,10 @@ class SavedFood extends StatefulWidget {
 class _SavedFoodState extends State<SavedFood> {
   @override
   Widget build(BuildContext context) {
+    print("savedfood lizza");
+    Analytics()
+        .getInstance()
+        .logScreenView(screenClass: 'FYF', screenName: 'SavedFood');
     double height = MediaQuery.of(context).size.height;
     return Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),

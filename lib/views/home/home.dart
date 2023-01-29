@@ -5,6 +5,7 @@ import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/views/home/findyourfood.dart';
 import 'package:dinetime_mobile_mvp/views/home/savedfood.dart';
+import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -53,6 +54,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    Analytics()
+        .getInstance()
+        .logScreenView(screenClass: 'FYF', screenName: 'Home');
     double height = MediaQuery.of(context).size.height;
     // Widget list for bottom nav bar
     final List<Widget> pages = <Widget>[

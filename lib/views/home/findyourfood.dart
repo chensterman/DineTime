@@ -1,12 +1,12 @@
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
-import 'package:dinetime_mobile_mvp/services/analytics_service.dart';
+import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/views/home/foodcard.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FindYourFood extends StatefulWidget {
   const FindYourFood({Key? key}) : super(key: key);
-
   @override
   State<FindYourFood> createState() => _FindYourFoodState();
 }
@@ -14,7 +14,7 @@ class FindYourFood extends StatefulWidget {
 class _FindYourFoodState extends State<FindYourFood> {
   @override
   Widget build(BuildContext context) {
-    AnalyticsService()
+    Analytics()
         .getInstance()
         .logScreenView(screenClass: 'FYF', screenName: 'FYFPage');
     return Scaffold(
