@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:dinetime_mobile_mvp/ui/onboarding/locationpreferences.dart';
-import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/signin.dart';
+import 'package:dinetime_mobile_mvp/ui/onboarding/signup_page/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
@@ -92,7 +92,7 @@ class RoutingLogic extends StatelessWidget {
     final user = Provider.of<User?>(context);
     final locationPermission = Provider.of<PermissionStatus>(context);
     if (user == null) {
-      return const SignIn();
+      return const SignUp();
     } else {
       if (user.emailVerified) {
         if (locationPermission == PermissionStatus.denied) {

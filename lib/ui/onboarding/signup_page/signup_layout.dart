@@ -1,15 +1,16 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/blocs/input/input_bloc.dart';
-import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/widgets/signin_error.dart';
-import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/widgets/signin_loading.dart';
+import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'widgets/signin_button.dart';
+import 'blocs/input/input_bloc.dart';
+import 'widgets/signup_button.dart';
+import 'widgets/signup_loading.dart';
+import 'widgets/signup_error.dart';
 
 // Sign in page for the app
-class SignInLayout extends StatelessWidget {
-  SignInLayout({Key? key}) : super(key: key);
+class SignUpLayout extends StatelessWidget {
+  SignUpLayout({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 
@@ -30,7 +31,7 @@ class SignInLayout extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Sign In",
+                    "Sign Up",
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   const SizedBox(height: 9.0),
@@ -50,31 +51,44 @@ class SignInLayout extends StatelessWidget {
                   const SizedBox(height: 10.0),
                   // Password input text widget
                   InputPassword(
-                    hintText: "Enter your password",
+                    hintText: "Choose your password",
                     onChanged: (value) {
                       context.read<InputBloc>().add(TypePassword(text: value));
                     },
                   ),
+                  const SizedBox(height: 10.0),
+                  // Password input text widget
+                  InputPassword(
+                    hintText: "Confirm your password",
+                    onChanged: (value) {
+                      context
+                          .read<InputBloc>()
+                          .add(TypeConfirmPassword(text: value));
+                    },
+                  ),
                   const SizedBox(height: 30.0),
                   // Sign in button widget
-                  const SignInButton(),
+                  const SignUpButton(),
                   const SizedBox(height: 10.0),
                   // If error message is present
-                  const SignInError(),
+                  const SignUpError(),
                   // Sign up page dialog
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Need an account? ',
+                        'Already registered? ',
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                       GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignIn()));
                           },
                           child: Text(
-                            'Sign Up',
+                            'Sign In',
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1
@@ -85,7 +99,7 @@ class SignInLayout extends StatelessWidget {
                     ],
                   ),
                   // Display on loading
-                  const SignInLoading(),
+                  const SignUpLoading(),
                 ],
               ),
             ),

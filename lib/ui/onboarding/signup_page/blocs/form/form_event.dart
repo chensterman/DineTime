@@ -10,9 +10,11 @@ abstract class FormEvent extends Equatable {
 class FormSubmission extends FormEvent {
   final String email;
   final String password;
+  final String confirmPassword;
   const FormSubmission({
     required this.email,
     required this.password,
+    required this.confirmPassword,
   });
 
   @override
