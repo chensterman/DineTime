@@ -3,7 +3,7 @@ import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/views/onboarding/emailverified.dart';
+import 'package:dinetime_mobile_mvp/ui/onboarding/emailverified.dart';
 
 // Email verification page
 // TODO:

@@ -48,6 +48,8 @@ dependencies:
 
   # State management libraries
   provider: ^6.0.5
+  flutter_bloc: ^8.0.0
+  equatable: ^2.0.5
 
   # Functional libraries
   location: ^4.4.0

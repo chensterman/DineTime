@@ -3,8 +3,8 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
-import 'package:dinetime_mobile_mvp/views/home/findyourfood.dart';
-import 'package:dinetime_mobile_mvp/views/home/savedfood.dart';
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood.dart';
+import 'package:dinetime_mobile_mvp/ui/home/savedfood.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

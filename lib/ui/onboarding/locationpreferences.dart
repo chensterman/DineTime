@@ -3,7 +3,7 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
-import 'package:dinetime_mobile_mvp/views/onboarding/welcome.dart';
+import 'package:dinetime_mobile_mvp/ui/onboarding/welcome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -69,6 +69,7 @@ class _LocationPreferencesState extends State<LocationPreferences> {
                 ),
                 const SizedBox(height: 60.0),
                 ButtonFilled(
+                  isDisabled: false,
                   text: "Allow Location",
                   onPressed: () async {
                     // Instantiate location service class

@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/views/home/home.dart';
+import 'package:dinetime_mobile_mvp/ui/home/home.dart';
 import 'package:flutter/material.dart';
 
 // Page to conclude onboarding process
