@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/ui/onboarding/locationpreferences.dart';
+import 'package:dinetime_mobile_mvp/ui/onboarding/locationpreferences_page/locationpreferences.dart';
 import 'package:flutter/material.dart';
 
 // Page confirming email has been verified

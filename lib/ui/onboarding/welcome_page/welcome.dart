@@ -3,19 +3,8 @@ import 'package:dinetime_mobile_mvp/ui/home/home.dart';
 import 'package:flutter/material.dart';
 
 // Page to conclude onboarding process
-class Welcome extends StatefulWidget {
+class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);
-
-  @override
-  State<Welcome> createState() => _WelcomeState();
-}
-
-class _WelcomeState extends State<Welcome> {
-  // Loading state
-  bool isLoading = false;
-
-  // Error state
-  String? errorMessage;
 
   @override
   Widget build(BuildContext context) {

@@ -2,6 +2,7 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/blocs/input/input_bloc.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/widgets/signin_error.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/widgets/signin_loading.dart';
+import 'package:dinetime_mobile_mvp/ui/onboarding/signup_page/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -71,7 +72,10 @@ class SignInLayout extends StatelessWidget {
                       ),
                       GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignUp()));
                           },
                           child: Text(
                             'Sign Up',
