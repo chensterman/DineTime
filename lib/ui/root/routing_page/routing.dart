@@ -1,4 +1,4 @@
-import 'package:dinetime_mobile_mvp/ui/home/home.dart';
+import 'package:dinetime_mobile_mvp/ui/home/home_page/home.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/locationpreferences_page/locationpreferences.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/signup_page/signup.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/verifyemail_page/verifyemail.dart';

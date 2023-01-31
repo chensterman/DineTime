@@ -3,8 +3,8 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
-import 'package:dinetime_mobile_mvp/ui/home/findyourfood.dart';
-import 'package:dinetime_mobile_mvp/ui/home/savedfood.dart';
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/findyourfood.dart';
+import 'package:dinetime_mobile_mvp/ui/home/favorites_page/favorites.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
     // Widget list for bottom nav bar
     final List<Widget> pages = <Widget>[
       const FindYourFood(),
-      SavedFood(
+      Favorites(
         customerId: user.uid,
       ),
     ];

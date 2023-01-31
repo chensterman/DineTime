@@ -1,11 +1,11 @@
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
-import 'package:dinetime_mobile_mvp/ui/home/foodcard.dart';
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/foodcard.dart';
 import 'package:flutter/material.dart';
 
-class FoodCardDisplay extends StatelessWidget {
+class FoodDisplay extends StatelessWidget {
   final String restaurantId;
-  const FoodCardDisplay({
+  const FoodDisplay({
     required this.restaurantId,
     super.key,
   });
