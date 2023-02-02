@@ -1,6 +1,9 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/locationpreferences_page/locationpreferences.dart';
+import 'package:dinetime_mobile_mvp/ui/onboarding/welcome_page/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 
 // Page confirming email has been verified
 class EmailVerified extends StatelessWidget {
@@ -8,6 +11,7 @@ class EmailVerified extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locationPermission = Provider.of<PermissionStatus>(context);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -50,12 +54,21 @@ class EmailVerified extends StatelessWidget {
                   isDisabled: false,
                   text: "Continue",
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LocationPreferences(),
-                      ),
-                    );
+                    if (locationPermission == PermissionStatus.denied) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LocationPreferences(),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Welcome(),
+                        ),
+                      );
+                    }
                   },
                 ),
               ],

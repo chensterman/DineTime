@@ -2,7 +2,7 @@ import 'package:dinetime_mobile_mvp/ui/home/home_page/home.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/locationpreferences_page/locationpreferences.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/signup_page/signup.dart';
 import 'package:dinetime_mobile_mvp/ui/onboarding/verifyemail_page/verifyemail.dart';
-import 'package:dinetime_mobile_mvp/ui/root/auth_wrapper/authwrapper.dart';
+import 'package:dinetime_mobile_mvp/ui/root/routing_page/wrappers/auth_wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
