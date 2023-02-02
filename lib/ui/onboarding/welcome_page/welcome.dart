@@ -20,9 +20,11 @@ class Welcome extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Image(
+                    width: 50.0,
+                    height: 50.0,
                     image: AssetImage('lib/assets/dinetime-white.png'),
                   ),
-                  const SizedBox(height: 50.0),
+                  const SizedBox(height: 20.0),
                   Text(
                     "Welcome to DineTime.",
                     style: Theme.of(context).textTheme.headline1?.copyWith(
@@ -43,7 +45,7 @@ class Welcome extends StatelessWidget {
                   ButtonOutlined(
                     text: "Let's Go!",
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const Home(),

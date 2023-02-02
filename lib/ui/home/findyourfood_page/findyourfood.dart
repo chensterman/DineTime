@@ -4,6 +4,7 @@ import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/services/analytics_service.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/foodcard.dart';
+import 'package:dinetime_mobile_mvp/ui/onboarding/signin_page/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

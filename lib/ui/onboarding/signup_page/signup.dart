@@ -7,7 +7,11 @@ import 'blocs/input/input_bloc.dart';
 import 'blocs/form/form_bloc.dart' as fb;
 
 class SignUp extends StatelessWidget {
-  const SignUp({super.key});
+  final Function callBack;
+  const SignUp({
+    super.key,
+    required this.callBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,9 @@ class SignUp extends StatelessWidget {
         BlocProvider(create: (context) => InputBloc()),
         BlocProvider(create: (context) => fb.FormBloc()),
       ],
-      child: SignUpLayout(),
+      child: SignUpLayout(
+        callBack: callBack,
+      ),
     );
   }
 }

@@ -198,7 +198,7 @@ class _FoodCardState extends State<FoodCard> {
       width: width,
       height: height,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -963,7 +963,7 @@ class _FoodCardState extends State<FoodCard> {
     num minute = dateStart.toDate().minute;
     String timeZoneName = dateStart.toDate().timeZoneName;
     return ListCard(
-      height: 60.0,
+      height: 50.0,
       width: double.infinity,
       child: Row(
         children: [
@@ -1051,8 +1051,8 @@ class _FoodCardState extends State<FoodCard> {
       children: [
         Image.asset(
           'lib/assets/location_white.png',
-          width: 18,
-          height: 18,
+          width: 15,
+          height: 15,
         ),
         const SizedBox(width: 5),
         Text(
@@ -1077,7 +1077,7 @@ class _FoodCardState extends State<FoodCard> {
       children: [
         const Icon(
           Icons.access_time_rounded,
-          size: 18.0,
+          size: 15.0,
           color: Colors.white,
         ),
         const SizedBox(width: 5),
