@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:page_view_indicators/page_view_indicators.dart';
 
 class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
@@ -128,7 +131,7 @@ class _FoodCardState extends State<FoodCard> {
     // Get size of screen
     Size size = MediaQuery.of(context).size;
     double width = size.width * 0.9;
-    double height = size.height * 0.75;
+    double height = size.height * 0.77;
     return Container(
       height: height,
       width: width,
@@ -347,17 +350,32 @@ class _FoodCardState extends State<FoodCard> {
   Widget photoGallery() {
     List<r.GalleryImage> gallery = widget.restaurant.gallery;
     List<Widget> galleryChildren = [];
+    final _controller = PageController();
     num count = 0;
     for (r.GalleryImage galleryImage in gallery) {
       galleryChildren.add(
         Container(
           height: 100,
-          width: 100,
+          width: 110,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white.withOpacity(0.5),
             image: DecorationImage(
                 image: galleryImage.image, fit: BoxFit.cover, opacity: 0.8),
+          ),
+          child: Stack(
+            children: [
+              Container(),
+              Positioned(
+                top: 5,
+                right: 5,
+                child: Image.asset(
+                  "lib/assets/expanded.png",
+                  height: 20,
+                  width: 20,
+                ),
+              ),
+            ],
           ),
         ),
       );
@@ -388,9 +406,10 @@ class _FoodCardState extends State<FoodCard> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(25),
+                    padding: EdgeInsets.all(20),
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.47,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       child: Column(
                         children: [
                           Align(
@@ -421,17 +440,208 @@ class _FoodCardState extends State<FoodCard> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 40),
+                          const SizedBox(height: 10),
                           Column(
                             children: [
-                              PhotoCarousel(
-                                images: gallery.map((e) => e.image).toList(),
-                                descriptions: gallery
-                                    .map((e) => e.imageDescription)
-                                    .toList(),
+                              Container(
+                                width: 410,
+                                height: 400,
+                                child: PageView(
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _controller,
+                                  children: <Widget>[
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Famous Noodles',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline1
+                                                ?.copyWith(
+                                                  fontSize: 18.0,
+                                                  fontFamily: 'Lato',
+                                                ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            child: Image.asset(
+                                                'lib/assets/food1.png',
+                                                width: 310,
+                                                height: 310),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              'Very very tasty Samosas made with a lot of good food and things.  Very amazing food.  Very good food and very nice food',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  ?.copyWith(
+                                                    fontSize: 10.0,
+                                                    fontFamily: 'Lato',
+                                                  ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Famous Salad',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline1
+                                                ?.copyWith(
+                                                  fontSize: 18.0,
+                                                  fontFamily: 'Lato',
+                                                ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            child: Image.asset(
+                                                'lib/assets/food2.png',
+                                                width: 310,
+                                                height: 310,
+                                                fit: BoxFit.cover),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              'Very very tasty Samosas made with a lot of good food and things.  Very amazing food.  Very good food and very nice food',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  ?.copyWith(
+                                                    fontSize: 10.0,
+                                                    fontFamily: 'Lato',
+                                                  ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Famous Salad',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline1
+                                                ?.copyWith(
+                                                  fontSize: 18.0,
+                                                  fontFamily: 'Lato',
+                                                ),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            child: Image.asset(
+                                                'lib/assets/food3.png',
+                                                width: 310,
+                                                height: 310,
+                                                fit: BoxFit.cover),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              'Very very tasty Samosas made with a lot of good food and things.  Very amazing food.  Very good food and very nice food',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  ?.copyWith(
+                                                    fontSize: 10.0,
+                                                    fontFamily: 'Lato',
+                                                  ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Famous Salad',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline1
+                                                ?.copyWith(
+                                                  fontSize: 18.0,
+                                                  fontFamily: 'Lato',
+                                                ),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            child: Image.asset(
+                                                'lib/assets/food1.png',
+                                                width: 310,
+                                                height: 310,
+                                                fit: BoxFit.cover),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              'Very very tasty Samosas made with a lot of good food and things.  Very amazing food.  Very good food and very nice food',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2
+                                                  ?.copyWith(
+                                                    fontSize: 10.0,
+                                                    fontFamily: 'Lato',
+                                                  ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SmoothPageIndicator(
+                                controller: _controller,
+                                count: 4,
+                                effect: SwapEffect(
+                                  activeDotColor: Colors.orange,
+                                  dotColor: Colors.grey,
+                                  dotHeight: 5,
+                                  dotWidth: 5,
+                                ),
                               )
                             ],
                           ),
+                          // Column(
+                          //   children: [
+                          //     PhotoCarousel(
+                          //       images: gallery.map((e) => e.image).toList(),
+                          //       descriptions: gallery
+                          //           .map((e) => e.imageDescription)
+                          //           .toList(),
+                          //     )
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
@@ -612,7 +822,6 @@ class _FoodCardState extends State<FoodCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           itemName,
@@ -622,20 +831,36 @@ class _FoodCardState extends State<FoodCard> {
                                     fontFamily: 'Lato',
                                   ),
                         ),
-                        Text(
-                          '\$' + price.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1
-                              ?.copyWith(
-                                  fontSize: 12.0,
-                                  fontFamily: 'Lato',
-                                  color: dineTimeColorScheme.primary),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Image.asset(
+                          'lib/assets/vegan.png',
+                          width: 13,
+                          height: 13,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Image.asset(
+                          'lib/assets/nut_free.png',
+                          width: 13,
+                          height: 13,
                         ),
                       ],
                     ),
                     const SizedBox(
                       height: 5,
+                    ),
+                    Text(
+                      '\$' + price.toString(),
+                      style: Theme.of(context).textTheme.headline1?.copyWith(
+                          fontSize: 11.0,
+                          fontFamily: 'Lato',
+                          color: dineTimeColorScheme.primary),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Text(
                       itemDesc,
@@ -1150,7 +1375,7 @@ class _FoodCardState extends State<FoodCard> {
           width: 15,
           height: 15,
         ),
-        const SizedBox(width: 5),
+        const SizedBox(width: 7),
         Text(
           nextDate,
           style: Theme.of(context).textTheme.subtitle1?.copyWith(

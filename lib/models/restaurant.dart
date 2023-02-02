@@ -59,12 +59,14 @@ class GalleryImage {
   String imageDescription;
   ImageProvider<Object> image;
   Timestamp dateAdded;
+  String imageName;
 
   GalleryImage({
     required this.imageId,
     required this.imageDescription,
     required this.image,
     required this.dateAdded,
+    required this.imageName,
   });
 }
 

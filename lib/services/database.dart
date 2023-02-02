@@ -134,6 +134,7 @@ class DatabaseService {
     for (Map<String, dynamic> imageRaw in galleryRaw) {
       gallery.add(r.GalleryImage(
           imageId: imageRaw['photo_id'],
+          imageName: imageRaw['photo_name'],
           image: await getPhoto(imageRaw['photo_location']),
           imageDescription: imageRaw['photo_description'],
           dateAdded: imageRaw['date_added']));
