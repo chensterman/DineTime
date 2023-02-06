@@ -174,6 +174,7 @@ class DatabaseService {
       pricing: pricing,
       gallery: gallery,
       menu: menu,
+      instagramHandle: instagramHandle,
       upcomingLocations: upcomingLocations,
       cuisine: cuisine,
       bio: bio,

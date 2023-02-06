@@ -115,6 +115,55 @@ class _FoodCardState extends State<FoodCard> {
     }
   }
 
+  Widget statusGradient() {
+    final provider = Provider.of<CardProvider>(context);
+    final status = provider.getStatus();
+    final opacity = provider.getStatusOpacity();
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    switch (status) {
+      case CardStatus.like:
+        final child = Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            gradient: const LinearGradient(
+              colors: [
+                Colors.white,
+                Colors.transparent,
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              stops: [0.2, 1],
+            ),
+          ),
+        );
+        return Opacity(opacity: opacity * 0.8, child: child);
+      case CardStatus.dislike:
+        final child = Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            gradient: const LinearGradient(
+              colors: [
+                Colors.white,
+                Colors.transparent,
+              ],
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft,
+              stops: [0.2, 1],
+            ),
+          ),
+        );
+        return Opacity(opacity: opacity * 0.8, child: child);
+      default:
+        return Container();
+    }
+  }
+
   Widget stamp({
     required Color color,
     required String text,
@@ -147,6 +196,7 @@ class _FoodCardState extends State<FoodCard> {
                   mainBackground(width, height),
                   mainBackgroundShadow(width, height),
                   mainDetails(width, height),
+                  statusGradient(),
                 ],
               ),
               additionalDetails(),
