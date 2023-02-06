@@ -33,8 +33,8 @@ class _FindYourFoodState extends State<FindYourFood> {
                     await AuthService().signOut();
                   },
                   child: Container(
-                    width: 20.0,
-                    height: 20.0,
+                    width: 15.0,
+                    height: 15.0,
                     decoration: BoxDecoration(
                       image: const DecorationImage(
                         fit: BoxFit.contain,
@@ -47,14 +47,14 @@ class _FindYourFoodState extends State<FindYourFood> {
                   ),
                 ),
                 const SizedBox(
-                  width: 10.0,
+                  width: 13.0,
                 ),
                 Text(
                   "Bellevue, WA 98004",
                   style: Theme.of(context)
                       .textTheme
                       .headline1
-                      ?.copyWith(fontSize: 18.0),
+                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
