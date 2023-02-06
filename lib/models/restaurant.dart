@@ -14,6 +14,7 @@ class Restaurant {
   String? cuisine;
   String? website;
   String? instagramHandle;
+  String? email;
 
   Restaurant({
     required this.restaurantId,
@@ -27,6 +28,7 @@ class Restaurant {
     this.cuisine,
     this.website,
     this.instagramHandle,
+    this.email,
   });
 }
 
@@ -40,6 +42,7 @@ class RestaurantPreview {
   String? cuisine;
   String? instagramHandle;
   String? website;
+  String? email;
 
   RestaurantPreview({
     required this.restaurantId,
@@ -50,6 +53,7 @@ class RestaurantPreview {
     this.cuisine,
     this.instagramHandle,
     this.website,
+    this.email,
   });
 }
 
@@ -59,12 +63,14 @@ class GalleryImage {
   String imageDescription;
   ImageProvider<Object> image;
   Timestamp dateAdded;
+  String imageName;
 
   GalleryImage({
     required this.imageId,
     required this.imageDescription,
     required this.image,
     required this.dateAdded,
+    required this.imageName,
   });
 }
 

@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
             initialData: PermissionStatus.granted),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'DineTime Demo',
         theme: ThemeData(
           colorScheme: dineTimeColorScheme,

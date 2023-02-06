@@ -85,6 +85,7 @@ class DatabaseService {
     int pricing = restaurantData['pricing'];
     String? cuisine = restaurantData['cuisine'];
     String? instagramHandle = restaurantData['instagram_handle'];
+    String? email = restaurantData['email'];
     String? website = restaurantData['website'];
     // Refactor location data into a list of PopUpLocation objects
     List<r.PopUpLocation> restaurantLocationData = [];
@@ -110,6 +111,7 @@ class DatabaseService {
         pricing: pricing,
         cuisine: cuisine,
         instagramHandle: instagramHandle,
+        email: email,
         website: website);
   }
 
@@ -127,6 +129,7 @@ class DatabaseService {
     String cuisine = restaurantData['cuisine'];
     String website = restaurantData['website'];
     String instagramHandle = restaurantData['instagram_handle'];
+    String email = restaurantData['email'];
 
     // Get restaurant gallery
     List galleryRaw = restaurantData['gallery'];
@@ -134,6 +137,7 @@ class DatabaseService {
     for (Map<String, dynamic> imageRaw in galleryRaw) {
       gallery.add(r.GalleryImage(
           imageId: imageRaw['photo_id'],
+          imageName: imageRaw['photo_name'],
           image: await getPhoto(imageRaw['photo_location']),
           imageDescription: imageRaw['photo_description'],
           dateAdded: imageRaw['date_added']));
@@ -178,6 +182,8 @@ class DatabaseService {
       cuisine: cuisine,
       bio: bio,
       website: website,
+      instagramHandle: instagramHandle,
+      email: email,
     );
   }
 

@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:page_view_indicators/page_view_indicators.dart';
 
 class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
@@ -125,10 +128,12 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget buildCard(BuildContext context) {
-    // Get size of screen
     Size size = MediaQuery.of(context).size;
     double width = size.width * 0.9;
-    double height = size.height * 0.75;
+    double height = size.height * 0.77;
+
+    bool _isMainDetailsVisible = true;
+
     return Container(
       height: height,
       width: width,
@@ -136,21 +141,41 @@ class _FoodCardState extends State<FoodCard> {
           color: Colors.white,
           border: Border.all(
               color: Theme.of(context).colorScheme.onSurface, width: 1),
-          borderRadius: BorderRadius.circular(20)),
+          borderRadius: BorderRadius.circular(10)),
       child: Center(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Stack(
+          child: Scrollbar(
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (scrollNotification) {
+                print("SingleChildScrollView is scrolling");
+                if (scrollNotification.metrics.pixels >= 20) {
+                  setState(() {
+                    _isMainDetailsVisible = false;
+                  });
+                } else {
+                  setState(() {
+                    _isMainDetailsVisible = true;
+                  });
+                }
+                return false;
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  mainBackground(width, height),
-                  mainBackgroundShadow(width, height),
-                  mainDetails(width, height),
+                  Stack(
+                    children: [
+                      mainBackground(width, height),
+                      mainBackgroundShadow(width, height),
+                      Visibility(
+                        visible: _isMainDetailsVisible,
+                        child: mainDetails(width, height),
+                      ),
+                    ],
+                  ),
+                  additionalDetails(),
                 ],
               ),
-              additionalDetails(),
-            ],
+            ),
           ),
         ),
       ),
@@ -160,7 +185,7 @@ class _FoodCardState extends State<FoodCard> {
   Widget mainBackground(double width, double height) {
     return Container(
       width: width,
-      height: height,
+      height: height - 2,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: widget.restaurant.menu.isEmpty
@@ -169,7 +194,7 @@ class _FoodCardState extends State<FoodCard> {
           fit: BoxFit.cover,
         ),
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
     );
   }
@@ -177,9 +202,9 @@ class _FoodCardState extends State<FoodCard> {
   Widget mainBackgroundShadow(double width, double height) {
     return Container(
       width: width,
-      height: height,
+      height: height - 2,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(10.0),
         gradient: const LinearGradient(
           colors: [
             Colors.transparent,
@@ -198,27 +223,30 @@ class _FoodCardState extends State<FoodCard> {
       width: width,
       height: height,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(
+            left: 25.0, right: 25.0, top: 30.0, bottom: 30.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             logo(),
-            const SizedBox(height: 12),
-            name(),
-            const SizedBox(height: 5),
-            cuisineDetails(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
+            name(dineTimeColorScheme.background),
+            cuisineDetails(dineTimeColorScheme.background),
+            const SizedBox(height: 18),
             widget.restaurant.upcomingLocations.isNotEmpty
-                ? nextLocation()
+                ? nextLocation(dineTimeColorScheme.background,
+                    'lib/assets/location_white.png')
                 : Container(),
-            const SizedBox(height: 5),
+            const SizedBox(height: 7),
             widget.restaurant.upcomingLocations.isNotEmpty
-                ? nextDate()
+                ? nextDate(
+                    dineTimeColorScheme.background, 'lib/assets/calendar.png')
                 : Container(),
-            const SizedBox(height: 5),
+            const SizedBox(height: 7),
             widget.restaurant.upcomingLocations.isNotEmpty
-                ? nextTime()
+                ? nextTime(dineTimeColorScheme.background,
+                    'lib/assets/clock_white.png')
                 : Container(),
           ],
         ),
@@ -228,10 +256,34 @@ class _FoodCardState extends State<FoodCard> {
 
   Widget additionalDetails() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(
+          left: 25.0, right: 25.0, top: 15.0, bottom: 15.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 5),
+          contact(),
+          const SizedBox(height: 5),
+          name(dineTimeColorScheme.onBackground),
+          cuisineDetails(dineTimeColorScheme.onBackground),
+          const SizedBox(height: 15),
+          widget.restaurant.upcomingLocations.isNotEmpty
+              ? bottomNextLocation(dineTimeColorScheme.onBackground,
+                  'lib/assets/location_arrow_orange.png')
+              : Container(),
+          const SizedBox(height: 7),
+          widget.restaurant.upcomingLocations.isNotEmpty
+              ? bottomNextDate(dineTimeColorScheme.onBackground,
+                  'lib/assets/calendar_orange.png')
+              : Container(),
+          const SizedBox(height: 7),
+          widget.restaurant.upcomingLocations.isNotEmpty
+              ? bottomNextTime(dineTimeColorScheme.onBackground,
+                  'lib/assets/clock_orange.png')
+              : Container(),
+          const SizedBox(height: 10.0),
+          const Divider(),
+          const SizedBox(height: 10.0),
           aboutAndStory(),
           const SizedBox(height: 10.0),
           const Divider(),
@@ -254,85 +306,116 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
+  Widget contact() {
+    return Row(
+      children: [
+        widget.restaurant.instagramHandle != null
+            ? Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: InkWell(
+                  onTap: () => launchUrl(Uri.parse(
+                      'https://www.instagram.com/${widget.restaurant.instagramHandle!}')),
+                  child: Container(
+                    width: 30.0,
+                    height: 30.0,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 5),
+                        boxShadow: const [
+                          BoxShadow(
+                              blurRadius: 20,
+                              color: Color.fromARGB(255, 224, 224, 224),
+                              spreadRadius: 5)
+                        ]),
+                    child: const CircleAvatar(
+                      radius: 40.0,
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage('lib/assets/instagram.png'),
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
+        widget.restaurant.website != null
+            ? Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: InkWell(
+                  onTap: () => launchUrl(
+                      Uri.parse('https://${widget.restaurant.website!}')),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: Container(
+                      width: 30.0,
+                      height: 30.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('lib/assets/website.png'),
+                          ),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 7),
+                          boxShadow: const [
+                            BoxShadow(
+                                blurRadius: 20,
+                                color: Color.fromARGB(255, 231, 231, 231),
+                                spreadRadius: 5)
+                          ]),
+                      child: const CircleAvatar(
+                        radius: 50.0,
+                        backgroundColor: Colors.white,
+                        backgroundImage: AssetImage('lib/assets/website.png'),
+                      ),
+                    ),
+                  ),
+                ))
+            : Container(),
+        widget.restaurant.email != null
+            ? Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: InkWell(
+                  onTap: () => launchUrl(
+                    Uri.parse('mailto:${widget.restaurant.email!}'),
+                  ),
+                  child: Container(
+                    width: 30.0,
+                    height: 30.0,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 5),
+                        boxShadow: const [
+                          BoxShadow(
+                              blurRadius: 20,
+                              color: Color.fromARGB(255, 224, 224, 224),
+                              spreadRadius: 5)
+                        ]),
+                    child: const Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Image(
+                        image: AssetImage('lib/assets/email.png'),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
+      ],
+    );
+  }
+
   Widget aboutAndStory() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              'About & Story',
-              style: Theme.of(context).textTheme.headline1?.copyWith(
-                    fontSize: 20.0,
-                    fontFamily: 'Lato',
-                  ),
-            ),
-            widget.restaurant.instagramHandle != null
-                ? Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: InkWell(
-                      onTap: () => launchUrl(Uri.parse(
-                          'https://www.instagram.com/${widget.restaurant.instagramHandle!}')),
-                      child: Container(
-                        width: 30.0,
-                        height: 30.0,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 5),
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 10,
-                                  color: Color.fromARGB(255, 224, 224, 224),
-                                  spreadRadius: 5)
-                            ]),
-                        child: const CircleAvatar(
-                          radius: 40.0,
-                          backgroundColor: Colors.white,
-                          backgroundImage:
-                              AssetImage('lib/assets/instagram.png'),
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(),
-            widget.restaurant.website != null
-                ? Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: InkWell(
-                      onTap: () => launchUrl(
-                          Uri.parse('https://${widget.restaurant.website!}')),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 0),
-                        child: Container(
-                          width: 30.0,
-                          height: 30.0,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              image: const DecorationImage(
-                                image: AssetImage('lib/assets/website.png'),
-                              ),
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 7),
-                              boxShadow: const [
-                                BoxShadow(
-                                    blurRadius: 10,
-                                    color: Color.fromARGB(255, 231, 231, 231),
-                                    spreadRadius: 5)
-                              ]),
-                          child: const CircleAvatar(
-                            radius: 50.0,
-                            backgroundColor: Colors.white,
-                            backgroundImage:
-                                AssetImage('lib/assets/website.png'),
-                          ),
-                        ),
-                      ),
-                    ))
-                : Container(),
-          ],
+        Text(
+          'Our Story',
+          style: Theme.of(context).textTheme.headline1?.copyWith(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w500,
+              ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 13),
         Text(
           widget.restaurant.bio!,
           style: Theme.of(context).textTheme.bodyText2?.copyWith(
@@ -344,28 +427,93 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
+  Widget photoOption(
+      String imageName, ImageProvider<Object>? image, String imageDescription) {
+    return Container(
+      child: Column(
+        children: [
+          Text(
+            imageName,
+            style: Theme.of(context)
+                .textTheme
+                .headline1
+                ?.copyWith(fontSize: 20.0, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 10),
+          AspectRatio(
+            aspectRatio: 1.25,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white.withOpacity(0.5),
+                image: DecorationImage(
+                  image: image ??
+                      const AssetImage("lib/assets/dinetime-orange.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Text(
+              imageDescription,
+              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    fontSize: 12.0,
+                    fontFamily: 'Lato',
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget photoGallery() {
     List<r.GalleryImage> gallery = widget.restaurant.gallery;
     List<Widget> galleryChildren = [];
+    List<Widget> galleryButtonChildren = [];
+    final _controller = PageController();
     num count = 0;
     for (r.GalleryImage galleryImage in gallery) {
       galleryChildren.add(
         Container(
-          height: 100,
-          width: 100,
+          height: 80,
+          width: 80,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white.withOpacity(0.5),
             image: DecorationImage(
                 image: galleryImage.image, fit: BoxFit.cover, opacity: 0.8),
           ),
+          child: Stack(
+            children: [
+              Container(),
+              Positioned(
+                top: 5,
+                right: 5,
+                child: Image.asset(
+                  "lib/assets/expanded.png",
+                  height: 15,
+                  width: 15,
+                ),
+              ),
+            ],
+          ),
         ),
       );
-      galleryChildren.add(SizedBox(width: 25));
       count += 1;
       if (count == 3) {
         break;
       }
+    }
+    for (r.GalleryImage galleryImage in gallery) {
+      galleryButtonChildren.add(
+        photoOption(galleryImage.imageName, galleryImage.image,
+            galleryImage.imageDescription),
+      );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,11 +521,11 @@ class _FoodCardState extends State<FoodCard> {
         Text(
           'Photo Gallery',
           style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 20.0,
-                fontFamily: 'Lato',
+                fontSize: 18.0,
+                fontWeight: FontWeight.w500,
               ),
         ),
-        const SizedBox(height: 20.0),
+        const SizedBox(height: 15.0),
         InkWell(
           onTap: () {
             showDialog(
@@ -388,9 +536,10 @@ class _FoodCardState extends State<FoodCard> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(25),
+                    padding: EdgeInsets.all(20),
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.43,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       child: Column(
                         children: [
                           Align(
@@ -399,36 +548,33 @@ class _FoodCardState extends State<FoodCard> {
                               onTap: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Row(
-                                children: [
-                                  const Image(
-                                      image: AssetImage(
-                                          'lib/assets/back_arrow.png'),
-                                      height: 15,
-                                      width: 15),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    "Go Back",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1
-                                        ?.copyWith(
-                                            fontSize: 15.0,
-                                            fontFamily: 'Lato',
-                                            color: dineTimeColorScheme.primary),
-                                  ),
-                                ],
-                              ),
+                              child: const Image(
+                                  image: AssetImage('lib/assets/x_button.png'),
+                                  height: 25,
+                                  width: 25),
                             ),
                           ),
-                          const SizedBox(height: 40),
+                          const SizedBox(height: 2),
                           Column(
                             children: [
-                              PhotoCarousel(
-                                images: gallery.map((e) => e.image).toList(),
-                                descriptions: gallery
-                                    .map((e) => e.imageDescription)
-                                    .toList(),
+                              Container(
+                                width: 410,
+                                height: 330,
+                                child: PageView(
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _controller,
+                                  children: galleryButtonChildren,
+                                ),
+                              ),
+                              SmoothPageIndicator(
+                                controller: _controller,
+                                count: galleryChildren.length,
+                                effect: const SwapEffect(
+                                  activeDotColor: Colors.orange,
+                                  dotColor: Colors.grey,
+                                  dotHeight: 5,
+                                  dotWidth: 5,
+                                ),
                               )
                             ],
                           ),
@@ -441,7 +587,7 @@ class _FoodCardState extends State<FoodCard> {
             );
           },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: galleryChildren,
           ),
         ),
@@ -455,10 +601,10 @@ class _FoodCardState extends State<FoodCard> {
       children: [
         Text(
           'Dietary Options',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 20.0,
-                fontFamily: 'Lato',
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .headline1
+              ?.copyWith(fontSize: 18.0, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 10),
         Row(
@@ -474,6 +620,7 @@ class _FoodCardState extends State<FoodCard> {
                       color: Color.fromARGB(95, 158, 158, 158), width: 2),
                   borderRadius: BorderRadius.circular(7)),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     'lib/assets/vegan.png',
@@ -501,6 +648,7 @@ class _FoodCardState extends State<FoodCard> {
                       color: Color.fromARGB(95, 158, 158, 158), width: 2),
                   borderRadius: BorderRadius.circular(7)),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     'lib/assets/nut_free.png',
@@ -528,6 +676,7 @@ class _FoodCardState extends State<FoodCard> {
                       color: Color.fromARGB(95, 158, 158, 158), width: 2),
                   borderRadius: BorderRadius.circular(7)),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     'lib/assets/vegetarian.png',
@@ -556,7 +705,7 @@ class _FoodCardState extends State<FoodCard> {
     List<Widget> columnChildren = [];
     num count = 0;
     for (r.MenuItem menuItem in menu) {
-      columnChildren.add(menuOption(menuItem.itemName,
+      columnChildren.add(menuOption(12.0, menuItem.itemName,
           menuItem.itemDescription!, menuItem.itemPrice, menuItem.itemPhoto));
       columnChildren.add(
         const Divider(
@@ -569,20 +718,22 @@ class _FoodCardState extends State<FoodCard> {
         break;
       }
     }
-    columnChildren.add(Center(
-      child: menuButton(),
-    ));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Menu',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 20.0,
-                fontFamily: 'Lato',
-              ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Our Menu',
+              style: Theme.of(context).textTheme.headline1?.copyWith(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+            menuButton(),
+          ],
         ),
-        const SizedBox(height: 20),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -599,67 +750,79 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
-  Widget menuOption(String itemName, String itemDesc, num price,
+  Widget menuOption(double padding, String itemName, String itemDesc, num price,
       ImageProvider<Object>? itemImage) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.all(padding),
           child: Row(
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      itemName,
+                      softWrap: true,
+                      style: Theme.of(context).textTheme.headline1?.copyWith(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          itemName,
-                          style:
-                              Theme.of(context).textTheme.headline1?.copyWith(
-                                    fontSize: 12.0,
-                                    fontFamily: 'Lato',
-                                  ),
-                        ),
                         Text(
                           '\$' + price.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .headline1
                               ?.copyWith(
-                                  fontSize: 12.0,
-                                  fontFamily: 'Lato',
-                                  color: dineTimeColorScheme.primary),
+                                  fontSize: 14.0,
+                                  color: dineTimeColorScheme.primary,
+                                  fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
-                    Text(
-                      itemDesc,
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                            fontSize: 8.0,
-                            fontFamily: 'Lato',
-                          ),
+                    Container(
+                      height: 40,
+                      child: Text(
+                        itemDesc,
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              fontSize: 10.0,
+                              fontFamily: 'Lato',
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 30.0),
-                child: Container(
-                  height: 60,
-                  width: 90,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white.withOpacity(0.5),
-                    image: DecorationImage(
-                        image: itemImage ??
-                            const AssetImage("lib/assets/dinetime-orange.png"),
-                        fit: BoxFit.cover,
-                        opacity: 0.8),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 30.0),
+                  child: Container(
+                    height: 75,
+                    width: 75,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white.withOpacity(0.5),
+                      image: DecorationImage(
+                          image: itemImage ??
+                              const AssetImage(
+                                  "lib/assets/dinetime-orange.png"),
+                          fit: BoxFit.cover,
+                          opacity: 0.8),
+                    ),
                   ),
                 ),
               ),
@@ -677,8 +840,11 @@ class _FoodCardState extends State<FoodCard> {
       columnChildren.add(const SizedBox(
         height: 10.0,
       ));
-      columnChildren.add(menuOption(menuItem.itemName,
+      columnChildren.add(menuOption(0, menuItem.itemName,
           menuItem.itemDescription!, menuItem.itemPrice, menuItem.itemPhoto));
+      columnChildren.add(
+        const SizedBox(height: 12.0),
+      );
       columnChildren.add(
         const Divider(
           color: Color.fromARGB(95, 158, 158, 158),
@@ -700,7 +866,8 @@ class _FoodCardState extends State<FoodCard> {
                 child: Padding(
                   padding: EdgeInsets.all(25),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
                         Align(
@@ -714,8 +881,8 @@ class _FoodCardState extends State<FoodCard> {
                                 const Image(
                                     image:
                                         AssetImage('lib/assets/back_arrow.png'),
-                                    height: 15,
-                                    width: 15),
+                                    height: 12,
+                                    width: 12),
                                 const SizedBox(width: 10),
                                 Text(
                                   "Go Back",
@@ -723,7 +890,7 @@ class _FoodCardState extends State<FoodCard> {
                                       .textTheme
                                       .subtitle1
                                       ?.copyWith(
-                                          fontSize: 15.0,
+                                          fontSize: 12.0,
                                           fontFamily: 'Lato',
                                           color: dineTimeColorScheme.primary),
                                 ),
@@ -742,15 +909,16 @@ class _FoodCardState extends State<FoodCard> {
                                     .textTheme
                                     .headline1
                                     ?.copyWith(
-                                      fontSize: 25.0,
-                                    ),
+                                        fontSize: 23.0,
+                                        fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Scrollbar(
-                          child: SingleChildScrollView(
+                        SizedBox(height: 10),
+                        SingleChildScrollView(
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.6,
                             child: Column(
                               children: columnChildren,
                             ),
@@ -765,9 +933,9 @@ class _FoodCardState extends State<FoodCard> {
           );
         },
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           child: Container(
-            width: 250,
+            width: 135,
             height: 25,
             decoration: BoxDecoration(
               color: dineTimeColorScheme.primary.withOpacity(0.2),
@@ -778,18 +946,17 @@ class _FoodCardState extends State<FoodCard> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Image(
+                        image: AssetImage('lib/assets/view_menu.png'),
+                        height: 10,
+                        width: 10),
+                    SizedBox(width: 5),
                     Text(
                       "View full menu",
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           fontSize: 10.0,
                           color: dineTimeColorScheme.primary,
                           fontFamily: 'Lato'),
-                    ),
-                    SizedBox(width: 5),
-                    Icon(
-                      Icons.arrow_forward,
-                      color: dineTimeColorScheme.primary,
-                      size: 10,
                     ),
                   ],
                 ),
@@ -807,8 +974,8 @@ class _FoodCardState extends State<FoodCard> {
       Text(
         'Upcoming Locations',
         style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 20.0,
-              fontFamily: 'Lato',
+              fontSize: 18.0,
+              fontWeight: FontWeight.w500,
             ),
       ),
     ];
@@ -871,8 +1038,8 @@ class _FoodCardState extends State<FoodCard> {
                                   const Image(
                                       image: AssetImage(
                                           'lib/assets/back_arrow.png'),
-                                      height: 15,
-                                      width: 15),
+                                      height: 12,
+                                      width: 12),
                                   const SizedBox(width: 10),
                                   Text(
                                     "Go Back",
@@ -880,7 +1047,7 @@ class _FoodCardState extends State<FoodCard> {
                                         .textTheme
                                         .subtitle1
                                         ?.copyWith(
-                                            fontSize: 15.0,
+                                            fontSize: 12.0,
                                             fontFamily: 'Lato',
                                             color: dineTimeColorScheme.primary),
                                   ),
@@ -894,12 +1061,13 @@ class _FoodCardState extends State<FoodCard> {
                             child: Row(
                               children: [
                                 Text(
-                                  "Upcoming Locations",
+                                  'Upcoming Locations',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline1
                                       ?.copyWith(
-                                        fontSize: 25.0,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                 ),
                               ],
@@ -922,10 +1090,10 @@ class _FoodCardState extends State<FoodCard> {
             );
           },
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
             child: Container(
-              width: 250,
-              height: 22,
+              width: 190,
+              height: 26,
               decoration: BoxDecoration(
                 color: dineTimeColorScheme.primary.withOpacity(0.2),
                 shape: BoxShape.rectangle,
@@ -935,18 +1103,18 @@ class _FoodCardState extends State<FoodCard> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Image(
+                        image:
+                            AssetImage('lib/assets/location_arrow_orange.png'),
+                        height: 15,
+                        width: 15),
+                    const SizedBox(width: 7),
                     Text(
                       "View all upcoming locations",
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           fontSize: 10.0,
                           color: dineTimeColorScheme.primary,
                           fontFamily: 'Lato'),
-                    ),
-                    SizedBox(width: 5),
-                    Icon(
-                      Icons.arrow_forward,
-                      color: dineTimeColorScheme.primary,
-                      size: 10,
                     ),
                   ],
                 ),
@@ -963,14 +1131,17 @@ class _FoodCardState extends State<FoodCard> {
     num minute = dateStart.toDate().minute;
     String timeZoneName = dateStart.toDate().timeZoneName;
     return ListCard(
-      height: 60.0,
+      height: 50.0,
       width: double.infinity,
       child: Row(
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
-            child:
-                Text('${dateStart.toDate().month}/${dateStart.toDate().day}'),
+            child: Text('${dateStart.toDate().month}/${dateStart.toDate().day}',
+                style: Theme.of(context).textTheme.headline1?.copyWith(
+                    fontSize: 14.0,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500)),
           ),
           Expanded(
             flex: 5,
@@ -987,18 +1158,19 @@ class _FoodCardState extends State<FoodCard> {
                         name,
                         style: Theme.of(context).textTheme.headline1?.copyWith(
                             fontSize: 14.0,
-                            color: Theme.of(context).colorScheme.onSurface),
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.w500),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(height: 5.0),
+                    const SizedBox(height: 1.0),
                     Flexible(
                       child: Text(
                         "$distance mi - $hour:$minute $period $timeZoneName",
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1
-                            ?.copyWith(fontSize: 12.0),
+                            ?.copyWith(fontSize: 10.0),
                         overflow: TextOverflow.ellipsis,
                       ),
                     )
@@ -1013,13 +1185,13 @@ class _FoodCardState extends State<FoodCard> {
               onTap: () => launchUrl(Uri.parse(
                   'https://www.google.com/maps/search/?api=1&query=${address}')),
               child: Container(
-                width: 30.0,
-                height: 30.0,
+                width: 20.0,
+                height: 20.0,
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     // Display image based on availability of user uploaded image
                     fit: BoxFit.fill,
-                    image: AssetImage('lib/assets/location_grey.png'),
+                    image: AssetImage('lib/assets/location_arrow_grey.png'),
                   ),
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(40.0),
@@ -1035,38 +1207,60 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
-  Widget name() {
+  Widget name(Color color) {
     return Text(
       widget.restaurant.restaurantName,
       style: Theme.of(context).textTheme.headline1?.copyWith(
-            fontSize: 28.0,
-            color: dineTimeColorScheme.background,
-            fontFamily: 'Lato',
+            fontSize: 25.0,
+            color: color,
+            fontWeight: FontWeight.normal,
           ),
     );
   }
 
-  Widget nextLocation() {
+  Widget nextLocation(Color color, String imagePath) {
     return Row(
       children: [
         Image.asset(
-          'lib/assets/location_white.png',
-          width: 18,
-          height: 18,
+          imagePath,
+          width: 13,
+          height: 13,
         ),
-        const SizedBox(width: 5),
+        const SizedBox(width: 10.5),
         Text(
           widget.restaurant.upcomingLocations[0].name,
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+          style: Theme.of(context).textTheme.headline1?.copyWith(
               fontSize: 12.0,
-              color: dineTimeColorScheme.background,
-              fontFamily: 'Lato'),
+              color: color,
+              fontFamily: 'Lato',
+              fontWeight: FontWeight.w500),
         ),
       ],
     );
   }
 
-  Widget nextTime() {
+  Widget bottomNextLocation(Color color, String imagePath) {
+    return Row(
+      children: [
+        Image.asset(
+          imagePath,
+          width: 15,
+          height: 15,
+        ),
+        const SizedBox(width: 10.5),
+        Text(
+          widget.restaurant.upcomingLocations[0].name,
+          style: Theme.of(context).textTheme.headline1?.copyWith(
+              fontSize: 12.0,
+              color: color,
+              fontFamily: 'Lato',
+              fontWeight: FontWeight.w500),
+        ),
+      ],
+    );
+  }
+
+  Widget nextTime(Color textColor, String imagePath) {
     r.PopUpLocation nextPopUpLocation = widget.restaurant.upcomingLocations[0];
     Timestamp dateStart = nextPopUpLocation.locationDateStart;
     String period = dateStart.toDate().hour > 12 ? "PM" : "AM";
@@ -1075,18 +1269,47 @@ class _FoodCardState extends State<FoodCard> {
     String timeZoneName = dateStart.toDate().timeZoneName;
     return Row(
       children: [
-        const Icon(
-          Icons.access_time_rounded,
-          size: 18.0,
-          color: Colors.white,
+        Image.asset(
+          imagePath,
+          width: 13,
+          height: 13,
         ),
-        const SizedBox(width: 5),
+        const SizedBox(width: 10.5),
         Text(
           "$hour:$minute $period $timeZoneName",
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+          style: Theme.of(context).textTheme.headline1?.copyWith(
               fontSize: 12.0,
-              color: dineTimeColorScheme.background,
-              fontFamily: 'Lato'),
+              color: textColor,
+              fontFamily: 'Lato',
+              fontWeight: FontWeight.normal),
+        ),
+      ],
+    );
+  }
+
+  Widget bottomNextTime(Color textColor, String imagePath) {
+    r.PopUpLocation nextPopUpLocation = widget.restaurant.upcomingLocations[0];
+    Timestamp dateStart = nextPopUpLocation.locationDateStart;
+    String period = dateStart.toDate().hour > 12 ? "PM" : "AM";
+    num hour = dateStart.toDate().hour % 12;
+    num minute = dateStart.toDate().minute;
+    String timeZoneName = dateStart.toDate().timeZoneName;
+    return Row(
+      children: [
+        const SizedBox(width: 1.0),
+        Image.asset(
+          imagePath,
+          width: 13,
+          height: 13,
+        ),
+        const SizedBox(width: 10.5),
+        Text(
+          "$hour:$minute $period $timeZoneName",
+          style: Theme.of(context).textTheme.headline1?.copyWith(
+              fontSize: 12.0,
+              color: textColor,
+              fontFamily: 'Lato',
+              fontWeight: FontWeight.normal),
         ),
       ],
     );
@@ -1094,39 +1317,41 @@ class _FoodCardState extends State<FoodCard> {
 
   Widget logo() {
     return Container(
-      width: 80,
-      height: 80,
+      width: 60,
+      height: 60,
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
           image: widget.restaurant.restaurantLogo,
         ),
         shape: BoxShape.circle,
-        border: Border.all(color: dineTimeColorScheme.primary, width: 4),
+        border: Border.all(color: dineTimeColorScheme.primary, width: 3),
       ),
     );
   }
 
-  Widget cuisineDetails() {
+  Widget cuisineDetails(Color color) {
     return RichText(
       text: TextSpan(
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              fontSize: 12.0,
-              color: dineTimeColorScheme.background,
-              fontFamily: 'Lato'),
+          style: Theme.of(context)
+              .textTheme
+              .subtitle1
+              ?.copyWith(fontSize: 12.0, color: color, fontFamily: 'Lato'),
           children: [
             TextSpan(text: widget.restaurant.cuisine),
             const TextSpan(
-                text: '   ·   ', style: TextStyle(fontWeight: FontWeight.bold)),
+                text: '   ·   ',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0)),
             TextSpan(text: '\$' * widget.restaurant.pricing),
             const TextSpan(
-                text: '   ·   ', style: TextStyle(fontWeight: FontWeight.bold)),
+                text: '   ·   ',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0)),
             TextSpan(text: '2.2 mi'),
           ]),
     );
   }
 
-  Widget nextDate() {
+  Widget nextDate(Color color, String imagePath) {
     List<String> months = [
       'January',
       'February',
@@ -1145,40 +1370,75 @@ class _FoodCardState extends State<FoodCard> {
         '${months[widget.restaurant.upcomingLocations[0].locationDateStart.toDate().month - 1]} ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().day}, ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().year}';
     return Row(
       children: [
+        const SizedBox(width: 0.5),
         Image.asset(
-          'lib/assets/calendar.png',
-          width: 15,
-          height: 15,
+          imagePath,
+          width: 12,
+          height: 12,
         ),
-        const SizedBox(width: 5),
+        const SizedBox(width: 10.5),
         Text(
           nextDate,
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              fontSize: 12.0,
-              color: dineTimeColorScheme.background,
-              fontFamily: 'Lato'),
+              fontSize: 12.0, color: color, fontWeight: FontWeight.normal),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 13),
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Container(
-            width: 80,
-            height: 18,
+            width: 60,
+            height: 15,
             decoration: BoxDecoration(
               color: dineTimeColorScheme.primary.withOpacity(0.7),
               shape: BoxShape.rectangle,
             ),
             child: Center(
               child: Text(
-                "3 days away",
+                "3 Days Away",
                 style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                    fontSize: 12.0,
+                    fontSize: 8.0,
                     color: dineTimeColorScheme.background,
                     fontFamily: 'Lato'),
               ),
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  Widget bottomNextDate(Color color, String imagePath) {
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    String nextDate =
+        '${months[widget.restaurant.upcomingLocations[0].locationDateStart.toDate().month - 1]} ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().day}, ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().year}';
+    return Row(
+      children: [
+        const SizedBox(width: 1.5),
+        Image.asset(
+          imagePath,
+          width: 12,
+          height: 12,
+        ),
+        const SizedBox(width: 10.5),
+        Text(
+          nextDate,
+          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              fontSize: 12.0, color: color, fontWeight: FontWeight.normal),
+        ),
+        const SizedBox(width: 13),
       ],
     );
   }

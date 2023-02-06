@@ -33,20 +33,49 @@ class Favorites extends StatelessWidget {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     // Initial text widgetrs
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.only(left: 27),
-                            child: Text("My Favorites",
-                                style: Theme.of(context).textTheme.headline1)),
-                        Padding(
-                            padding:
-                                const EdgeInsets.only(left: 27, bottom: 20),
-                            child: Text(
-                                '${data['saved_businesses'].length} items',
-                                style: Theme.of(context).textTheme.subtitle1)),
-                      ],
+                    return SingleChildScrollView(
+                      child: Scrollbar(
+                        child: Scrollbar(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 15, right: 15),
+                                child: Text(
+                                  "My Favorites",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline1
+                                      ?.copyWith(
+                                        fontSize: 30.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                ),
+                                child: Text(
+                                    '${data['saved_businesses'].length} items',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        ?.copyWith(
+                                          fontSize: 15,
+                                        )),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     );
                   }
                   // Return widget to process all document references

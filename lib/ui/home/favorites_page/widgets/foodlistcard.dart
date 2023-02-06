@@ -4,6 +4,7 @@ import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/ui/home/fooddisplay_page/fooddisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dinetime_mobile_mvp/designsystem.dart';
 
 // Cards that display list items in saved
 class FoodListCard extends StatelessWidget {
@@ -20,7 +21,7 @@ class FoodListCard extends StatelessWidget {
   // TODO: connect this to backend
   void deleteFavorite() {}
 
-  final double _cardHeight = 75.0;
+  final double _cardHeight = 70.0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class FoodListCard extends StatelessWidget {
   // Loading version of the FoodListCard
   Widget loadingFoodListCard() {
     return Padding(
-        padding: const EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         child: SizedBox(
             width: 70,
             height: 70,
@@ -82,10 +83,10 @@ class FoodListCard extends StatelessWidget {
   // Full version of the FoodListCard
   Widget fullFoodListCard(BuildContext context, double? distance) {
     String infoText = distance != null
-        ? '${restaurantPreview!.cuisine!} · ${'\$' * restaurantPreview!.pricing} · $distance mi'
-        : '${restaurantPreview!.cuisine!} · ${'\$' * restaurantPreview!.pricing}';
+        ? '${restaurantPreview!.cuisine!}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
+        : '${restaurantPreview!.cuisine!}  ·  ${'\$' * restaurantPreview!.pricing}';
     return Padding(
-        padding: const EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         child: SizedBox(
             width: 70,
             height: 70,
@@ -129,19 +130,22 @@ class FoodListCard extends StatelessWidget {
                               width: 50.0,
                               height: 50.0,
                               decoration: const BoxDecoration(
-                                  color: Colors.white,
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: restaurantPreview!.restaurantLogo,
+                                  ),
                                   shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 10,
-                                        color:
-                                            Color.fromARGB(255, 231, 231, 231),
-                                        spreadRadius: 5)
-                                  ]),
-                              child: CircleAvatar(
-                                radius: 25.0,
-                                backgroundImage:
-                                    restaurantPreview!.restaurantLogo,
+                                  border: Border.all(
+                                      color: dineTimeColorScheme.primary,
+                                      width: 2),
+                                ),
                               ),
                             ),
                           ),
@@ -163,19 +167,20 @@ class FoodListCard extends StatelessWidget {
                                             .textTheme
                                             .headline1
                                             ?.copyWith(
-                                              fontSize: 14.0,
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    const SizedBox(height: 5.0),
+                                    const SizedBox(height: 2.0),
                                     Flexible(
                                       child: Text(
                                         infoText,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText1
-                                            ?.copyWith(fontSize: 12.0),
+                                            ?.copyWith(fontSize: 10.0),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     )
@@ -194,8 +199,8 @@ class FoodListCard extends StatelessWidget {
                                         onTap: () => launchUrl(Uri.parse(
                                             'https://www.instagram.com/${restaurantPreview!.instagramHandle!}')),
                                         child: Container(
-                                          width: 30.0,
-                                          height: 30.0,
+                                          width: 25.0,
+                                          height: 25.0,
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               shape: BoxShape.circle,
@@ -204,16 +209,16 @@ class FoodListCard extends StatelessWidget {
                                                   width: 5),
                                               boxShadow: const [
                                                 BoxShadow(
-                                                    blurRadius: 10,
+                                                    blurRadius: 25,
                                                     color: Color.fromARGB(
                                                         255, 224, 224, 224),
                                                     spreadRadius: 5)
                                               ]),
-                                          child: const CircleAvatar(
-                                            radius: 40.0,
-                                            backgroundColor: Colors.white,
-                                            backgroundImage: AssetImage(
-                                                'lib/assets/instagram.png'),
+                                          child: const Image(
+                                            height: 5,
+                                            width: 5,
+                                            image: AssetImage(
+                                                'lib/assets/instagram_orange.png'),
                                           ),
                                         ),
                                       ),
@@ -221,7 +226,7 @@ class FoodListCard extends StatelessWidget {
                                   : Container(),
                               restaurantPreview!.website != null
                                   ? Padding(
-                                      padding: const EdgeInsets.all(6.0),
+                                      padding: const EdgeInsets.all(2.0),
                                       child: InkWell(
                                         onTap: () => launchUrl(Uri.parse(
                                             'https://${restaurantPreview!.website!}')),
@@ -229,29 +234,25 @@ class FoodListCard extends StatelessWidget {
                                           padding:
                                               const EdgeInsets.only(right: 0),
                                           child: Container(
-                                            width: 30.0,
-                                            height: 30.0,
+                                            width: 25.0,
+                                            height: 25.0,
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
-                                                image: const DecorationImage(
-                                                  image: AssetImage(
-                                                      'lib/assets/website.png'),
-                                                ),
                                                 shape: BoxShape.circle,
                                                 border: Border.all(
                                                     color: Colors.white,
-                                                    width: 7),
+                                                    width: 5),
                                                 boxShadow: const [
                                                   BoxShadow(
-                                                      blurRadius: 10,
+                                                      blurRadius: 25,
                                                       color: Color.fromARGB(
-                                                          255, 231, 231, 231),
+                                                          255, 224, 224, 224),
                                                       spreadRadius: 5)
                                                 ]),
-                                            child: const CircleAvatar(
-                                              radius: 50.0,
-                                              backgroundColor: Colors.white,
-                                              backgroundImage: AssetImage(
+                                            child: const Image(
+                                              height: 5,
+                                              width: 5,
+                                              image: AssetImage(
                                                   'lib/assets/website.png'),
                                             ),
                                           ),
