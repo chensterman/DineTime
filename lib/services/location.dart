@@ -84,11 +84,11 @@ class LocationService {
     List<geocoding.Placemark> location = await geocoding
         .placemarkFromCoordinates(geoPoint.latitude, geoPoint.longitude);
     String locationStr = "";
-    if (location[0]!.locality!.isNotEmpty) {
+    if (location[0].locality!.isNotEmpty) {
       locationStr = locationStr + location[0].locality.toString();
     }
-    if (location[0]!.administrativeArea!.isNotEmpty &&
-        location[0]!.postalCode!.isNotEmpty) {
+    if (location[0].administrativeArea!.isNotEmpty &&
+        location[0].postalCode!.isNotEmpty) {
       locationStr =
           "$locationStr, ${USStates.getAbbreviation(location[0].administrativeArea.toString())} ${location[0].postalCode}";
     }

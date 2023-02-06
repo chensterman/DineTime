@@ -10,7 +10,8 @@ import 'widgets/signup_error.dart';
 
 // Sign in page for the app
 class SignUpLayout extends StatelessWidget {
-  SignUpLayout({Key? key}) : super(key: key);
+  final Function callBack;
+  SignUpLayout({Key? key, required this.callBack}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 
@@ -69,7 +70,7 @@ class SignUpLayout extends StatelessWidget {
                   const SizedBox(height: 30.0),
                   // Sign in button widget
                   const SignUpButton(),
-                  const SizedBox(height: 10.0),
+                  const SizedBox(height: 16.0),
                   // If error message is present
                   const SignUpError(),
                   // Sign up page dialog
@@ -82,10 +83,7 @@ class SignUpLayout extends StatelessWidget {
                       ),
                       GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignIn()));
+                            callBack();
                           },
                           child: Text(
                             'Sign In',

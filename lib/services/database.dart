@@ -178,11 +178,11 @@ class DatabaseService {
       pricing: pricing,
       gallery: gallery,
       menu: menu,
+      instagramHandle: instagramHandle,
       upcomingLocations: upcomingLocations,
       cuisine: cuisine,
       bio: bio,
       website: website,
-      instagramHandle: instagramHandle,
       email: email,
     );
   }

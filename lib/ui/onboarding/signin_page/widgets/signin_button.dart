@@ -1,4 +1,5 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/ui/home/home_page/home.dart';
 import 'package:dinetime_mobile_mvp/ui/root/routing_page/routing.dart';
 
 import 'package:flutter/material.dart';
@@ -8,7 +9,9 @@ import '../blocs/input/input_bloc.dart';
 import '../blocs/form/form_bloc.dart' as fb;
 
 class SignInButton extends StatelessWidget {
-  const SignInButton({Key? key}) : super(key: key);
+  const SignInButton({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +31,6 @@ class SignInButton extends StatelessWidget {
             context
                 .read<fb.FormBloc>()
                 .add(fb.FormSubmission(email: email, password: password));
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Routing()));
           },
         );
       }

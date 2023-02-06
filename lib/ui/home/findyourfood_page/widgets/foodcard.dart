@@ -1,15 +1,12 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
-import 'package:dinetime_mobile_mvp/theme/components/photocarousel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:page_view_indicators/page_view_indicators.dart';
 
 class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
@@ -26,6 +23,8 @@ class FoodCard extends StatefulWidget {
 }
 
 class _FoodCardState extends State<FoodCard> {
+  bool _isMainDetailsVisible = true;
+
   @override
   void initState() {
     super.initState();
@@ -104,7 +103,7 @@ class _FoodCardState extends State<FoodCard> {
           opacity: opacity,
         );
 
-        return Positioned(top: 290, left: 10, child: child);
+        return Positioned(top: 200, left: -100, child: child);
       case CardStatus.dislike:
         final child = stamp(
           color: Colors.red,
@@ -112,7 +111,7 @@ class _FoodCardState extends State<FoodCard> {
           opacity: opacity,
         );
 
-        return Positioned(top: 290, right: 10, child: child);
+        return Positioned(top: 200, right: -100, child: child);
       default:
         return Container();
     }
@@ -124,15 +123,34 @@ class _FoodCardState extends State<FoodCard> {
     required double opacity,
   }) {
     return Opacity(
-        opacity: opacity, child: Image.asset(text, height: 70, width: 70));
+      opacity: opacity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 300,
+            height: 300,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              gradient: const RadialGradient(
+                colors: [
+                  Color.fromARGB(200, 255, 255, 255),
+                  Colors.transparent,
+                ],
+                stops: [0.5, 1],
+              ),
+            ),
+          ),
+          Image.asset(text, height: 70, width: 70),
+        ],
+      ),
+    );
   }
 
   Widget buildCard(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double width = size.width * 0.9;
     double height = size.height * 0.77;
-
-    bool _isMainDetailsVisible = true;
 
     return Container(
       height: height,
@@ -143,22 +161,21 @@ class _FoodCardState extends State<FoodCard> {
               color: Theme.of(context).colorScheme.onSurface, width: 1),
           borderRadius: BorderRadius.circular(10)),
       child: Center(
-        child: SingleChildScrollView(
-          child: Scrollbar(
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (scrollNotification) {
-                print("SingleChildScrollView is scrolling");
-                if (scrollNotification.metrics.pixels >= 20) {
-                  setState(() {
-                    _isMainDetailsVisible = false;
-                  });
-                } else {
-                  setState(() {
-                    _isMainDetailsVisible = true;
-                  });
-                }
-                return false;
-              },
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (scrollNotification) {
+            if (scrollNotification.metrics.pixels >= 50) {
+              setState(() {
+                _isMainDetailsVisible = false;
+              });
+            } else {
+              setState(() {
+                _isMainDetailsVisible = true;
+              });
+            }
+            return false;
+          },
+          child: SingleChildScrollView(
+            child: Scrollbar(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -538,7 +555,7 @@ class _FoodCardState extends State<FoodCard> {
                   child: Padding(
                     padding: EdgeInsets.all(20),
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.43,
+                      height: MediaQuery.of(context).size.height * 0.5,
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Column(
                         children: [
@@ -559,7 +576,7 @@ class _FoodCardState extends State<FoodCard> {
                             children: [
                               Container(
                                 width: 410,
-                                height: 330,
+                                height: 400,
                                 child: PageView(
                                   scrollDirection: Axis.horizontal,
                                   controller: _controller,
@@ -786,6 +803,24 @@ class _FoodCardState extends State<FoodCard> {
                                   color: dineTimeColorScheme.primary,
                                   fontWeight: FontWeight.w500),
                         ),
+                        const SizedBox(width: 10.0),
+                        Image.asset(
+                          'lib/assets/vegan.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                        const SizedBox(width: 10.0),
+                        Image.asset(
+                          'lib/assets/nut_free.png',
+                          width: 15,
+                          height: 15,
+                        ),
+                        const SizedBox(width: 10.0),
+                        Image.asset(
+                          'lib/assets/vegetarian.png',
+                          width: 15,
+                          height: 15,
+                        ),
                       ],
                     ),
                     const SizedBox(
@@ -863,11 +898,9 @@ class _FoodCardState extends State<FoodCard> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.all(25),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
                     child: Column(
                       children: [
                         Align(
@@ -915,14 +948,9 @@ class _FoodCardState extends State<FoodCard> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 10),
-                        SingleChildScrollView(
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.6,
-                            child: Column(
-                              children: columnChildren,
-                            ),
-                          ),
+                        const SizedBox(height: 10),
+                        Column(
+                          children: columnChildren,
                         ),
                       ],
                     ),
@@ -950,7 +978,7 @@ class _FoodCardState extends State<FoodCard> {
                         image: AssetImage('lib/assets/view_menu.png'),
                         height: 10,
                         width: 10),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Text(
                       "View full menu",
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
@@ -1021,10 +1049,9 @@ class _FoodCardState extends State<FoodCard> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.all(25),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.5,
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(25.0),
                       child: Column(
                         children: [
                           Align(

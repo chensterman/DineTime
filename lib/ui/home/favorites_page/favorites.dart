@@ -35,45 +35,43 @@ class Favorites extends StatelessWidget {
                     // Initial text widgetrs
                     return SingleChildScrollView(
                       child: Scrollbar(
-                        child: Scrollbar(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 15),
-                                child: Text(
-                                  "My Favorites",
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              child: Text(
+                                "My Favorites",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    ?.copyWith(
+                                      fontSize: 30.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 15,
+                              ),
+                              child: Text(
+                                  '${data['saved_businesses'].length} items',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headline1
+                                      .subtitle1
                                       ?.copyWith(
-                                        fontSize: 30.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 15,
-                                ),
-                                child: Text(
-                                    '${data['saved_businesses'].length} items',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1
-                                        ?.copyWith(
-                                          fontSize: 15,
-                                        )),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                            ],
-                          ),
+                                        fontSize: 15,
+                                      )),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                          ],
                         ),
                       ),
                     );
