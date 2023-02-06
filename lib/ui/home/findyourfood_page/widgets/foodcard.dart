@@ -24,6 +24,7 @@ class FoodCard extends StatefulWidget {
 
 class _FoodCardState extends State<FoodCard> {
   bool _isMainDetailsVisible = true;
+  double _opacity = 0.0;
 
   @override
   void initState() {
@@ -151,6 +152,8 @@ class _FoodCardState extends State<FoodCard> {
     Size size = MediaQuery.of(context).size;
     double width = size.width * 0.9;
     double height = size.height * 0.77;
+    double scrollLimit = MediaQuery.of(context).size.height * 0.12;
+    double opacitydelta = 1.0 / scrollLimit;
 
     return Container(
       height: height,
@@ -163,13 +166,18 @@ class _FoodCardState extends State<FoodCard> {
       child: Center(
         child: NotificationListener<ScrollNotification>(
           onNotification: (scrollNotification) {
-            if (scrollNotification.metrics.pixels >= 50) {
+            if (scrollNotification.metrics.pixels >= scrollLimit) {
               setState(() {
                 _isMainDetailsVisible = false;
               });
             } else {
               setState(() {
                 _isMainDetailsVisible = true;
+                if (scrollNotification.metrics.pixels <= 0) {
+                  _opacity = 0.0;
+                } else {
+                  _opacity = scrollNotification.metrics.pixels * opacitydelta;
+                }
               });
             }
             return false;
@@ -185,7 +193,10 @@ class _FoodCardState extends State<FoodCard> {
                       mainBackgroundShadow(width, height),
                       Visibility(
                         visible: _isMainDetailsVisible,
-                        child: mainDetails(width, height),
+                        child: Opacity(
+                          opacity: 1.0 - _opacity,
+                          child: mainDetails(width, height),
+                        ),
                       ),
                     ],
                   ),
