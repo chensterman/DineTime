@@ -60,6 +60,9 @@ dependencies:
   # Widget libraries
   dots_indicator: ^2.1.0
   carousel_slider: ^4.2.1
+  flutter_image_slideshow: any
+  page_view_indicators: ^2.0.0
+  smooth_page_indicator: ^1.0.0+2
   
   
 dev_dependencies:
