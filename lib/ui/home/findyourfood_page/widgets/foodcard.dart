@@ -1,12 +1,19 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/cuisinedetails.dart';
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/menu.dart';
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/photogallery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'aboutandstory.dart';
+import 'contact.dart';
+import 'name.dart';
+import 'stamps.dart';
 
 class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
@@ -67,7 +74,7 @@ class _FoodCardState extends State<FoodCard> {
               alignment: Alignment.center,
               children: [
                 buildCard(context),
-                buildStamps(),
+                const Stamps(),
               ],
             ),
           );
@@ -88,63 +95,6 @@ class _FoodCardState extends State<FoodCard> {
 
         provider.endPosition(widget.restaurant.restaurantId);
       },
-    );
-  }
-
-  Widget buildStamps() {
-    final provider = Provider.of<CardProvider>(context);
-    final status = provider.getStatus();
-    final opacity = provider.getStatusOpacity();
-
-    switch (status) {
-      case CardStatus.like:
-        final child = stamp(
-          color: Colors.green,
-          text: 'lib/assets/like_logo.png',
-          opacity: opacity,
-        );
-
-        return Positioned(top: 200, left: -100, child: child);
-      case CardStatus.dislike:
-        final child = stamp(
-          color: Colors.red,
-          text: 'lib/assets/dislike_logo.png',
-          opacity: opacity,
-        );
-
-        return Positioned(top: 200, right: -100, child: child);
-      default:
-        return Container();
-    }
-  }
-
-  Widget stamp({
-    required Color color,
-    required String text,
-    required double opacity,
-  }) {
-    return Opacity(
-      opacity: opacity,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              gradient: const RadialGradient(
-                colors: [
-                  Color.fromARGB(200, 255, 255, 255),
-                  Colors.transparent,
-                ],
-                stops: [0.5, 1],
-              ),
-            ),
-          ),
-          Image.asset(text, height: 70, width: 70),
-        ],
-      ),
     );
   }
 
@@ -191,13 +141,7 @@ class _FoodCardState extends State<FoodCard> {
                     children: [
                       mainBackground(width, height),
                       mainBackgroundShadow(width, height),
-                      Visibility(
-                        visible: _isMainDetailsVisible,
-                        child: Opacity(
-                          opacity: 1.0 - _opacity,
-                          child: mainDetails(width, height),
-                        ),
-                      ),
+                      mainDetails(width, height)
                     ],
                   ),
                   additionalDetails(),
@@ -247,36 +191,49 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget mainDetails(double width, double height) {
-    return Container(
-      width: width,
-      height: height,
-      child: Padding(
-        padding: const EdgeInsets.only(
-            left: 25.0, right: 25.0, top: 30.0, bottom: 30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            logo(),
-            const SizedBox(height: 18),
-            name(dineTimeColorScheme.background),
-            cuisineDetails(dineTimeColorScheme.background),
-            const SizedBox(height: 18),
-            widget.restaurant.upcomingLocations.isNotEmpty
-                ? nextLocation(dineTimeColorScheme.background,
-                    'lib/assets/location_white.png')
-                : Container(),
-            const SizedBox(height: 7),
-            widget.restaurant.upcomingLocations.isNotEmpty
-                ? nextDate(
-                    dineTimeColorScheme.background, 'lib/assets/calendar.png')
-                : Container(),
-            const SizedBox(height: 7),
-            widget.restaurant.upcomingLocations.isNotEmpty
-                ? nextTime(dineTimeColorScheme.background,
-                    'lib/assets/clock_white.png')
-                : Container(),
-          ],
+    return Visibility(
+      visible: _isMainDetailsVisible,
+      child: Opacity(
+        opacity: 1.0 - _opacity,
+        child: Container(
+          width: width,
+          height: height,
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 25.0, right: 25.0, top: 30.0, bottom: 30.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                logo(),
+                const SizedBox(height: 18),
+                Name(
+                  restaurantName: widget.restaurant.restaurantName,
+                  color: Theme.of(context).colorScheme.background,
+                ),
+                CuisineDetails(
+                  cuisine: widget.restaurant.cuisine,
+                  pricing: widget.restaurant.pricing,
+                  color: Theme.of(context).colorScheme.background,
+                ),
+                const SizedBox(height: 18),
+                widget.restaurant.upcomingLocations.isNotEmpty
+                    ? nextLocation(dineTimeColorScheme.background,
+                        'lib/assets/location_white.png')
+                    : Container(),
+                const SizedBox(height: 7),
+                widget.restaurant.upcomingLocations.isNotEmpty
+                    ? nextDate(dineTimeColorScheme.background,
+                        'lib/assets/calendar.png')
+                    : Container(),
+                const SizedBox(height: 7),
+                widget.restaurant.upcomingLocations.isNotEmpty
+                    ? nextTime(dineTimeColorScheme.background,
+                        'lib/assets/clock_white.png')
+                    : Container(),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -290,10 +247,21 @@ class _FoodCardState extends State<FoodCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 5),
-          contact(),
+          Contact(
+            instagramHandle: widget.restaurant.instagramHandle,
+            website: widget.restaurant.website,
+            email: widget.restaurant.email,
+          ),
           const SizedBox(height: 5),
-          name(dineTimeColorScheme.onBackground),
-          cuisineDetails(dineTimeColorScheme.onBackground),
+          Name(
+            restaurantName: widget.restaurant.restaurantName,
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
+          CuisineDetails(
+            cuisine: widget.restaurant.cuisine,
+            pricing: widget.restaurant.pricing,
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
           const SizedBox(height: 15),
           widget.restaurant.upcomingLocations.isNotEmpty
               ? bottomNextLocation(dineTimeColorScheme.onBackground,
@@ -312,11 +280,11 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          aboutAndStory(),
+          AboutAndStory(restaurantBio: widget.restaurant.bio),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          photoGallery(),
+          PhotoGallery(gallery: widget.restaurant.gallery),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
@@ -324,302 +292,13 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          menu(),
+          Menu(menu: widget.restaurant.menu),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
           upcomingLocations(),
         ],
       ),
-    );
-  }
-
-  Widget contact() {
-    return Row(
-      children: [
-        widget.restaurant.instagramHandle != null
-            ? Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: InkWell(
-                  onTap: () => launchUrl(Uri.parse(
-                      'https://www.instagram.com/${widget.restaurant.instagramHandle!}')),
-                  child: Container(
-                    width: 30.0,
-                    height: 30.0,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 5),
-                        boxShadow: const [
-                          BoxShadow(
-                              blurRadius: 20,
-                              color: Color.fromARGB(255, 224, 224, 224),
-                              spreadRadius: 5)
-                        ]),
-                    child: const CircleAvatar(
-                      radius: 40.0,
-                      backgroundColor: Colors.white,
-                      backgroundImage: AssetImage('lib/assets/instagram.png'),
-                    ),
-                  ),
-                ),
-              )
-            : Container(),
-        widget.restaurant.website != null
-            ? Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: InkWell(
-                  onTap: () => launchUrl(
-                      Uri.parse('https://${widget.restaurant.website!}')),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Container(
-                      width: 30.0,
-                      height: 30.0,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          image: const DecorationImage(
-                            image: AssetImage('lib/assets/website.png'),
-                          ),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 7),
-                          boxShadow: const [
-                            BoxShadow(
-                                blurRadius: 20,
-                                color: Color.fromARGB(255, 231, 231, 231),
-                                spreadRadius: 5)
-                          ]),
-                      child: const CircleAvatar(
-                        radius: 50.0,
-                        backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('lib/assets/website.png'),
-                      ),
-                    ),
-                  ),
-                ))
-            : Container(),
-        widget.restaurant.email != null
-            ? Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: InkWell(
-                  onTap: () => launchUrl(
-                    Uri.parse('mailto:${widget.restaurant.email!}'),
-                  ),
-                  child: Container(
-                    width: 30.0,
-                    height: 30.0,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 5),
-                        boxShadow: const [
-                          BoxShadow(
-                              blurRadius: 20,
-                              color: Color.fromARGB(255, 224, 224, 224),
-                              spreadRadius: 5)
-                        ]),
-                    child: const Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: Image(
-                        image: AssetImage('lib/assets/email.png'),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            : Container(),
-      ],
-    );
-  }
-
-  Widget aboutAndStory() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Our Story',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-              ),
-        ),
-        const SizedBox(height: 13),
-        Text(
-          widget.restaurant.bio!,
-          style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                fontSize: 12.0,
-                fontFamily: 'Lato',
-              ),
-        ),
-      ],
-    );
-  }
-
-  Widget photoOption(
-      String imageName, ImageProvider<Object>? image, String imageDescription) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            imageName,
-            style: Theme.of(context)
-                .textTheme
-                .headline1
-                ?.copyWith(fontSize: 20.0, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(height: 10),
-          AspectRatio(
-            aspectRatio: 1.25,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white.withOpacity(0.5),
-                image: DecorationImage(
-                  image: image ??
-                      const AssetImage("lib/assets/dinetime-orange.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 15),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Text(
-              imageDescription,
-              style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                    fontSize: 12.0,
-                    fontFamily: 'Lato',
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget photoGallery() {
-    List<r.GalleryImage> gallery = widget.restaurant.gallery;
-    List<Widget> galleryChildren = [];
-    List<Widget> galleryButtonChildren = [];
-    final _controller = PageController();
-    num count = 0;
-    for (r.GalleryImage galleryImage in gallery) {
-      galleryChildren.add(
-        Container(
-          height: 80,
-          width: 80,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white.withOpacity(0.5),
-            image: DecorationImage(
-                image: galleryImage.image, fit: BoxFit.cover, opacity: 0.8),
-          ),
-          child: Stack(
-            children: [
-              Container(),
-              Positioned(
-                top: 5,
-                right: 5,
-                child: Image.asset(
-                  "lib/assets/expanded.png",
-                  height: 15,
-                  width: 15,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-      count += 1;
-      if (count == 3) {
-        break;
-      }
-    }
-    for (r.GalleryImage galleryImage in gallery) {
-      galleryButtonChildren.add(
-        photoOption(galleryImage.imageName, galleryImage.image,
-            galleryImage.imageDescription),
-      );
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Photo Gallery',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-              ),
-        ),
-        const SizedBox(height: 15.0),
-        InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Image(
-                                  image: AssetImage('lib/assets/x_button.png'),
-                                  height: 25,
-                                  width: 25),
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Column(
-                            children: [
-                              Container(
-                                width: 410,
-                                height: 400,
-                                child: PageView(
-                                  scrollDirection: Axis.horizontal,
-                                  controller: _controller,
-                                  children: galleryButtonChildren,
-                                ),
-                              ),
-                              SmoothPageIndicator(
-                                controller: _controller,
-                                count: galleryChildren.length,
-                                effect: const SwapEffect(
-                                  activeDotColor: Colors.orange,
-                                  dotColor: Colors.grey,
-                                  dotHeight: 5,
-                                  dotWidth: 5,
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: galleryChildren,
-          ),
-        ),
-      ],
     );
   }
 
@@ -1245,17 +924,6 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
-  Widget name(Color color) {
-    return Text(
-      widget.restaurant.restaurantName,
-      style: Theme.of(context).textTheme.headline1?.copyWith(
-            fontSize: 25.0,
-            color: color,
-            fontWeight: FontWeight.normal,
-          ),
-    );
-  }
-
   Widget nextLocation(Color color, String imagePath) {
     return Row(
       children: [
@@ -1406,6 +1074,8 @@ class _FoodCardState extends State<FoodCard> {
     ];
     String nextDate =
         '${months[widget.restaurant.upcomingLocations[0].locationDateStart.toDate().month - 1]} ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().day}, ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().year}';
+    String daysAway =
+        '${DateTime.now().difference(widget.restaurant.upcomingLocations[0].locationDateStart.toDate()).inDays} days away';
     return Row(
       children: [
         const SizedBox(width: 0.5),
@@ -1432,7 +1102,7 @@ class _FoodCardState extends State<FoodCard> {
             ),
             child: Center(
               child: Text(
-                "3 Days Away",
+                daysAway,
                 style: Theme.of(context).textTheme.subtitle1?.copyWith(
                     fontSize: 8.0,
                     color: dineTimeColorScheme.background,

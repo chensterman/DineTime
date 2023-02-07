@@ -5,13 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Restaurant {
   String restaurantId;
   String restaurantName;
+  String bio;
+  String cuisine;
   ImageProvider<Object> restaurantLogo;
   int pricing;
   List<GalleryImage> gallery;
   List<MenuItem> menu;
   List<PopUpLocation> upcomingLocations;
-  String? bio;
-  String? cuisine;
   String? website;
   String? instagramHandle;
   String? email;
@@ -24,8 +24,8 @@ class Restaurant {
     required this.gallery,
     required this.menu,
     required this.upcomingLocations,
-    this.bio,
-    this.cuisine,
+    required this.bio,
+    required this.cuisine,
     this.website,
     this.instagramHandle,
     this.email,
