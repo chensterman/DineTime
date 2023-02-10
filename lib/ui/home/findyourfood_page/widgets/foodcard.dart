@@ -1,19 +1,22 @@
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/cuisinedetails.dart';
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/dietary.dart';
 import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/menu.dart';
 import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/photogallery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'aboutandstory.dart';
 import 'contact.dart';
 import 'name.dart';
+import 'nextdate.dart';
+import 'nextlocation.dart';
+import 'nexttime.dart';
 import 'stamps.dart';
+import 'upcominglocations.dart';
 
 class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
@@ -205,7 +208,7 @@ class _FoodCardState extends State<FoodCard> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                logo(),
+                LogoDisplay(image: widget.restaurant.restaurantLogo),
                 const SizedBox(height: 18),
                 Name(
                   restaurantName: widget.restaurant.restaurantName,
@@ -218,18 +221,32 @@ class _FoodCardState extends State<FoodCard> {
                 ),
                 const SizedBox(height: 18),
                 widget.restaurant.upcomingLocations.isNotEmpty
-                    ? nextLocation(dineTimeColorScheme.background,
-                        'lib/assets/location_white.png')
+                    ? NextLocation(
+                        locationName:
+                            widget.restaurant.upcomingLocations[0].name,
+                        imagePath: 'lib/assets/location_white.png',
+                        color: Theme.of(context).colorScheme.background,
+                      )
                     : Container(),
                 const SizedBox(height: 7),
                 widget.restaurant.upcomingLocations.isNotEmpty
-                    ? nextDate(dineTimeColorScheme.background,
-                        'lib/assets/calendar.png')
+                    ? NextDate(
+                        locationDateStart: widget
+                            .restaurant.upcomingLocations[0].locationDateStart,
+                        imagePath: 'lib/assets/calendar.png',
+                        color: Theme.of(context).colorScheme.background,
+                      )
                     : Container(),
                 const SizedBox(height: 7),
                 widget.restaurant.upcomingLocations.isNotEmpty
-                    ? nextTime(dineTimeColorScheme.background,
-                        'lib/assets/clock_white.png')
+                    ? NextTime(
+                        locationDateStart: widget
+                            .restaurant.upcomingLocations[0].locationDateStart,
+                        locationDateEnd: widget
+                            .restaurant.upcomingLocations[0].locationDateEnd,
+                        imagePath: 'lib/assets/clock_white.png',
+                        color: Theme.of(context).colorScheme.background,
+                      )
                     : Container(),
               ],
             ),
@@ -264,18 +281,31 @@ class _FoodCardState extends State<FoodCard> {
           ),
           const SizedBox(height: 15),
           widget.restaurant.upcomingLocations.isNotEmpty
-              ? bottomNextLocation(dineTimeColorScheme.onBackground,
-                  'lib/assets/location_arrow_orange.png')
+              ? NextLocation(
+                  locationName: widget.restaurant.upcomingLocations[0].name,
+                  imagePath: 'lib/assets/location_arrow_orange.png',
+                  color: Theme.of(context).colorScheme.onBackground,
+                )
               : Container(),
           const SizedBox(height: 7),
           widget.restaurant.upcomingLocations.isNotEmpty
-              ? bottomNextDate(dineTimeColorScheme.onBackground,
-                  'lib/assets/calendar_orange.png')
+              ? NextDate(
+                  locationDateStart:
+                      widget.restaurant.upcomingLocations[0].locationDateStart,
+                  imagePath: 'lib/assets/calendar_orange.png',
+                  color: Theme.of(context).colorScheme.onBackground,
+                )
               : Container(),
           const SizedBox(height: 7),
           widget.restaurant.upcomingLocations.isNotEmpty
-              ? bottomNextTime(dineTimeColorScheme.onBackground,
-                  'lib/assets/clock_orange.png')
+              ? NextTime(
+                  locationDateStart:
+                      widget.restaurant.upcomingLocations[0].locationDateStart,
+                  locationDateEnd:
+                      widget.restaurant.upcomingLocations[0].locationDateEnd,
+                  imagePath: 'lib/assets/clock_orange.png',
+                  color: Theme.of(context).colorScheme.onBackground,
+                )
               : Container(),
           const SizedBox(height: 10.0),
           const Divider(),
@@ -288,7 +318,7 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          dietaryOptions(),
+          Dietary(menu: widget.restaurant.menu),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
@@ -296,879 +326,10 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          upcomingLocations(),
+          UpcomingLocations(
+              popUpLocations: widget.restaurant.upcomingLocations),
         ],
       ),
     );
   }
-
-  Widget dietaryOptions() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Dietary Options',
-          style: Theme.of(context)
-              .textTheme
-              .headline1
-              ?.copyWith(fontSize: 18.0, fontWeight: FontWeight.w500),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 2),
-              width: 85,
-              height: 25,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Color.fromARGB(95, 158, 158, 158), width: 2),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'lib/assets/vegan.png',
-                    width: 15,
-                    height: 15,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Vegan',
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                        fontFamily: 'Lato'),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 2),
-              width: 95,
-              height: 25,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Color.fromARGB(95, 158, 158, 158), width: 2),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'lib/assets/nut_free.png',
-                    width: 15,
-                    height: 15,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Nut Free',
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                        fontFamily: 'Lato'),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 2),
-              width: 110,
-              height: 25,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Color.fromARGB(95, 158, 158, 158), width: 2),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'lib/assets/vegetarian.png',
-                    width: 15,
-                    height: 15,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Vegatarian',
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        fontSize: 12.0,
-                        color: Colors.black,
-                        fontFamily: 'Lato'),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget menu() {
-    List<r.MenuItem> menu = widget.restaurant.menu;
-    List<Widget> columnChildren = [];
-    num count = 0;
-    for (r.MenuItem menuItem in menu) {
-      columnChildren.add(menuOption(12.0, menuItem.itemName,
-          menuItem.itemDescription!, menuItem.itemPrice, menuItem.itemPhoto));
-      columnChildren.add(
-        const Divider(
-          color: Color.fromARGB(95, 158, 158, 158),
-          height: 1,
-        ),
-      );
-      count += 1;
-      if (count == 3) {
-        break;
-      }
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Our Menu',
-              style: Theme.of(context).textTheme.headline1?.copyWith(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            menuButton(),
-          ],
-        ),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                  color: Theme.of(context).colorScheme.onSurface, width: 1),
-              borderRadius: BorderRadius.circular(15)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: columnChildren,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget menuOption(double padding, String itemName, String itemDesc, num price,
-      ImageProvider<Object>? itemImage) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(padding),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      itemName,
-                      softWrap: true,
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '\$' + price.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1
-                              ?.copyWith(
-                                  fontSize: 14.0,
-                                  color: dineTimeColorScheme.primary,
-                                  fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(width: 10.0),
-                        Image.asset(
-                          'lib/assets/vegan.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                        const SizedBox(width: 10.0),
-                        Image.asset(
-                          'lib/assets/nut_free.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                        const SizedBox(width: 10.0),
-                        Image.asset(
-                          'lib/assets/vegetarian.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 40,
-                      child: Text(
-                        itemDesc,
-                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                              fontSize: 10.0,
-                              fontFamily: 'Lato',
-                            ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: Container(
-                    height: 75,
-                    width: 75,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withOpacity(0.5),
-                      image: DecorationImage(
-                          image: itemImage ??
-                              const AssetImage(
-                                  "lib/assets/dinetime-orange.png"),
-                          fit: BoxFit.cover,
-                          opacity: 0.8),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget menuButton() {
-    List<r.MenuItem> menu = widget.restaurant.menu;
-    List<Widget> columnChildren = [];
-    for (r.MenuItem menuItem in menu) {
-      columnChildren.add(const SizedBox(
-        height: 10.0,
-      ));
-      columnChildren.add(menuOption(0, menuItem.itemName,
-          menuItem.itemDescription!, menuItem.itemPrice, menuItem.itemPhoto));
-      columnChildren.add(
-        const SizedBox(height: 12.0),
-      );
-      columnChildren.add(
-        const Divider(
-          color: Color.fromARGB(95, 158, 158, 158),
-          height: 1,
-        ),
-      );
-    }
-    return Padding(
-      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-      child: InkWell(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Row(
-                              children: [
-                                const Image(
-                                    image:
-                                        AssetImage('lib/assets/back_arrow.png'),
-                                    height: 12,
-                                    width: 12),
-                                const SizedBox(width: 10),
-                                Text(
-                                  "Go Back",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.copyWith(
-                                          fontSize: 12.0,
-                                          fontFamily: 'Lato',
-                                          color: dineTimeColorScheme.primary),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Row(
-                            children: [
-                              Text(
-                                "Menu",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    ?.copyWith(
-                                        fontSize: 23.0,
-                                        fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Column(
-                          children: columnChildren,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            width: 135,
-            height: 25,
-            decoration: BoxDecoration(
-              color: dineTimeColorScheme.primary.withOpacity(0.2),
-              shape: BoxShape.rectangle,
-            ),
-            child: Center(
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Image(
-                        image: AssetImage('lib/assets/view_menu.png'),
-                        height: 10,
-                        width: 10),
-                    const SizedBox(width: 5),
-                    Text(
-                      "View full menu",
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          fontSize: 10.0,
-                          color: dineTimeColorScheme.primary,
-                          fontFamily: 'Lato'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget upcomingLocations() {
-    List<r.PopUpLocation> popUpLocations = widget.restaurant.upcomingLocations;
-    List<Widget> columnChildren = [
-      Text(
-        'Upcoming Locations',
-        style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w500,
-            ),
-      ),
-    ];
-    num count = 0;
-    for (r.PopUpLocation popUpLocation in popUpLocations) {
-      columnChildren.add(const SizedBox(
-        height: 10.0,
-      ));
-      columnChildren.add(upcomingLocationCard(popUpLocation.locationDateStart,
-          popUpLocation.name, 2.0, popUpLocation.locationAddress));
-      count += 1;
-      if (count == 3) {
-        break;
-      }
-    }
-    columnChildren.add(Center(
-      child: locationsButton(),
-    ));
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: columnChildren,
-    );
-  }
-
-  Widget locationsButton() {
-    List<r.PopUpLocation> popUpLocations = widget.restaurant.upcomingLocations;
-    List<Widget> columnChildren = [];
-    for (r.PopUpLocation popUpLocation in popUpLocations) {
-      columnChildren.add(const SizedBox(
-        height: 10.0,
-      ));
-      columnChildren.add(upcomingLocationCard(popUpLocation.locationDateStart,
-          popUpLocation.name, 2.0, popUpLocation.locationAddress));
-    }
-    return Padding(
-      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-      child: InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Row(
-                                children: [
-                                  const Image(
-                                      image: AssetImage(
-                                          'lib/assets/back_arrow.png'),
-                                      height: 12,
-                                      width: 12),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    "Go Back",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1
-                                        ?.copyWith(
-                                            fontSize: 12.0,
-                                            fontFamily: 'Lato',
-                                            color: dineTimeColorScheme.primary),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Upcoming Locations',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      ?.copyWith(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Scrollbar(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: columnChildren,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              width: 190,
-              height: 26,
-              decoration: BoxDecoration(
-                color: dineTimeColorScheme.primary.withOpacity(0.2),
-                shape: BoxShape.rectangle,
-              ),
-              child: Center(
-                  child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Image(
-                        image:
-                            AssetImage('lib/assets/location_arrow_orange.png'),
-                        height: 15,
-                        width: 15),
-                    const SizedBox(width: 7),
-                    Text(
-                      "View all upcoming locations",
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          fontSize: 10.0,
-                          color: dineTimeColorScheme.primary,
-                          fontFamily: 'Lato'),
-                    ),
-                  ],
-                ),
-              )),
-            ),
-          )),
-    );
-  }
-
-  Widget upcomingLocationCard(
-      Timestamp dateStart, String name, double distance, String address) {
-    String period = dateStart.toDate().hour > 12 ? "PM" : "AM";
-    num hour = dateStart.toDate().hour % 12;
-    num minute = dateStart.toDate().minute;
-    String timeZoneName = dateStart.toDate().timeZoneName;
-    return ListCard(
-      height: 50.0,
-      width: double.infinity,
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text('${dateStart.toDate().month}/${dateStart.toDate().day}',
-                style: Theme.of(context).textTheme.headline1?.copyWith(
-                    fontSize: 14.0,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500)),
-          ),
-          Expanded(
-            flex: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Text overflow works by wrapping text under Flexible widget
-                    Flexible(
-                      child: Text(
-                        name,
-                        style: Theme.of(context).textTheme.headline1?.copyWith(
-                            fontSize: 14.0,
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontWeight: FontWeight.w500),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(height: 1.0),
-                    Flexible(
-                      child: Text(
-                        "$distance mi - $hour:$minute $period $timeZoneName",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(fontSize: 10.0),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: InkWell(
-              onTap: () => launchUrl(Uri.parse(
-                  'https://www.google.com/maps/search/?api=1&query=${address}')),
-              child: Container(
-                width: 20.0,
-                height: 20.0,
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    // Display image based on availability of user uploaded image
-                    fit: BoxFit.fill,
-                    image: AssetImage('lib/assets/location_arrow_grey.png'),
-                  ),
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 20.0,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget nextLocation(Color color, String imagePath) {
-    return Row(
-      children: [
-        Image.asset(
-          imagePath,
-          width: 13,
-          height: 13,
-        ),
-        const SizedBox(width: 10.5),
-        Text(
-          widget.restaurant.upcomingLocations[0].name,
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 12.0,
-              color: color,
-              fontFamily: 'Lato',
-              fontWeight: FontWeight.w500),
-        ),
-      ],
-    );
-  }
-
-  Widget bottomNextLocation(Color color, String imagePath) {
-    return Row(
-      children: [
-        Image.asset(
-          imagePath,
-          width: 15,
-          height: 15,
-        ),
-        const SizedBox(width: 10.5),
-        Text(
-          widget.restaurant.upcomingLocations[0].name,
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 12.0,
-              color: color,
-              fontFamily: 'Lato',
-              fontWeight: FontWeight.w500),
-        ),
-      ],
-    );
-  }
-
-  Widget nextTime(Color textColor, String imagePath) {
-    r.PopUpLocation nextPopUpLocation = widget.restaurant.upcomingLocations[0];
-    Timestamp dateStart = nextPopUpLocation.locationDateStart;
-    String period = dateStart.toDate().hour > 12 ? "PM" : "AM";
-    num hour = dateStart.toDate().hour % 12;
-    num minute = dateStart.toDate().minute;
-    String timeZoneName = dateStart.toDate().timeZoneName;
-    return Row(
-      children: [
-        Image.asset(
-          imagePath,
-          width: 13,
-          height: 13,
-        ),
-        const SizedBox(width: 10.5),
-        Text(
-          "$hour:$minute $period $timeZoneName",
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 12.0,
-              color: textColor,
-              fontFamily: 'Lato',
-              fontWeight: FontWeight.normal),
-        ),
-      ],
-    );
-  }
-
-  Widget bottomNextTime(Color textColor, String imagePath) {
-    r.PopUpLocation nextPopUpLocation = widget.restaurant.upcomingLocations[0];
-    Timestamp dateStart = nextPopUpLocation.locationDateStart;
-    String period = dateStart.toDate().hour > 12 ? "PM" : "AM";
-    num hour = dateStart.toDate().hour % 12;
-    num minute = dateStart.toDate().minute;
-    String timeZoneName = dateStart.toDate().timeZoneName;
-    return Row(
-      children: [
-        const SizedBox(width: 1.0),
-        Image.asset(
-          imagePath,
-          width: 13,
-          height: 13,
-        ),
-        const SizedBox(width: 10.5),
-        Text(
-          "$hour:$minute $period $timeZoneName",
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 12.0,
-              color: textColor,
-              fontFamily: 'Lato',
-              fontWeight: FontWeight.normal),
-        ),
-      ],
-    );
-  }
-
-  Widget logo() {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: widget.restaurant.restaurantLogo,
-        ),
-        shape: BoxShape.circle,
-        border: Border.all(color: dineTimeColorScheme.primary, width: 3),
-      ),
-    );
-  }
-
-  Widget cuisineDetails(Color color) {
-    return RichText(
-      text: TextSpan(
-          style: Theme.of(context)
-              .textTheme
-              .subtitle1
-              ?.copyWith(fontSize: 12.0, color: color, fontFamily: 'Lato'),
-          children: [
-            TextSpan(text: widget.restaurant.cuisine),
-            const TextSpan(
-                text: '   ·   ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0)),
-            TextSpan(text: '\$' * widget.restaurant.pricing),
-            const TextSpan(
-                text: '   ·   ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0)),
-            TextSpan(text: '2.2 mi'),
-          ]),
-    );
-  }
-
-  Widget nextDate(Color color, String imagePath) {
-    List<String> months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-    String nextDate =
-        '${months[widget.restaurant.upcomingLocations[0].locationDateStart.toDate().month - 1]} ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().day}, ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().year}';
-    String daysAway =
-        '${DateTime.now().difference(widget.restaurant.upcomingLocations[0].locationDateStart.toDate()).inDays} days away';
-    return Row(
-      children: [
-        const SizedBox(width: 0.5),
-        Image.asset(
-          imagePath,
-          width: 12,
-          height: 12,
-        ),
-        const SizedBox(width: 10.5),
-        Text(
-          nextDate,
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              fontSize: 12.0, color: color, fontWeight: FontWeight.normal),
-        ),
-        const SizedBox(width: 13),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            width: 60,
-            height: 15,
-            decoration: BoxDecoration(
-              color: dineTimeColorScheme.primary.withOpacity(0.7),
-              shape: BoxShape.rectangle,
-            ),
-            child: Center(
-              child: Text(
-                daysAway,
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                    fontSize: 8.0,
-                    color: dineTimeColorScheme.background,
-                    fontFamily: 'Lato'),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget bottomNextDate(Color color, String imagePath) {
-    List<String> months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-    String nextDate =
-        '${months[widget.restaurant.upcomingLocations[0].locationDateStart.toDate().month - 1]} ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().day}, ${widget.restaurant.upcomingLocations[0].locationDateStart.toDate().year}';
-    return Row(
-      children: [
-        const SizedBox(width: 1.5),
-        Image.asset(
-          imagePath,
-          width: 12,
-          height: 12,
-        ),
-        const SizedBox(width: 10.5),
-        Text(
-          nextDate,
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              fontSize: 12.0, color: color, fontWeight: FontWeight.normal),
-        ),
-        const SizedBox(width: 13),
-      ],
-    );
-  }
-
-  Widget buildRefresh() => Row(
-        children: [
-          Container(
-              width: 50,
-              height: 50,
-              child: InkWell(
-                onTap: () {
-                  final provider =
-                      Provider.of<CardProvider>(context, listen: false);
-
-                  provider.resetUsers();
-                },
-                child: Image.asset(
-                  'lib/assets/reload.png',
-                  width: 200,
-                  height: 50,
-                ),
-              )),
-        ],
-      );
 }

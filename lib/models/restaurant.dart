@@ -39,7 +39,7 @@ class RestaurantPreview {
   ImageProvider<Object> restaurantLogo;
   List<PopUpLocation> upcomingLocations;
   int pricing;
-  String? cuisine;
+  String cuisine;
   String? instagramHandle;
   String? website;
   String? email;
@@ -50,7 +50,7 @@ class RestaurantPreview {
     required this.restaurantLogo,
     required this.upcomingLocations,
     required this.pricing,
-    this.cuisine,
+    required this.cuisine,
     this.instagramHandle,
     this.website,
     this.email,
@@ -80,16 +80,18 @@ class MenuItem {
   String itemName;
   num itemPrice;
   Timestamp dateAdded;
-  ImageProvider<Object>? itemPhoto;
-  String? itemDescription;
+  List dietaryTags;
+  ImageProvider<Object> itemPhoto;
+  String itemDescription;
 
   MenuItem({
     required this.itemId,
     required this.itemName,
     required this.itemPrice,
     required this.dateAdded,
-    this.itemPhoto,
-    this.itemDescription,
+    required this.dietaryTags,
+    required this.itemPhoto,
+    required this.itemDescription,
   });
 }
 
@@ -113,3 +115,9 @@ class PopUpLocation {
     required this.name,
   });
 }
+
+Map<String, String> dietToImagePath = {
+  "Vegan": "lib/assets/vegan.png",
+  "Vegetarian": "lib/assets/vegetarian.png",
+  "Nut Free": "lib/assets/nut_free.png",
+};

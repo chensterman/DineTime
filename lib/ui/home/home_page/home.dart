@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite_border_rounded),
-              label: 'My Lists',
+              label: 'Favorites',
             ),
           ],
         ));

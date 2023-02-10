@@ -83,7 +83,7 @@ class DatabaseService {
     ImageProvider<Object> restaurantLogo = await getPhoto(photoPath);
     List restaurantLocationDataRaw = restaurantData['upcoming_locations'];
     int pricing = restaurantData['pricing'];
-    String? cuisine = restaurantData['cuisine'];
+    String cuisine = restaurantData['cuisine'];
     String? instagramHandle = restaurantData['instagram_handle'];
     String? email = restaurantData['email'];
     String? website = restaurantData['website'];
@@ -149,6 +149,7 @@ class DatabaseService {
     for (Map<String, dynamic> menuItemRaw in menuRaw) {
       menu.add(r.MenuItem(
         dateAdded: menuItemRaw['date_added'],
+        dietaryTags: menuItemRaw['dietary_tags'],
         itemDescription: menuItemRaw['item_description'],
         itemId: menuItemRaw['item_id'],
         itemName: menuItemRaw['item_name'],

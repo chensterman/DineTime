@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 
@@ -13,8 +15,15 @@ class Menu extends StatelessWidget {
     List<Widget> columnChildren = [];
     num count = 0;
     for (r.MenuItem menuItem in menu) {
-      columnChildren.add(menuOption(context, 12.0, menuItem.itemName,
-          menuItem.itemDescription!, menuItem.itemPrice, menuItem.itemPhoto));
+      columnChildren.add(menuOption(
+        context,
+        12.0,
+        menuItem.itemName,
+        menuItem.itemDescription!,
+        menuItem.itemPrice,
+        menuItem.itemPhoto,
+        menuItem.dietaryTags,
+      ));
       columnChildren.add(
         const Divider(
           color: Color.fromARGB(95, 158, 158, 158),
@@ -58,8 +67,36 @@ class Menu extends StatelessWidget {
     );
   }
 
-  Widget menuOption(BuildContext context, double padding, String itemName,
-      String itemDesc, num price, ImageProvider<Object>? itemImage) {
+  Widget menuOption(
+    BuildContext context,
+    double padding,
+    String itemName,
+    String itemDesc,
+    num price,
+    ImageProvider<Object>? itemImage,
+    List dietaryTags,
+  ) {
+    List<Widget> pricingDietRowChildren = [
+      Text(
+        '\$' + price.toString(),
+        style: Theme.of(context).textTheme.headline1?.copyWith(
+            fontSize: 14.0,
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.w500),
+      ),
+      const SizedBox(width: 10.0),
+    ];
+    for (String diet in dietaryTags) {
+      String imagePath = r.dietToImagePath[diet]!;
+      pricingDietRowChildren.add(
+        Image.asset(
+          imagePath,
+          width: 15,
+          height: 15,
+        ),
+      );
+      pricingDietRowChildren.add(const SizedBox(width: 10.0));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -83,36 +120,7 @@ class Menu extends StatelessWidget {
                       height: 3,
                     ),
                     Row(
-                      children: [
-                        Text(
-                          '\$' + price.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1
-                              ?.copyWith(
-                                  fontSize: 14.0,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(width: 10.0),
-                        Image.asset(
-                          'lib/assets/vegan.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                        const SizedBox(width: 10.0),
-                        Image.asset(
-                          'lib/assets/nut_free.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                        const SizedBox(width: 10.0),
-                        Image.asset(
-                          'lib/assets/vegetarian.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                      ],
+                      children: pricingDietRowChildren,
                     ),
                     const SizedBox(
                       height: 10,
@@ -165,8 +173,15 @@ class Menu extends StatelessWidget {
       columnChildren.add(const SizedBox(
         height: 10.0,
       ));
-      columnChildren.add(menuOption(context, 0, menuItem.itemName,
-          menuItem.itemDescription!, menuItem.itemPrice, menuItem.itemPhoto));
+      columnChildren.add(menuOption(
+        context,
+        0,
+        menuItem.itemName,
+        menuItem.itemDescription!,
+        menuItem.itemPrice,
+        menuItem.itemPhoto,
+        menuItem.dietaryTags,
+      ));
       columnChildren.add(
         const SizedBox(height: 12.0),
       );
