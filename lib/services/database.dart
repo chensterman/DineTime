@@ -1,33 +1,15 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:dinetime_mobile_mvp/services/location.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 
 // Contains all methods and data pertaining to the user database
 class DatabaseService {
-  // Firebase Storage instance.
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   // Access to 'restaurants' collection
   final CollectionReference restaurantCollection =
       FirebaseFirestore.instance.collection('restaurants');
   // Access to 'customers' collection
   final CollectionReference customerCollection =
       FirebaseFirestore.instance.collection('customers');
-
-  // Retrieves the stored image from a given reference to Firebase Storage.
-  Future<ImageProvider<Object>> getPhoto(String photoPath) async {
-    ImageProvider<Object> photo;
-    Uint8List? photoData = await _storage.ref().child(photoPath).getData();
-    if (photoData == null) {
-      photo = const AssetImage('lib/assets/dinetime-orange.png');
-    } else {
-      photo = MemoryImage(photoData);
-    }
-    return photo;
-  }
 
   /* CUSTOMER FIRESTORE INTERACTIONS */
 
@@ -99,8 +81,7 @@ class DatabaseService {
         restaurantSnapshot.data() as Map<String, dynamic>;
     // Isolate all fields
     String restaurantName = restaurantData['restaurant_name'];
-    String photoPath = restaurantData['logo_location'];
-    ImageProvider<Object> restaurantLogo = await getPhoto(photoPath);
+    String restaurantLogoRef = restaurantData['logo_location'];
     List restaurantLocationDataRaw = restaurantData['upcoming_locations'];
     int pricing = restaurantData['pricing'];
     String cuisine = restaurantData['cuisine'];
@@ -137,7 +118,7 @@ class DatabaseService {
     return r.RestaurantPreview(
       restaurantId: restaurantId,
       restaurantName: restaurantName,
-      restaurantLogo: restaurantLogo,
+      restaurantLogoRef: restaurantLogoRef,
       upcomingLocations: restaurantLocationData,
       pricing: pricing,
       cuisine: cuisine,
@@ -163,8 +144,7 @@ class DatabaseService {
         restaurantSnapshot.data() as Map<String, dynamic>;
     String restaurantName = restaurantData['restaurant_name'];
     int pricing = restaurantData['pricing'];
-    ImageProvider<Object> restaurantLogo =
-        await getPhoto(restaurantData['logo_location']);
+    String restaurantLogoRef = restaurantData['logo_location'];
     String bio = restaurantData['restaurant_bio'];
     String cuisine = restaurantData['cuisine'];
     String website = restaurantData['website'];
@@ -178,7 +158,7 @@ class DatabaseService {
       gallery.add(r.GalleryImage(
           imageId: imageRaw['photo_id'],
           imageName: imageRaw['photo_name'],
-          image: await getPhoto(imageRaw['photo_location']),
+          imageRef: imageRaw['photo_location'],
           imageDescription: imageRaw['photo_description'],
           dateAdded: imageRaw['date_added']));
     }
@@ -194,7 +174,7 @@ class DatabaseService {
         itemId: menuItemRaw['item_id'],
         itemName: menuItemRaw['item_name'],
         itemPrice: menuItemRaw['item_price'],
-        itemPhoto: await getPhoto(menuItemRaw['photo_location']),
+        itemImageRef: menuItemRaw['photo_location'],
       ));
     }
 
@@ -227,7 +207,7 @@ class DatabaseService {
     return r.Restaurant(
         restaurantId: restaurantId,
         restaurantName: restaurantName,
-        restaurantLogo: restaurantLogo,
+        restaurantLogoRef: restaurantLogoRef,
         pricing: pricing,
         gallery: gallery,
         menu: menu,

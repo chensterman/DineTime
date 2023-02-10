@@ -1,11 +1,10 @@
-import 'dart:ui';
-
+import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 
 class Menu extends StatelessWidget {
   final List<r.MenuItem> menu;
-  const Menu({
+  Menu({
     Key? key,
     required this.menu,
   }) : super(key: key);
@@ -15,14 +14,12 @@ class Menu extends StatelessWidget {
     List<Widget> columnChildren = [];
     num count = 0;
     for (r.MenuItem menuItem in menu) {
-      columnChildren.add(menuOption(
-        context,
-        12.0,
-        menuItem.itemName,
-        menuItem.itemDescription,
-        menuItem.itemPrice,
-        menuItem.itemPhoto,
-        menuItem.dietaryTags,
+      columnChildren.add(MenuOption(
+        itemName: menuItem.itemName,
+        itemDesc: menuItem.itemDescription,
+        price: menuItem.itemPrice,
+        itemImageRef: menuItem.itemImageRef,
+        dietaryTags: menuItem.dietaryTags,
       ));
       columnChildren.add(
         const Divider(
@@ -67,120 +64,18 @@ class Menu extends StatelessWidget {
     );
   }
 
-  Widget menuOption(
-    BuildContext context,
-    double padding,
-    String itemName,
-    String itemDesc,
-    num price,
-    ImageProvider<Object>? itemImage,
-    List dietaryTags,
-  ) {
-    List<Widget> pricingDietRowChildren = [
-      Text(
-        '\$' + price.toString(),
-        style: Theme.of(context).textTheme.headline1?.copyWith(
-            fontSize: 14.0,
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.w500),
-      ),
-      const SizedBox(width: 10.0),
-    ];
-    for (String diet in dietaryTags) {
-      String imagePath = r.dietToImagePath[diet]!;
-      pricingDietRowChildren.add(
-        Image.asset(
-          imagePath,
-          width: 15,
-          height: 15,
-        ),
-      );
-      pricingDietRowChildren.add(const SizedBox(width: 10.0));
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(padding),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      itemName,
-                      softWrap: true,
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    Row(
-                      children: pricingDietRowChildren,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 40,
-                      child: Text(
-                        itemDesc,
-                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                              fontSize: 10.0,
-                              fontFamily: 'Lato',
-                            ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: Container(
-                    height: 75,
-                    width: 75,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withOpacity(0.5),
-                      image: DecorationImage(
-                          image: itemImage ??
-                              const AssetImage(
-                                  "lib/assets/dinetime-orange.png"),
-                          fit: BoxFit.cover,
-                          opacity: 0.8),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget menuButton(BuildContext context) {
     List<Widget> columnChildren = [];
     for (r.MenuItem menuItem in menu) {
       columnChildren.add(const SizedBox(
         height: 10.0,
       ));
-      columnChildren.add(menuOption(
-        context,
-        0,
-        menuItem.itemName,
-        menuItem.itemDescription,
-        menuItem.itemPrice,
-        menuItem.itemPhoto,
-        menuItem.dietaryTags,
+      columnChildren.add(MenuOption(
+        itemName: menuItem.itemName,
+        itemDesc: menuItem.itemDescription,
+        price: menuItem.itemPrice,
+        itemImageRef: menuItem.itemImageRef,
+        dietaryTags: menuItem.dietaryTags,
       ));
       columnChildren.add(
         const SizedBox(height: 12.0),
@@ -294,6 +189,166 @@ class Menu extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class MenuOption extends StatefulWidget {
+  final String itemName;
+  final String itemDesc;
+  final num price;
+  final String itemImageRef;
+  final List dietaryTags;
+  const MenuOption({
+    Key? key,
+    required this.itemName,
+    required this.itemDesc,
+    required this.price,
+    required this.itemImageRef,
+    required this.dietaryTags,
+  }) : super(key: key);
+
+  @override
+  State<MenuOption> createState() => _MenuOptionState();
+}
+
+class _MenuOptionState extends State<MenuOption> {
+  // Create an instance variable.
+  late final Future<ImageProvider<Object>?> _getPhoto;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Assign that variable your Future.
+    _getPhoto = StorageService().getPhoto(widget.itemImageRef);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> pricingDietRowChildren = [
+      Text(
+        '\$${widget.price}',
+        style: Theme.of(context).textTheme.headline1?.copyWith(
+            fontSize: 14.0,
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.w500),
+      ),
+      const SizedBox(width: 10.0),
+    ];
+    for (String diet in widget.dietaryTags) {
+      String imagePath = r.dietToImagePath[diet]!;
+      pricingDietRowChildren.add(
+        Image.asset(
+          imagePath,
+          width: 15,
+          height: 15,
+        ),
+      );
+      pricingDietRowChildren.add(const SizedBox(width: 10.0));
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.itemName,
+                      softWrap: true,
+                      style: Theme.of(context).textTheme.headline1?.copyWith(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: pricingDietRowChildren,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 40,
+                      child: Text(
+                        widget.itemDesc,
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              fontSize: 10.0,
+                              fontFamily: 'Lato',
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30.0),
+                  child: FutureBuilder(
+                    future: _getPhoto,
+                    builder: (context,
+                        AsyncSnapshot<ImageProvider<Object>?> snapshot) {
+                      if (snapshot.hasError) {
+                        return Container(
+                          height: 75,
+                          width: 75,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white.withOpacity(0.5),
+                            image: const DecorationImage(
+                                image: AssetImage(
+                                    "lib/assets/dinetime-orange.png"),
+                                fit: BoxFit.cover,
+                                opacity: 0.8),
+                          ),
+                        );
+                        // On success
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        return Container(
+                          height: 75,
+                          width: 75,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white.withOpacity(0.5),
+                            image: DecorationImage(
+                                image: snapshot.data!,
+                                fit: BoxFit.cover,
+                                opacity: 0.8),
+                          ),
+                        );
+                        // On loading
+                      } else {
+                        return Container(
+                          height: 75,
+                          width: 75,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

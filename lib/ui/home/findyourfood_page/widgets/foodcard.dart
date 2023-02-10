@@ -1,15 +1,17 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/backgroundshadow.dart';
 import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/cuisinedetails.dart';
 import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/dietary.dart';
+import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/logo.dart';
 import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/menu.dart';
 import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/widgets/photogallery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
-import 'package:dinetime_mobile_mvp/designsystem.dart';
 
 import 'aboutandstory.dart';
+import 'background.dart';
 import 'contact.dart';
 import 'name.dart';
 import 'nextdate.dart';
@@ -142,8 +144,11 @@ class _FoodCardState extends State<FoodCard> {
                 children: [
                   Stack(
                     children: [
-                      mainBackground(width, height),
-                      mainBackgroundShadow(width, height),
+                      Background(
+                          width: width,
+                          height: height,
+                          restaurantMenu: widget.restaurant.menu),
+                      BackgroundShadow(width: width, height: height),
                       mainDetails(width, height)
                     ],
                   ),
@@ -152,42 +157,6 @@ class _FoodCardState extends State<FoodCard> {
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget mainBackground(double width, double height) {
-    return Container(
-      width: width,
-      height: height - 2,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: widget.restaurant.menu.isEmpty
-              ? const AssetImage("lib/assets/dinetime-orange.png")
-              : widget.restaurant.menu[0].itemPhoto,
-          fit: BoxFit.cover,
-        ),
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-    );
-  }
-
-  Widget mainBackgroundShadow(double width, double height) {
-    return Container(
-      width: width,
-      height: height - 2,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        gradient: const LinearGradient(
-          colors: [
-            Colors.transparent,
-            Color.fromARGB(255, 0, 0, 0),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [0.5, 1],
         ),
       ),
     );
@@ -208,7 +177,7 @@ class _FoodCardState extends State<FoodCard> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                LogoDisplay(image: widget.restaurant.restaurantLogo),
+                Logo(restaurantLogoRef: widget.restaurant.restaurantLogoRef),
                 const SizedBox(height: 18),
                 Name(
                   restaurantName: widget.restaurant.restaurantName,

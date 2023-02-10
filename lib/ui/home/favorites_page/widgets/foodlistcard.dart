@@ -1,5 +1,6 @@
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
+import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:dinetime_mobile_mvp/ui/home/fooddisplay_page/fooddisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -129,19 +130,30 @@ class FoodListCard extends StatelessWidget {
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                               ),
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: restaurantPreview!.restaurantLogo,
-                                  ),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: dineTimeColorScheme.primary,
-                                      width: 2),
-                                ),
+                              child: FutureBuilder(
+                                future: StorageService().getPhoto(
+                                    restaurantPreview!.restaurantLogoRef),
+                                builder: ((context,
+                                    AsyncSnapshot<ImageProvider<Object>?>
+                                        snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Container();
+                                    // On success
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return LogoDisplay(
+                                        width: 40.0,
+                                        height: 40.0,
+                                        image: snapshot.data!);
+                                    // On loading
+                                  } else {
+                                    return const LogoDisplay(
+                                      width: 40.0,
+                                      height: 40.0,
+                                      isLoading: true,
+                                    );
+                                  }
+                                }),
                               ),
                             ),
                           ),

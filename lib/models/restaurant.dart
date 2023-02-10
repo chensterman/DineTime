@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Restaurant data model
@@ -7,7 +6,7 @@ class Restaurant {
   String restaurantName;
   String bio;
   String cuisine;
-  ImageProvider<Object> restaurantLogo;
+  String restaurantLogoRef;
   int pricing;
   List<GalleryImage> gallery;
   List<MenuItem> menu;
@@ -20,7 +19,7 @@ class Restaurant {
   Restaurant({
     required this.restaurantId,
     required this.restaurantName,
-    required this.restaurantLogo,
+    required this.restaurantLogoRef,
     required this.pricing,
     required this.gallery,
     required this.menu,
@@ -38,7 +37,7 @@ class Restaurant {
 class RestaurantPreview {
   String restaurantId;
   String restaurantName;
-  ImageProvider<Object> restaurantLogo;
+  String restaurantLogoRef;
   List<PopUpLocation> upcomingLocations;
   int pricing;
   String cuisine;
@@ -50,7 +49,7 @@ class RestaurantPreview {
   RestaurantPreview({
     required this.restaurantId,
     required this.restaurantName,
-    required this.restaurantLogo,
+    required this.restaurantLogoRef,
     required this.upcomingLocations,
     required this.pricing,
     required this.cuisine,
@@ -64,15 +63,15 @@ class RestaurantPreview {
 // Gallery image data model for restaurants
 class GalleryImage {
   String imageId;
-  String imageDescription;
-  ImageProvider<Object> image;
-  Timestamp dateAdded;
+  String imageRef;
   String imageName;
+  String imageDescription;
+  Timestamp dateAdded;
 
   GalleryImage({
     required this.imageId,
     required this.imageDescription,
-    required this.image,
+    required this.imageRef,
     required this.dateAdded,
     required this.imageName,
   });
@@ -85,7 +84,7 @@ class MenuItem {
   num itemPrice;
   Timestamp dateAdded;
   List dietaryTags;
-  ImageProvider<Object> itemPhoto;
+  String itemImageRef;
   String itemDescription;
 
   MenuItem({
@@ -94,7 +93,7 @@ class MenuItem {
     required this.itemPrice,
     required this.dateAdded,
     required this.dietaryTags,
-    required this.itemPhoto,
+    required this.itemImageRef,
     required this.itemDescription,
   });
 }
