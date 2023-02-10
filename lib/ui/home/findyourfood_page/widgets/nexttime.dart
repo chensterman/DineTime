@@ -31,8 +31,7 @@ class NextTime extends StatelessWidget {
 
     String timeDisplay = "";
     if (locationDateEnd != null) {
-      timeDisplay =
-          "$hourStart:$minuteStart $periodStart $timeZoneName - Sold Out";
+      timeDisplay = "$hourStart:$minuteStart $periodStart $timeZoneName";
     } else {
       "$hourStart:$minuteStart $periodStart - $hourEnd:$minuteEnd $periodEnd $timeZoneName";
     }

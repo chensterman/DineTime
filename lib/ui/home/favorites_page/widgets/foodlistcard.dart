@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
-import 'package:dinetime_mobile_mvp/services/location.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/ui/home/fooddisplay_page/fooddisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -79,8 +78,8 @@ class FoodListCard extends StatelessWidget {
   // Full version of the FoodListCard
   Widget fullFoodListCard(BuildContext context, num? distance) {
     String infoText = distance != null
-        ? '${restaurantPreview!.cuisine!}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
-        : '${restaurantPreview!.cuisine!}  ·  ${'\$' * restaurantPreview!.pricing}';
+        ? '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
+        : '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}';
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: SizedBox(
@@ -90,8 +89,8 @@ class FoodListCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color:
-                          Color.fromARGB(255, 233, 233, 233).withOpacity(0.5),
+                      color: const Color.fromARGB(255, 233, 233, 233)
+                          .withOpacity(0.5),
                       blurRadius: 30,
                       offset: const Offset(0, 5), // changes position of shadow
                     ),
@@ -256,9 +255,28 @@ class FoodListCard extends StatelessWidget {
                                         ),
                                       ))
                                   : Container(),
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await DatabaseService().deleteCustomerSaved(
+                                        customerId,
+                                        restaurantPreview!.restaurantId);
+                                  },
+                                  child: Container(
+                                    width: 25.0,
+                                    height: 25.0,
+                                    child: const Image(
+                                      height: 5,
+                                      width: 5,
+                                      image: AssetImage('lib/assets/trash.png'),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               const SizedBox(
                                 width: 8.0,
-                              )
+                              ),
                             ],
                           ),
                         ],

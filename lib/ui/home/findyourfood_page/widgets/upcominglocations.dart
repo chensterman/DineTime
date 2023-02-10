@@ -32,7 +32,7 @@ class UpcomingLocations extends StatelessWidget {
           popUpLocation.locationDateStart,
           popUpLocation.locationDateEnd,
           popUpLocation.name,
-          2.0,
+          popUpLocation.distance,
           popUpLocation.locationAddress));
       count += 1;
       if (count == 3) {
@@ -53,7 +53,7 @@ class UpcomingLocations extends StatelessWidget {
     Timestamp locationDateStart,
     Timestamp? locationDateEnd,
     String name,
-    double distance,
+    num? distance,
     String address,
   ) {
     String periodStart = locationDateStart.toDate().hour > 12 ? "PM" : "AM";
@@ -63,19 +63,21 @@ class UpcomingLocations extends StatelessWidget {
     num? hourEnd;
     num? minuteEnd;
     if (locationDateEnd != null) {
-      String periodEnd = locationDateEnd!.toDate().hour > 12 ? "PM" : "AM";
-      num hourEnd = locationDateEnd!.toDate().hour % 12;
-      num minuteEnd = locationDateEnd!.toDate().minute;
+      String periodEnd = locationDateEnd.toDate().hour > 12 ? "PM" : "AM";
+      num hourEnd = locationDateEnd.toDate().hour % 12;
+      num minuteEnd = locationDateEnd.toDate().minute;
     }
     String timeZoneName = locationDateStart.toDate().timeZoneName;
 
     String timeDisplay = "";
     if (locationDateEnd != null) {
-      timeDisplay =
-          "$hourStart:$minuteStart $periodStart $timeZoneName - Sold Out";
+      timeDisplay = "$hourStart:$minuteStart $periodStart $timeZoneName";
     } else {
       "$hourStart:$minuteStart $periodStart - $hourEnd:$minuteEnd $periodEnd $timeZoneName";
     }
+
+    String infoText =
+        distance != null ? "$distance mi - $timeDisplay" : timeDisplay;
     return ListCard(
       height: 50.0,
       width: double.infinity,
@@ -113,7 +115,7 @@ class UpcomingLocations extends StatelessWidget {
                     const SizedBox(height: 1.0),
                     Flexible(
                       child: Text(
-                        timeDisplay,
+                        infoText,
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1

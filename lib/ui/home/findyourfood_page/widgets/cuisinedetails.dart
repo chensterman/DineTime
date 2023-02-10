@@ -17,8 +17,8 @@ class CuisineDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String infoText = distance != null
-        ? '${cuisine!}  ·  ${'\$' * pricing}  ·  $distance mi'
-        : '${cuisine!}  ·  ${'\$' * pricing}';
+        ? '$cuisine  ·  ${'\$' * pricing}  ·  $distance mi'
+        : '$cuisine  ·  ${'\$' * pricing}';
     return RichText(
       text: TextSpan(
           style: Theme.of(context).textTheme.subtitle1?.copyWith(

@@ -165,7 +165,7 @@ class _FoodCardState extends State<FoodCard> {
         image: DecorationImage(
           image: widget.restaurant.menu.isEmpty
               ? const AssetImage("lib/assets/dinetime-orange.png")
-              : widget.restaurant.menu[0].itemPhoto!,
+              : widget.restaurant.menu[0].itemPhoto,
           fit: BoxFit.cover,
         ),
         color: Colors.white,
