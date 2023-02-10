@@ -9,12 +9,12 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 // Cards that display list items in saved
 class FoodListCard extends StatelessWidget {
   final bool isLoading;
-  final GeoPoint? customerGeoPoint;
+  final String customerId;
   final RestaurantPreview? restaurantPreview;
   const FoodListCard({
     super.key,
     required this.isLoading,
-    this.customerGeoPoint,
+    required this.customerId,
     this.restaurantPreview,
   });
   // Function called when user hits delete button
@@ -33,12 +33,8 @@ class FoodListCard extends StatelessWidget {
       // If no upcoming locations, is null
       List<PopUpLocation> upcomingLocations =
           restaurantPreview!.upcomingLocations;
-      double? distance = upcomingLocations.isNotEmpty
-          ? LocationService().distanceBetweenTwoPoints(
-              customerGeoPoint!, upcomingLocations[0].geocode)
-          : null;
       // Card item
-      return fullFoodListCard(context, distance);
+      return fullFoodListCard(context, restaurantPreview!.distance);
     }
   }
 
@@ -81,7 +77,7 @@ class FoodListCard extends StatelessWidget {
   }
 
   // Full version of the FoodListCard
-  Widget fullFoodListCard(BuildContext context, double? distance) {
+  Widget fullFoodListCard(BuildContext context, num? distance) {
     String infoText = distance != null
         ? '${restaurantPreview!.cuisine!}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
         : '${restaurantPreview!.cuisine!}  ·  ${'\$' * restaurantPreview!.pricing}';
@@ -116,6 +112,7 @@ class FoodListCard extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => FoodDisplay(
                                   restaurantId: restaurantPreview!.restaurantId,
+                                  customerId: customerId,
                                 )),
                       );
                     },

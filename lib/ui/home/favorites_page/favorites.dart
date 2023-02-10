@@ -78,7 +78,7 @@ class Favorites extends StatelessWidget {
                   }
                   // Return widget to process all document references
                   return FoodListCardProcess(
-                      customerGeoPoint: data['geolocation'],
+                      customerId: customerId,
                       restaurantRef: data['saved_businesses'][index - 1]
                           ['restaurant_ref']);
                 },

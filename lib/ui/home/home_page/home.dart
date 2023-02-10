@@ -7,6 +7,7 @@ import 'package:dinetime_mobile_mvp/ui/home/findyourfood_page/findyourfood.dart'
 import 'package:dinetime_mobile_mvp/ui/home/favorites_page/favorites.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -53,35 +54,33 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     // Widget list for bottom nav bar
     final List<Widget> pages = <Widget>[
-      const FindYourFood(),
-      Favorites(
-        customerId: user.uid,
-      ),
+      FindYourFood(customerId: user.uid),
+      Favorites(customerId: user.uid),
     ];
     // Main page widget (contains nav bar pages as well)
     return Scaffold(
-        extendBodyBehindAppBar: false,
-        body: _selectedIndex == 0
-            ? pages.elementAt(_selectedIndex)
-            : Padding(
-                padding: const EdgeInsets.only(top: 45),
-                child: pages.elementAt(_selectedIndex)),
-        bottomNavigationBar: BottomNavBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border_rounded),
-              label: 'Favorites',
-            ),
-          ],
-        ));
+      extendBodyBehindAppBar: false,
+      body: _selectedIndex == 0
+          ? pages.elementAt(_selectedIndex)
+          : Padding(
+              padding: const EdgeInsets.only(top: 45),
+              child: pages.elementAt(_selectedIndex)),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border_rounded),
+            label: 'Favorites',
+          ),
+        ],
+      ),
+    );
   }
 }

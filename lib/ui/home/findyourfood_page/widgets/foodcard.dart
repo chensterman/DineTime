@@ -217,6 +217,7 @@ class _FoodCardState extends State<FoodCard> {
                 CuisineDetails(
                   cuisine: widget.restaurant.cuisine,
                   pricing: widget.restaurant.pricing,
+                  distance: widget.restaurant.distance,
                   color: Theme.of(context).colorScheme.background,
                 ),
                 const SizedBox(height: 18),
@@ -277,6 +278,7 @@ class _FoodCardState extends State<FoodCard> {
           CuisineDetails(
             cuisine: widget.restaurant.cuisine,
             pricing: widget.restaurant.pricing,
+            distance: widget.restaurant.distance,
             color: Theme.of(context).colorScheme.onBackground,
           ),
           const SizedBox(height: 15),

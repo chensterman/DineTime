@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 class FoodDisplay extends StatelessWidget {
   final String restaurantId;
+  final String customerId;
   const FoodDisplay({
     required this.restaurantId,
+    required this.customerId,
     super.key,
   });
 
@@ -26,14 +28,16 @@ class FoodDisplay extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-        future: DatabaseService().getRestaurant(restaurantId),
+        future: DatabaseService().getRestaurant(restaurantId, customerId),
         builder: (context, AsyncSnapshot<Restaurant> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             // On loaded, process into FoodListCard
             Restaurant restaurant = snapshot.data!;
-            return FoodCard(
-              restaurant: restaurant,
-              isFront: false,
+            return Center(
+              child: FoodCard(
+                restaurant: restaurant,
+                isFront: false,
+              ),
             );
           } else if (snapshot.hasError) {
             // On error

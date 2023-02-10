@@ -7,11 +7,11 @@ import 'foodlistcard.dart';
 
 // Widget that contains the FutureBuilder to process saved restaurant document references
 class FoodListCardProcess extends StatelessWidget {
-  final GeoPoint customerGeoPoint;
+  final String customerId;
   final DocumentReference restaurantRef;
   const FoodListCardProcess({
     super.key,
-    required this.customerGeoPoint,
+    required this.customerId,
     required this.restaurantRef,
   });
 
@@ -19,14 +19,15 @@ class FoodListCardProcess extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       // Future to retrieve document data of restaurant reference
-      future: DatabaseService().getRestaurantPreview(restaurantRef.id),
+      future:
+          DatabaseService().getRestaurantPreview(restaurantRef.id, customerId),
       builder: (context, AsyncSnapshot<RestaurantPreview> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           // On loaded, process into FoodListCard
           RestaurantPreview restaurantPreview = snapshot.data!;
           return FoodListCard(
             isLoading: false,
-            customerGeoPoint: customerGeoPoint,
+            customerId: customerId,
             restaurantPreview: restaurantPreview,
           );
         } else if (snapshot.hasError) {
@@ -34,7 +35,7 @@ class FoodListCardProcess extends StatelessWidget {
           return const Text('Error');
         } else {
           // While still loading, return loading version of FoodListCard
-          return const FoodListCard(isLoading: true);
+          return FoodListCard(isLoading: true, customerId: customerId);
         }
       },
     );

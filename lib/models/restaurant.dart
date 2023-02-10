@@ -15,6 +15,7 @@ class Restaurant {
   String? website;
   String? instagramHandle;
   String? email;
+  num? distance;
 
   Restaurant({
     required this.restaurantId,
@@ -29,6 +30,7 @@ class Restaurant {
     this.website,
     this.instagramHandle,
     this.email,
+    this.distance,
   });
 }
 
@@ -43,6 +45,7 @@ class RestaurantPreview {
   String? instagramHandle;
   String? website;
   String? email;
+  num? distance;
 
   RestaurantPreview({
     required this.restaurantId,
@@ -54,6 +57,7 @@ class RestaurantPreview {
     this.instagramHandle,
     this.website,
     this.email,
+    this.distance,
   });
 }
 
@@ -104,6 +108,7 @@ class PopUpLocation {
   Timestamp dateAdded;
   GeoPoint geocode;
   String name;
+  num? distance;
 
   PopUpLocation({
     required this.locationId,
@@ -113,6 +118,7 @@ class PopUpLocation {
     required this.dateAdded,
     required this.geocode,
     required this.name,
+    this.distance,
   });
 }
 
