@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
-import 'package:dinetime_mobile_mvp/services/location.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
+import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:dinetime_mobile_mvp/ui/home/fooddisplay_page/fooddisplay.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,12 +9,12 @@ import 'package:dinetime_mobile_mvp/designsystem.dart';
 // Cards that display list items in saved
 class FoodListCard extends StatelessWidget {
   final bool isLoading;
-  final GeoPoint? customerGeoPoint;
+  final String customerId;
   final RestaurantPreview? restaurantPreview;
   const FoodListCard({
     super.key,
     required this.isLoading,
-    this.customerGeoPoint,
+    required this.customerId,
     this.restaurantPreview,
   });
   // Function called when user hits delete button
@@ -33,12 +33,8 @@ class FoodListCard extends StatelessWidget {
       // If no upcoming locations, is null
       List<PopUpLocation> upcomingLocations =
           restaurantPreview!.upcomingLocations;
-      double? distance = upcomingLocations.isNotEmpty
-          ? LocationService().distanceBetweenTwoPoints(
-              customerGeoPoint!, upcomingLocations[0].geocode)
-          : null;
       // Card item
-      return fullFoodListCard(context, distance);
+      return fullFoodListCard(context, restaurantPreview!.distance);
     }
   }
 
@@ -81,10 +77,10 @@ class FoodListCard extends StatelessWidget {
   }
 
   // Full version of the FoodListCard
-  Widget fullFoodListCard(BuildContext context, double? distance) {
+  Widget fullFoodListCard(BuildContext context, num? distance) {
     String infoText = distance != null
-        ? '${restaurantPreview!.cuisine!}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
-        : '${restaurantPreview!.cuisine!}  ·  ${'\$' * restaurantPreview!.pricing}';
+        ? '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
+        : '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}';
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: SizedBox(
@@ -94,8 +90,8 @@ class FoodListCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color:
-                          Color.fromARGB(255, 233, 233, 233).withOpacity(0.5),
+                      color: const Color.fromARGB(255, 233, 233, 233)
+                          .withOpacity(0.5),
                       blurRadius: 30,
                       offset: const Offset(0, 5), // changes position of shadow
                     ),
@@ -116,6 +112,7 @@ class FoodListCard extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => FoodDisplay(
                                   restaurantId: restaurantPreview!.restaurantId,
+                                  customerId: customerId,
                                 )),
                       );
                     },
@@ -133,19 +130,30 @@ class FoodListCard extends StatelessWidget {
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                               ),
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: restaurantPreview!.restaurantLogo,
-                                  ),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: dineTimeColorScheme.primary,
-                                      width: 2),
-                                ),
+                              child: FutureBuilder(
+                                future: StorageService().getPhoto(
+                                    restaurantPreview!.restaurantLogoRef),
+                                builder: ((context,
+                                    AsyncSnapshot<ImageProvider<Object>?>
+                                        snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Container();
+                                    // On success
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return LogoDisplay(
+                                        width: 40.0,
+                                        height: 40.0,
+                                        image: snapshot.data!);
+                                    // On loading
+                                  } else {
+                                    return const LogoDisplay(
+                                      width: 40.0,
+                                      height: 40.0,
+                                      isLoading: true,
+                                    );
+                                  }
+                                }),
                               ),
                             ),
                           ),
@@ -259,9 +267,28 @@ class FoodListCard extends StatelessWidget {
                                         ),
                                       ))
                                   : Container(),
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await DatabaseService().deleteCustomerSaved(
+                                        customerId,
+                                        restaurantPreview!.restaurantId);
+                                  },
+                                  child: Container(
+                                    width: 25.0,
+                                    height: 25.0,
+                                    child: const Image(
+                                      height: 5,
+                                      width: 5,
+                                      image: AssetImage('lib/assets/trash.png'),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               const SizedBox(
                                 width: 8.0,
-                              )
+                              ),
                             ],
                           ),
                         ],

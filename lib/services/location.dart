@@ -90,7 +90,7 @@ class LocationService {
     if (location[0].administrativeArea!.isNotEmpty &&
         location[0].postalCode!.isNotEmpty) {
       locationStr =
-          "$locationStr, ${USStates.getAbbreviation(location[0].administrativeArea.toString())} ${location[0].postalCode}";
+          "$locationStr, ${location[0].administrativeArea.toString()} ${location[0].postalCode}";
     }
     return locationStr;
   }
