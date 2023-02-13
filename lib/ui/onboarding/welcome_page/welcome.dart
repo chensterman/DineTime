@@ -32,18 +32,18 @@ class Welcome extends StatelessWidget {
                   ),
                   const SizedBox(height: 50.0),
                   Text(
-                    "Ready to discover new",
+                    "Discover food you can't",
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   Text(
-                    "and exciting places to eat?",
+                    "find anywhere else.",
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   const SizedBox(height: 60.0),
                   ButtonOutlined(
-                    text: "Let's Go!",
+                    text: "It's DineTime!",
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
