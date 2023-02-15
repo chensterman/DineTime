@@ -20,9 +20,12 @@ class Start extends StatelessWidget {
     // DineTime logo displayed
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: const Center(
-        child: Image(
-          image: AssetImage('lib/assets/dinetime-combo-white.png'),
+      body: const Padding(
+        padding: EdgeInsets.all(64.0),
+        child: Center(
+          child: Image(
+            image: AssetImage('lib/assets/dinetime-combo-white.png'),
+          ),
         ),
       ),
     );
