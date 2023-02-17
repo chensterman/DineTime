@@ -2,14 +2,23 @@ import 'dart:math';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
-import 'package:us_states/us_states.dart';
+
+abstract class LocationService {
+  Stream<PermissionStatus> getLocationPermissionStatus();
+  requestUserPermission();
+  getLocationData();
+  distanceBetweenTwoPoints(GeoPoint p1, GeoPoint p2);
+  Future<GeoPoint?> addressToGeoPoint(String address);
+  Future<String?> geoPointToAddress(GeoPoint geoPoint);
+}
 
 // Contains all methods and data pertaining to user device location
-class LocationService {
+class LocationServiceApp implements LocationService {
   final Location _location = Location();
   final int _permissionInterval = 3;
 
   // Stream keeping updates on the permissioning the user has given for location
+  @override
   Stream<PermissionStatus> getLocationPermissionStatus() async* {
     yield* Stream.periodic(Duration(seconds: _permissionInterval), (_) {
       return _location.hasPermission();
@@ -18,6 +27,7 @@ class LocationService {
 
   // Enable location services on the user device and ask the user
   // for permission to access their location (native iOS or Android dialog)
+  @override
   Future<PermissionStatus> requestUserPermission() async {
     // Enable location services
     bool serviceEnabled = await _location.serviceEnabled();
@@ -33,6 +43,7 @@ class LocationService {
   }
 
   // Obtain the location of the user (null if permission not granted)
+  @override
   Future<GeoPoint?> getLocationData() async {
     try {
       LocationData locationData = await _location.getLocation();
@@ -46,16 +57,17 @@ class LocationService {
     }
   }
 
-  double geopointToRadians(double geopoint) {
+  double _geopointToRadians(double geopoint) {
     double conversionFactor = pi / 180;
     return conversionFactor * geopoint;
   }
 
+  @override
   double distanceBetweenTwoPoints(GeoPoint p1, GeoPoint p2) {
-    double radLat1 = geopointToRadians(p1.latitude);
-    double radLong1 = geopointToRadians(p1.longitude);
-    double radLat2 = geopointToRadians(p2.latitude);
-    double radLong2 = geopointToRadians(p2.longitude);
+    double radLat1 = _geopointToRadians(p1.latitude);
+    double radLong1 = _geopointToRadians(p1.longitude);
+    double radLat2 = _geopointToRadians(p2.latitude);
+    double radLong2 = _geopointToRadians(p2.longitude);
 
     // Haversine Formula
     double distLat = radLat2 - radLat1;
@@ -73,14 +85,16 @@ class LocationService {
   }
 
   // Converts address to Geopoint
-  Future<GeoPoint?> addressToGeopoint(String address) async {
+  @override
+  Future<GeoPoint?> addressToGeoPoint(String address) async {
     List<geocoding.Location> location =
         await geocoding.locationFromAddress(address);
     var geoPoint = GeoPoint(location[0].latitude, location[0].longitude);
     return geoPoint;
   }
 
-  Future<String?> geopointToAddress(GeoPoint geoPoint) async {
+  @override
+  Future<String?> geoPointToAddress(GeoPoint geoPoint) async {
     List<geocoding.Placemark> location = await geocoding
         .placemarkFromCoordinates(geoPoint.latitude, geoPoint.longitude);
     String locationStr = "";

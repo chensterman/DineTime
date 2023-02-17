@@ -3,11 +3,16 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-class StorageService {
+abstract class StorageService {
+  getPhoto(String photoPath);
+}
+
+class StorageServiceApp implements StorageService {
   // Firebase Storage instance.
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   // Retrieves the stored image from a given reference to Firebase Storage.
+  @override
   Future<ImageProvider<Object>> getPhoto(String photoPath) async {
     ImageProvider<Object> photo;
     Uint8List? photoData = await _storage.ref().child(photoPath).getData();

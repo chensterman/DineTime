@@ -2,8 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:dinetime_mobile_mvp/services/location.dart';
 
+abstract class DatabaseService {
+  createCustomer(String customerId);
+  updateCustomer(String customerId, Map<String, dynamic> customerData);
+  addCustomerFavorites(String customerId, String restaurantId);
+  deleteCustomerFavorites(String customerId, String restaurantId);
+  customerLocationAddress(String customerId);
+  Stream<DocumentSnapshot> customerStream(String customerId);
+  getRestaurant(String restaurantId, String customerId);
+  getRestaurantPreview(String restaurantId, String customerId);
+  getRestaurantsSwipe(String customerId);
+}
+
 // Contains all methods and data pertaining to the user database
-class DatabaseService {
+class DatabaseServiceApp extends DatabaseService {
   // Access to 'restaurants' collection
   final CollectionReference restaurantCollection =
       FirebaseFirestore.instance.collection('restaurants');
@@ -14,6 +26,7 @@ class DatabaseService {
   /* CUSTOMER FIRESTORE INTERACTIONS */
 
   // Add user document to 'users' collection and initialize fields
+  @override
   Future<void> createCustomer(String customerId) async {
     await customerCollection.doc(customerId).set({
       'geolocation': null,
@@ -22,13 +35,16 @@ class DatabaseService {
   }
 
   // Update user data
+  @override
   Future<void> updateCustomer(
       String customerId, Map<String, dynamic> customerData) async {
     await customerCollection.doc(customerId).update(customerData);
   }
 
   // Add saved restaurant to customer
-  Future<void> addCustomerSaved(String customerId, String restaurantId) async {
+  @override
+  Future<void> addCustomerFavorites(
+      String customerId, String restaurantId) async {
     await customerCollection.doc(customerId).update({
       'saved_businesses': FieldValue.arrayUnion([
         {'restaurant_ref': restaurantCollection.doc(restaurantId)}
@@ -37,7 +53,8 @@ class DatabaseService {
   }
 
   // Delete saved restaurant from customer
-  Future<void> deleteCustomerSaved(
+  @override
+  Future<void> deleteCustomerFavorites(
       String customerId, String restaurantId) async {
     await customerCollection.doc(customerId).update({
       'saved_businesses': FieldValue.arrayRemove([
@@ -46,6 +63,7 @@ class DatabaseService {
     });
   }
 
+  @override
   Future<String?> customerLocationAddress(String customerId) async {
     DocumentSnapshot customerDoc =
         await customerCollection.doc(customerId).get();
@@ -54,11 +72,12 @@ class DatabaseService {
     GeoPoint customerLocation = customerData['geolocation'];
 
     String? address =
-        await LocationService().geopointToAddress(customerLocation);
+        await LocationServiceApp().geoPointToAddress(customerLocation);
     return address;
   }
 
   // Stream of specific customer document
+  @override
   Stream<DocumentSnapshot> customerStream(String customerId) {
     return customerCollection.doc(customerId).snapshots();
   }
@@ -66,6 +85,7 @@ class DatabaseService {
   /* RESTAURANT FIRESTORE INTERACTIONS */
 
   // Retrieves a data from a restaurant to obtain a RestaurantPreview object
+  @override
   Future<r.RestaurantPreview> getRestaurantPreview(
       String restaurantId, String customerId) async {
     DocumentSnapshot customerDoc =
@@ -94,7 +114,7 @@ class DatabaseService {
     if (restaurantLocationDataRaw.isNotEmpty) {
       for (Object location in restaurantLocationDataRaw) {
         Map<String, dynamic> locationMap = location as Map<String, dynamic>;
-        num? distance = LocationService()
+        num? distance = LocationServiceApp()
             .distanceBetweenTwoPoints(location['geocode'], customerLocation);
         restaurantLocationData.add(r.PopUpLocation(
             locationId: locationMap['location_id'],
@@ -110,7 +130,7 @@ class DatabaseService {
 
     num? distance;
     if (restaurantLocationData.isNotEmpty) {
-      distance = LocationService().distanceBetweenTwoPoints(
+      distance = LocationServiceApp().distanceBetweenTwoPoints(
           restaurantLocationData[0].geocode, customerLocation);
     }
 
@@ -129,6 +149,7 @@ class DatabaseService {
     );
   }
 
+  @override
   Future<r.Restaurant> getRestaurant(
       String restaurantId, String customerId) async {
     DocumentSnapshot customerDoc =
@@ -182,7 +203,7 @@ class DatabaseService {
     List locationsRaw = restaurantData['upcoming_locations'];
     List<r.PopUpLocation> upcomingLocations = [];
     for (Map<String, dynamic> locationRaw in locationsRaw) {
-      num? distance = LocationService()
+      num? distance = LocationServiceApp()
           .distanceBetweenTwoPoints(locationRaw['geocode'], customerLocation);
       upcomingLocations.add(
         r.PopUpLocation(
@@ -200,7 +221,7 @@ class DatabaseService {
 
     num? distance;
     if (upcomingLocations.isNotEmpty) {
-      distance = LocationService().distanceBetweenTwoPoints(
+      distance = LocationServiceApp().distanceBetweenTwoPoints(
           upcomingLocations[0].geocode, customerLocation);
     }
 
@@ -220,6 +241,7 @@ class DatabaseService {
         distance: distance);
   }
 
+  @override
   Future<List<r.Restaurant>> getRestaurantsSwipe(String customerId) async {
     // Get saved business document references from customer
     DocumentSnapshot customerDoc =
