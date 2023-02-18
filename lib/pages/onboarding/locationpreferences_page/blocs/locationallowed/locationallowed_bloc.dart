@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
-import 'package:dinetime_mobile_mvp/services/location.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
@@ -34,7 +32,7 @@ class LocationAllowedBloc
       // update database
       GeoPoint? userLocation = await clientLocation.getLocationData();
       String customerId = clientAuth.getCurrentUserUid()!;
-      await clientDB.updateCustomer(customerId, {
+      await clientDB.customerUpdate(customerId, {
         'geolocation': userLocation,
       });
       emit(PermissionGiven());

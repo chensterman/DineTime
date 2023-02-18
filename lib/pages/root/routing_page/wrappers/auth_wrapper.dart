@@ -1,13 +1,10 @@
-import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/signin_page/signin.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/signup_page/signup.dart';
 import 'package:flutter/material.dart';
 
 class AuthWrapper extends StatefulWidget {
-  final AuthService clientAuth;
   const AuthWrapper({
     Key? key,
-    required this.clientAuth,
   }) : super(key: key);
 
   @override
@@ -29,11 +26,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
     return isSignUp
         ? SignUp(
             callBack: callBack,
-            clientAuth: widget.clientAuth,
           )
         : SignIn(
             callBack: callBack,
-            clientAuth: widget.clientAuth,
           );
   }
 }

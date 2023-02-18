@@ -9,18 +9,8 @@ import 'package:flutter/material.dart';
 
 // Page to enable location settings
 class LocationPreferencesLayout extends StatelessWidget {
-  final AuthService clientAuth;
-  final DatabaseService clientDB;
-  final LocationService clientLocation;
-  final StorageService clientStorage;
-  final AnalyticsService clientAnalytics;
   const LocationPreferencesLayout({
     Key? key,
-    required this.clientAuth,
-    required this.clientDB,
-    required this.clientLocation,
-    required this.clientStorage,
-    required this.clientAnalytics,
   }) : super(key: key);
 
   @override
@@ -72,13 +62,7 @@ class LocationPreferencesLayout extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 const SizedBox(height: 60.0),
-                LocationPreferencesButton(
-                  clientAuth: clientAuth,
-                  clientDB: clientDB,
-                  clientLocation: clientLocation,
-                  clientStorage: clientStorage,
-                  clientAnalytics: clientAnalytics,
-                ),
+                const LocationPreferencesButton(),
               ],
             ),
           ),

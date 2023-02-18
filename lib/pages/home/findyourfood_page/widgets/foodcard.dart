@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/backgroundshadow.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/cuisinedetails.dart';
@@ -24,12 +25,12 @@ import 'upcominglocations.dart';
 class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
   final bool isFront;
-  final StorageService clientStorage;
+  final Services services;
   const FoodCard({
     Key? key,
     required this.restaurant,
     required this.isFront,
-    required this.clientStorage,
+    required this.services,
   }) : super(key: key);
 
   @override
@@ -150,7 +151,7 @@ class _FoodCardState extends State<FoodCard> {
                         width: width,
                         height: height,
                         restaurantMenu: widget.restaurant.menu,
-                        clientStorage: widget.clientStorage,
+                        services: widget.services,
                       ),
                       BackgroundShadow(width: width, height: height),
                       mainDetails(width, height)
@@ -183,7 +184,7 @@ class _FoodCardState extends State<FoodCard> {
               children: [
                 Logo(
                   restaurantLogoRef: widget.restaurant.restaurantLogoRef,
-                  clientStorage: widget.clientStorage,
+                  services: widget.services,
                 ),
                 const SizedBox(height: 18),
                 Name(
@@ -193,7 +194,6 @@ class _FoodCardState extends State<FoodCard> {
                 CuisineDetails(
                   cuisine: widget.restaurant.cuisine,
                   pricing: widget.restaurant.pricing,
-                  distance: widget.restaurant.distance,
                   color: Theme.of(context).colorScheme.background,
                 ),
                 const SizedBox(height: 18),
@@ -254,7 +254,6 @@ class _FoodCardState extends State<FoodCard> {
           CuisineDetails(
             cuisine: widget.restaurant.cuisine,
             pricing: widget.restaurant.pricing,
-            distance: widget.restaurant.distance,
             color: Theme.of(context).colorScheme.onBackground,
           ),
           const SizedBox(height: 15),
@@ -302,7 +301,6 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           Menu(
             menu: widget.restaurant.menu,
-            clientStorage: widget.clientStorage,
           ),
           const SizedBox(height: 10.0),
           const Divider(),

@@ -1,18 +1,9 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-abstract class AnalyticsService {
-  getInstance();
-  trackEvent(String eventName);
-  trackScreenView(String pageName);
-}
+import 'services.dart';
 
 class AnalyticsServiceApp extends AnalyticsService {
   final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
-
-  @override
-  FirebaseAnalytics getInstance() {
-    return _analytics;
-  }
 
   @override
   void trackEvent(String eventName) {

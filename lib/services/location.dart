@@ -3,14 +3,7 @@ import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 
-abstract class LocationService {
-  Stream<PermissionStatus> getLocationPermissionStatus();
-  requestUserPermission();
-  getLocationData();
-  distanceBetweenTwoPoints(GeoPoint p1, GeoPoint p2);
-  Future<GeoPoint?> addressToGeoPoint(String address);
-  Future<String?> geoPointToAddress(GeoPoint geoPoint);
-}
+import 'services.dart';
 
 // Contains all methods and data pertaining to user device location
 class LocationServiceApp implements LocationService {

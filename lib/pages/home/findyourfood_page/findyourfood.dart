@@ -1,24 +1,16 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/provider/cardprovider.dart';
-import 'package:dinetime_mobile_mvp/services/analytics.dart';
-import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/foodcard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FindYourFood extends StatefulWidget {
-  final AuthService clientAuth;
-  final DatabaseService clientDB;
-  final StorageService clientStorage;
-  final AnalyticsService clientAnalytics;
+  final Customer customer;
   const FindYourFood({
     Key? key,
-    required this.clientAuth,
-    required this.clientDB,
-    required this.clientStorage,
-    required this.clientAnalytics,
+    required this.customer,
   }) : super(key: key);
 
   @override
@@ -28,22 +20,21 @@ class FindYourFood extends StatefulWidget {
 class _FindYourFoodState extends State<FindYourFood> {
   @override
   Widget build(BuildContext context) {
-    widget.clientAnalytics
-        .getInstance()
-        .logScreenView(screenClass: 'FYF', screenName: 'FYFPage');
+    Services services = Provider.of<Services>(context);
+    services.clientAnalytics.trackScreenView('FYFPage');
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            topLocationBar(),
+            topLocationBar(context),
             const SizedBox(
               height: 20.0,
             ),
             ChangeNotifierProvider(
               create: (context) => CardProvider(
-                customerId: widget.clientAuth.getCurrentUserUid()!,
-                clientDB: widget.clientDB,
+                customerId: services.clientAuth.getCurrentUserUid()!,
+                clientDB: services.clientDB,
               ),
               builder: (context, child) {
                 return buildCards(context);
@@ -55,13 +46,14 @@ class _FindYourFoodState extends State<FindYourFood> {
     );
   }
 
-  Widget topLocationBar() {
+  Widget topLocationBar(BuildContext context) {
+    Services services = Provider.of<Services>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         InkWell(
           onTap: () async {
-            await widget.clientAuth.signOut();
+            await services.clientAuth.signOut();
           },
           child: Container(
             width: 15.0,
@@ -80,9 +72,9 @@ class _FindYourFoodState extends State<FindYourFood> {
           width: 13.0,
         ),
         FutureBuilder(
-          future: widget.clientDB
-              .customerLocationAddress(widget.clientAuth.getCurrentUserUid()!),
-          builder: (context, AsyncSnapshot<String?> snapshot) {
+          future: services.clientDB
+              .customerGet(services.clientAuth.getCurrentUserUid()!),
+          builder: (context, AsyncSnapshot<Customer?> snapshot) {
             if (snapshot.hasError) {
               return Text(
                 "Error retrieving location",
@@ -93,8 +85,9 @@ class _FindYourFoodState extends State<FindYourFood> {
               );
               // On success.
             } else if (snapshot.connectionState == ConnectionState.done) {
+              Customer customer = snapshot.data!;
               return Text(
-                snapshot.data!,
+                "TEST",
                 style: Theme.of(context)
                     .textTheme
                     .headline1
@@ -117,6 +110,7 @@ class _FindYourFoodState extends State<FindYourFood> {
 
   Widget buildCards(BuildContext context) {
     final provider = Provider.of<CardProvider>(context);
+    Services services = Provider.of<Services>(context);
     final restaurants = provider.restaurants;
 
     return restaurants.isEmpty
@@ -132,7 +126,7 @@ class _FindYourFoodState extends State<FindYourFood> {
                   (restaurant) => FoodCard(
                     restaurant: restaurant,
                     isFront: restaurants.last == restaurant,
-                    clientStorage: widget.clientStorage,
+                    services: services,
                   ),
                 )
                 .toList(),

@@ -14,8 +14,6 @@ class Restaurant {
   String? website;
   String? instagramHandle;
   String? email;
-  num? distance;
-
   Restaurant({
     required this.restaurantId,
     required this.restaurantName,
@@ -29,34 +27,6 @@ class Restaurant {
     this.website,
     this.instagramHandle,
     this.email,
-    this.distance,
-  });
-}
-
-// Restaurant preview class that only displays necessary data for the saved list cards
-class RestaurantPreview {
-  String restaurantId;
-  String restaurantName;
-  String restaurantLogoRef;
-  List<PopUpLocation> upcomingLocations;
-  int pricing;
-  String cuisine;
-  String? instagramHandle;
-  String? website;
-  String? email;
-  num? distance;
-
-  RestaurantPreview({
-    required this.restaurantId,
-    required this.restaurantName,
-    required this.restaurantLogoRef,
-    required this.upcomingLocations,
-    required this.pricing,
-    required this.cuisine,
-    this.instagramHandle,
-    this.website,
-    this.email,
-    this.distance,
   });
 }
 
@@ -67,7 +37,6 @@ class GalleryImage {
   String imageName;
   String imageDescription;
   Timestamp dateAdded;
-
   GalleryImage({
     required this.imageId,
     required this.imageDescription,
@@ -86,7 +55,6 @@ class MenuItem {
   List dietaryTags;
   String itemImageRef;
   String itemDescription;
-
   MenuItem({
     required this.itemId,
     required this.itemName,
@@ -107,8 +75,6 @@ class PopUpLocation {
   Timestamp dateAdded;
   GeoPoint geocode;
   String name;
-  num? distance;
-
   PopUpLocation({
     required this.locationId,
     required this.locationAddress,
@@ -117,7 +83,6 @@ class PopUpLocation {
     required this.dateAdded,
     required this.geocode,
     required this.name,
-    this.distance,
   });
 }
 

@@ -1,15 +1,8 @@
+import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 
-abstract class AuthService {
-  getCurrentUser();
-  getCurrentUserUid();
-  Stream<User?> streamUserState();
-  signUp(String email, String password);
-  signIn(String email, String password);
-  signOut();
-  resetPassword(String email);
-}
+import 'services.dart';
 
 //  Contains all methods and data pertaining to user authentication
 class AuthServiceApp extends AuthService {
@@ -18,8 +11,17 @@ class AuthServiceApp extends AuthService {
 
   // Get current user info if logged in - returned null if not
   @override
-  User? getCurrentUser() {
-    return _auth.currentUser;
+  UserDT? getCurrentUser() {
+    User? firebaseUser = _auth.currentUser;
+    if (firebaseUser == null) {
+      return null;
+    } else {
+      return UserDT(
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        emailVerified: firebaseUser.emailVerified,
+      );
+    }
   }
 
   @override
@@ -29,8 +31,20 @@ class AuthServiceApp extends AuthService {
 
   // Stream that listens for authentication changes
   @override
-  Stream<User?> streamUserState() {
-    return _auth.authStateChanges();
+  Stream<UserDT?> streamUserState() async* {
+    Stream<User?> firebaseUserStream = _auth.authStateChanges();
+    await for (User? firebaseUser in firebaseUserStream) {
+      if (firebaseUser == null) {
+        yield null;
+      } else {
+        UserDT user = UserDT(
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          emailVerified: firebaseUser.emailVerified,
+        );
+        yield user;
+      }
+    }
   }
 
   // Method for signing up
@@ -43,7 +57,7 @@ class AuthServiceApp extends AuthService {
 
     // Store in database
     User? user = result.user;
-    await DatabaseServiceApp().createCustomer(user!.uid);
+    await DatabaseServiceApp().customerCreate(user!.uid);
   }
 
   // Method for singing in
@@ -65,5 +79,10 @@ class AuthServiceApp extends AuthService {
   @override
   Future<void> resetPassword(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future<void> sendEmailVerification() async {
+    await _auth.currentUser?.sendEmailVerification();
   }
 }

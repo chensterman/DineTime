@@ -1,14 +1,15 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:flutter/material.dart';
 
 class Logo extends StatefulWidget {
   final String restaurantLogoRef;
-  final StorageService clientStorage;
+  final Services services;
   const Logo({
     Key? key,
     required this.restaurantLogoRef,
-    required this.clientStorage,
+    required this.services,
   }) : super(key: key);
 
   @override
@@ -24,7 +25,8 @@ class _LogoState extends State<Logo> {
     super.initState();
 
     // Assign that variable your Future.
-    _getPhoto = widget.clientStorage.getPhoto(widget.restaurantLogoRef);
+    _getPhoto =
+        widget.services.clientStorage.getPhoto(widget.restaurantLogoRef);
   }
 
   @override

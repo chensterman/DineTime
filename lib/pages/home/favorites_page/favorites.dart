@@ -1,44 +1,40 @@
-import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
+import 'package:dinetime_mobile_mvp/models/customer.dart';
+import 'package:dinetime_mobile_mvp/models/restaurant.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:provider/provider.dart';
 
-import 'widgets/foodlistcardprocess.dart';
+import 'widgets/foodlistcard.dart';
 
 // Widget that displays list of saved restaurants for logged in customer
 class Favorites extends StatelessWidget {
-  final AuthService clientAuth;
-  final DatabaseService clientDB;
-  final StorageService clientStorage;
+  final Customer customer;
   const Favorites({
     Key? key,
-    required this.clientAuth,
-    required this.clientDB,
-    required this.clientStorage,
+    required this.customer,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    Services services = Provider.of<Services>(context);
     return Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),
         color: Colors.white,
-        child: StreamBuilder<DocumentSnapshot>(
+        child: StreamBuilder<List<Restaurant>>(
           // Customer document stream
-          stream: clientDB.customerStream(clientAuth.getCurrentUserUid()!),
+          stream: services.clientDB.customerFavoritesStream(
+              services.clientAuth.getCurrentUserUid()!),
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               // On document loaded, convert document snapshot to map
-              DocumentSnapshot documentSnapshot = snapshot.data!;
-              Map<String, dynamic> data =
-                  documentSnapshot.data()! as Map<String, dynamic>;
+              List<Restaurant> restaurants = snapshot.data!;
               // Generate ListView of all saved restaurants
               return ListView.separated(
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 8.0),
-                itemCount: data['saved_businesses'].length + 1,
+                itemCount: restaurants.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     // Initial text widgetrs
@@ -68,8 +64,7 @@ class Favorites extends StatelessWidget {
                               padding: const EdgeInsets.only(
                                 left: 15,
                               ),
-                              child: Text(
-                                  '${data['saved_businesses'].length} items',
+                              child: Text('${restaurants.length} items',
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle1
@@ -86,12 +81,9 @@ class Favorites extends StatelessWidget {
                     );
                   }
                   // Return widget to process all document references
-                  return FoodListCardProcess(
-                    customerId: clientAuth.getCurrentUserUid()!,
-                    restaurantRef: data['saved_businesses'][index - 1]
-                        ['restaurant_ref'],
-                    clientStorage: clientStorage,
-                    clientDB: clientDB,
+                  return FoodListCard(
+                    customer: customer,
+                    restaurant: restaurants[index - 1],
                   );
                 },
               );

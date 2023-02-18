@@ -1,30 +1,18 @@
 import 'package:dinetime_mobile_mvp/designsystem.dart';
-import 'package:dinetime_mobile_mvp/services/analytics.dart';
-import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
-import 'package:dinetime_mobile_mvp/services/location.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/pages/home/home_page/home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // Page to conclude onboarding process
 class Welcome extends StatelessWidget {
-  final AuthService clientAuth;
-  final DatabaseService clientDB;
-  final LocationService clientLocation;
-  final StorageService clientStorage;
-  final AnalyticsService clientAnalytics;
   const Welcome({
     Key? key,
-    required this.clientAuth,
-    required this.clientDB,
-    required this.clientLocation,
-    required this.clientStorage,
-    required this.clientAnalytics,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Services services = Provider.of<Services>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SafeArea(
@@ -66,11 +54,7 @@ class Welcome extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Home(
-                            clientAuth: clientAuth,
-                            clientDB: clientDB,
-                            clientLocation: clientLocation,
-                            clientStorage: clientStorage,
-                            clientAnalytics: clientAnalytics,
+                            services: services,
                           ),
                         ),
                       );

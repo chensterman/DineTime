@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 
 enum CardStatus { like, dislike }
@@ -51,7 +51,7 @@ class CardProvider extends ChangeNotifier {
 
     switch (status) {
       case CardStatus.like:
-        clientDB.addCustomerFavorites(customerId, restaurantId);
+        clientDB.customerAddFavorite(customerId, restaurantId);
         like();
         break;
       case CardStatus.dislike:
@@ -126,7 +126,7 @@ class CardProvider extends ChangeNotifier {
   }
 
   Future resetUsers() async {
-    _restaurants = await clientDB.getRestaurantsSwipe(customerId);
+    _restaurants = await clientDB.customerSwipe(customerId);
     notifyListeners();
   }
 }

@@ -28,12 +28,12 @@ class UpcomingLocations extends StatelessWidget {
         height: 10.0,
       ));
       columnChildren.add(upcomingLocationCard(
-          context,
-          popUpLocation.locationDateStart,
-          popUpLocation.locationDateEnd,
-          popUpLocation.name,
-          popUpLocation.distance,
-          popUpLocation.locationAddress));
+        context,
+        popUpLocation.locationDateStart,
+        popUpLocation.locationDateEnd,
+        popUpLocation.name,
+        popUpLocation.locationAddress,
+      ));
       count += 1;
       if (count == 3) {
         break;
@@ -53,7 +53,6 @@ class UpcomingLocations extends StatelessWidget {
     Timestamp locationDateStart,
     Timestamp? locationDateEnd,
     String name,
-    num? distance,
     String address,
   ) {
     String periodStart = locationDateStart.toDate().hour > 12 ? "PM" : "AM";
@@ -75,9 +74,9 @@ class UpcomingLocations extends StatelessWidget {
     } else {
       "$hourStart:$minuteStart $periodStart - $hourEnd:$minuteEnd $periodEnd $timeZoneName";
     }
-
-    String infoText =
-        distance != null ? "$distance mi - $timeDisplay" : timeDisplay;
+    String infoText = "TEST";
+    // String infoText =
+    //     distance != null ? "$distance mi - $timeDisplay" : timeDisplay;
     return ListCard(
       height: 50.0,
       width: double.infinity,
@@ -167,7 +166,6 @@ class UpcomingLocations extends StatelessWidget {
           popUpLocation.locationDateStart,
           popUpLocation.locationDateEnd,
           popUpLocation.name,
-          2.0,
           popUpLocation.locationAddress));
     }
     return Padding(

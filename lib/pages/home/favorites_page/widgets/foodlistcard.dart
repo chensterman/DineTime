@@ -1,87 +1,31 @@
+import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:dinetime_mobile_mvp/pages/home/fooddisplay_page/fooddisplay.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 
 // Cards that display list items in saved
 class FoodListCard extends StatelessWidget {
-  final bool isLoading;
-  final String customerId;
-  final RestaurantPreview? restaurantPreview;
-  final StorageService clientStorage;
-  final DatabaseService clientDB;
+  final Customer customer;
+  final Restaurant restaurant;
   const FoodListCard({
     super.key,
-    required this.isLoading,
-    required this.customerId,
-    this.restaurantPreview,
-    required this.clientStorage,
-    required this.clientDB,
+    required this.customer,
+    required this.restaurant,
   });
 
   final double _cardHeight = 70.0;
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      // Loading version of FoodListCard
-      return loadingFoodListCard();
-    } else {
-      // Get distance between customer and first location
-      // If no upcoming locations, is null
-      List<PopUpLocation> upcomingLocations =
-          restaurantPreview!.upcomingLocations;
-      // Card item
-      return fullFoodListCard(context, restaurantPreview!.distance);
-    }
-  }
-
-  // Loading version of the FoodListCard
-  Widget loadingFoodListCard() {
-    return Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: SizedBox(
-            width: 70,
-            height: 70,
-            child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 233, 233, 233)
-                          .withOpacity(0.5),
-                      blurRadius: 30,
-                      offset: const Offset(0, 5), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: SizedBox(
-                    height: _cardHeight,
-                    child: const Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: SizedBox(
-                        width: 50.0,
-                        height: 50.0,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ))));
-  }
-
-  // Full version of the FoodListCard
-  Widget fullFoodListCard(BuildContext context, num? distance) {
-    String infoText = distance != null
-        ? '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
-        : '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}';
+    Services services = Provider.of<Services>(context);
+    String infoText = "TEST";
+    // String infoText = distance != null
+    //     ? '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
+    //     : '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}';
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: SizedBox(
@@ -111,12 +55,11 @@ class FoodListCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => FoodDisplay(
-                                  restaurantId: restaurantPreview!.restaurantId,
-                                  customerId: customerId,
-                                  clientStorage: clientStorage,
-                                  clientDB: clientDB,
-                                )),
+                          builder: (context) => FoodDisplay(
+                            customer: customer,
+                            restaurant: restaurant,
+                          ),
+                        ),
                       );
                     },
                     child: SizedBox(
@@ -134,8 +77,8 @@ class FoodListCard extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                               child: FutureBuilder(
-                                future: clientStorage.getPhoto(
-                                    restaurantPreview!.restaurantLogoRef),
+                                future: services.clientStorage
+                                    .getPhoto(restaurant.restaurantLogoRef),
                                 builder: ((context,
                                     AsyncSnapshot<ImageProvider<Object>?>
                                         snapshot) {
@@ -173,7 +116,7 @@ class FoodListCard extends StatelessWidget {
                                     // Text overflow works by wrapping text under Flexible widget
                                     Flexible(
                                       child: Text(
-                                        restaurantPreview!.restaurantName,
+                                        restaurant.restaurantName,
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline1
@@ -203,12 +146,12 @@ class FoodListCard extends StatelessWidget {
                           // Instagram link, website link (only shown if exists)
                           Row(
                             children: [
-                              restaurantPreview!.instagramHandle != null
+                              restaurant.instagramHandle != null
                                   ? Padding(
                                       padding: const EdgeInsets.all(6.0),
                                       child: InkWell(
                                         onTap: () => launchUrl(Uri.parse(
-                                            'https://www.instagram.com/${restaurantPreview!.instagramHandle!}')),
+                                            'https://www.instagram.com/${restaurant.instagramHandle!}')),
                                         child: Container(
                                           width: 25.0,
                                           height: 25.0,
@@ -235,12 +178,12 @@ class FoodListCard extends StatelessWidget {
                                       ),
                                     )
                                   : Container(),
-                              restaurantPreview!.website != null
+                              restaurant.website != null
                                   ? Padding(
                                       padding: const EdgeInsets.all(2.0),
                                       child: InkWell(
                                         onTap: () => launchUrl(Uri.parse(
-                                            'https://${restaurantPreview!.website!}')),
+                                            'https://${restaurant.website!}')),
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(right: 0),
@@ -274,9 +217,10 @@ class FoodListCard extends StatelessWidget {
                                 padding: const EdgeInsets.all(6.0),
                                 child: InkWell(
                                   onTap: () async {
-                                    await clientDB.deleteCustomerFavorites(
-                                        customerId,
-                                        restaurantPreview!.restaurantId);
+                                    await services.clientDB
+                                        .customerDeleteFavorite(
+                                            customer.customerId,
+                                            restaurant.restaurantId);
                                   },
                                   child: Container(
                                     width: 25.0,

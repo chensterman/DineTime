@@ -1,18 +1,19 @@
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:provider/provider.dart';
 
 class Menu extends StatelessWidget {
   final List<r.MenuItem> menu;
-  final StorageService clientStorage;
-  Menu({
+  const Menu({
     Key? key,
     required this.menu,
-    required this.clientStorage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Services services = Provider.of<Services>(context);
     List<Widget> columnChildren = [];
     num count = 0;
     for (r.MenuItem menuItem in menu) {
@@ -22,7 +23,7 @@ class Menu extends StatelessWidget {
         price: menuItem.itemPrice,
         itemImageRef: menuItem.itemImageRef,
         dietaryTags: menuItem.dietaryTags,
-        clientStorage: clientStorage,
+        clientStorage: services.clientStorage,
       ));
       columnChildren.add(
         const Divider(
@@ -68,6 +69,7 @@ class Menu extends StatelessWidget {
   }
 
   Widget menuButton(BuildContext context) {
+    Services services = Provider.of<Services>(context);
     List<Widget> columnChildren = [];
     for (r.MenuItem menuItem in menu) {
       columnChildren.add(const SizedBox(
@@ -79,7 +81,7 @@ class Menu extends StatelessWidget {
         price: menuItem.itemPrice,
         itemImageRef: menuItem.itemImageRef,
         dietaryTags: menuItem.dietaryTags,
-        clientStorage: clientStorage,
+        clientStorage: services.clientStorage,
       ));
       columnChildren.add(
         const SizedBox(height: 12.0),

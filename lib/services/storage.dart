@@ -3,9 +3,7 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-abstract class StorageService {
-  getPhoto(String photoPath);
-}
+import 'services.dart';
 
 class StorageServiceApp implements StorageService {
   // Firebase Storage instance.

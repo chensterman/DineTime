@@ -12,18 +12,9 @@ import 'package:provider/provider.dart';
 
 // Page confirming email has been verified
 class EmailVerified extends StatelessWidget {
-  final LocationService clientLocation;
-  final AuthService clientAuth;
-  final DatabaseService clientDB;
-  final StorageService clientStorage;
-  final AnalyticsService clientAnalytics;
-  const EmailVerified(
-      {super.key,
-      required this.clientLocation,
-      required this.clientAuth,
-      required this.clientDB,
-      required this.clientStorage,
-      required this.clientAnalytics});
+  const EmailVerified({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,26 +65,14 @@ class EmailVerified extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LocationPreferences(
-                            clientLocation: clientLocation,
-                            clientAuth: clientAuth,
-                            clientDB: clientDB,
-                            clientStorage: clientStorage,
-                            clientAnalytics: clientAnalytics,
-                          ),
+                          builder: (context) => const LocationPreferences(),
                         ),
                       );
                     } else {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Welcome(
-                            clientAuth: clientAuth,
-                            clientDB: clientDB,
-                            clientLocation: clientLocation,
-                            clientStorage: clientStorage,
-                            clientAnalytics: clientAnalytics,
-                          ),
+                          builder: (context) => const Welcome(),
                         ),
                       );
                     }

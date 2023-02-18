@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/emailverified_page/emailverified.dart';
@@ -14,19 +15,11 @@ import 'package:dinetime_mobile_mvp/pages/onboarding/emailverified_page/emailver
 //  Resend email is rate limited
 class VerifyEmail extends StatefulWidget {
   final String email;
-  final LocationService clientLocation;
-  final AuthService clientAuth;
-  final DatabaseService clientDB;
-  final StorageService clientStorage;
-  final AnalyticsService clientAnalytics;
+  final Services services;
   const VerifyEmail({
     Key? key,
     required this.email,
-    required this.clientLocation,
-    required this.clientAuth,
-    required this.clientDB,
-    required this.clientStorage,
-    required this.clientAnalytics,
+    required this.services,
   }) : super(key: key);
 
   @override
@@ -34,16 +27,16 @@ class VerifyEmail extends StatefulWidget {
 }
 
 class _VerifyEmailState extends State<VerifyEmail> {
-  late User user;
+  late UserDT user;
   late Timer timer;
 
   @override
   void initState() {
     // Safe to assume user is not null because in order to get to this page,
     //  User had to have been created.
-    user = widget.clientAuth.getCurrentUser()!;
+    user = widget.services.clientAuth.getCurrentUser()!;
     // Sends verification email
-    user.sendEmailVerification();
+    widget.services.clientAuth.sendEmailVerification();
 
     // Check every 5 seconds for verification
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
@@ -105,20 +98,13 @@ class _VerifyEmailState extends State<VerifyEmail> {
   // Check that a user has responded to the verification email
   Future<void> checkEmailVerified() async {
     // Reloads current user info from Firebase Authentication
-    user = widget.clientAuth.getCurrentUser()!;
-    await user.reload();
+    user = widget.services.clientAuth.getCurrentUser()!;
 
     // Send to onboarding if verified
-    if (user.emailVerified && mounted) {
+    if (user.emailVerified! && mounted) {
       timer.cancel();
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => EmailVerified(
-                clientLocation: widget.clientLocation,
-                clientAuth: widget.clientAuth,
-                clientDB: widget.clientDB,
-                clientStorage: widget.clientStorage,
-                clientAnalytics: widget.clientAnalytics,
-              )));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const EmailVerified()));
     }
   }
 }

@@ -1,18 +1,18 @@
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
-import 'package:dinetime_mobile_mvp/services/storage.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 
 class Background extends StatefulWidget {
   final double width;
   final double height;
   final List<r.MenuItem> restaurantMenu;
-  final StorageService clientStorage;
+  final Services services;
   const Background({
     Key? key,
     required this.width,
     required this.height,
     required this.restaurantMenu,
-    required this.clientStorage,
+    required this.services,
   }) : super(key: key);
 
   @override
@@ -29,8 +29,8 @@ class _BackgroundState extends State<Background> {
 
     // Assign that variable your Future.
     if (widget.restaurantMenu.isNotEmpty) {
-      _getPhoto =
-          widget.clientStorage.getPhoto(widget.restaurantMenu[0].itemImageRef);
+      _getPhoto = widget.services.clientStorage
+          .getPhoto(widget.restaurantMenu[0].itemImageRef);
     }
   }
 
