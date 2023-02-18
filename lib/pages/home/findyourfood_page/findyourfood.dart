@@ -1,4 +1,5 @@
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/pages/root/routing_page/routing.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
@@ -52,8 +53,14 @@ class _FindYourFoodState extends State<FindYourFood> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         InkWell(
-          onTap: () async {
-            await services.clientAuth.signOut();
+          onTap: () {
+            services.clientAuth.signOut();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Routing(),
+              ),
+            );
           },
           child: Container(
             width: 15.0,
@@ -72,9 +79,9 @@ class _FindYourFoodState extends State<FindYourFood> {
           width: 13.0,
         ),
         FutureBuilder(
-          future: services.clientDB
-              .customerGet(services.clientAuth.getCurrentUserUid()!),
-          builder: (context, AsyncSnapshot<Customer?> snapshot) {
+          future: services.clientLocation
+              .geoPointToAddress(widget.customer.geolocation),
+          builder: (context, AsyncSnapshot<String?> snapshot) {
             if (snapshot.hasError) {
               return Text(
                 "Error retrieving location",
@@ -85,9 +92,9 @@ class _FindYourFoodState extends State<FindYourFood> {
               );
               // On success.
             } else if (snapshot.connectionState == ConnectionState.done) {
-              Customer customer = snapshot.data!;
+              String address = snapshot.data!;
               return Text(
-                "TEST",
+                address,
                 style: Theme.of(context)
                     .textTheme
                     .headline1
@@ -124,6 +131,7 @@ class _FindYourFoodState extends State<FindYourFood> {
             children: restaurants
                 .map(
                   (restaurant) => FoodCard(
+                    customer: widget.customer,
                     restaurant: restaurant,
                     isFront: restaurants.last == restaurant,
                     services: services,

@@ -1,4 +1,4 @@
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 
 // Input password text for form fields

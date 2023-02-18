@@ -1,14 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UpcomingLocations extends StatelessWidget {
   final List<PopUpLocation> popUpLocations;
+  final GeoPoint customerLocation;
   const UpcomingLocations({
     Key? key,
     required this.popUpLocations,
+    required this.customerLocation,
   }) : super(key: key);
 
   @override
@@ -29,9 +33,10 @@ class UpcomingLocations extends StatelessWidget {
       ));
       columnChildren.add(upcomingLocationCard(
         context,
+        popUpLocation.geolocation,
         popUpLocation.locationDateStart,
         popUpLocation.locationDateEnd,
-        popUpLocation.name,
+        popUpLocation.locationName,
         popUpLocation.locationAddress,
       ));
       count += 1;
@@ -50,6 +55,7 @@ class UpcomingLocations extends StatelessWidget {
 
   Widget upcomingLocationCard(
     BuildContext context,
+    GeoPoint geocode,
     Timestamp locationDateStart,
     Timestamp? locationDateEnd,
     String name,
@@ -74,9 +80,11 @@ class UpcomingLocations extends StatelessWidget {
     } else {
       "$hourStart:$minuteStart $periodStart - $hourEnd:$minuteEnd $periodEnd $timeZoneName";
     }
-    String infoText = "TEST";
-    // String infoText =
-    //     distance != null ? "$distance mi - $timeDisplay" : timeDisplay;
+
+    Services services = Provider.of<Services>(context);
+    double distance = services.clientLocation
+        .distanceBetweenTwoPoints(customerLocation, geocode);
+    String infoText = "$distance mi - $timeDisplay";
     return ListCard(
       height: 50.0,
       width: double.infinity,
@@ -163,9 +171,10 @@ class UpcomingLocations extends StatelessWidget {
       ));
       columnChildren.add(upcomingLocationCard(
           context,
+          popUpLocation.geolocation,
           popUpLocation.locationDateStart,
           popUpLocation.locationDateEnd,
-          popUpLocation.name,
+          popUpLocation.locationName,
           popUpLocation.locationAddress));
     }
     return Padding(

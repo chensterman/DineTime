@@ -32,6 +32,7 @@ class FoodDisplay extends StatelessWidget {
         ),
         body: Center(
           child: FoodCard(
+            customer: customer,
             restaurant: restaurant,
             isFront: false,
             services: services,

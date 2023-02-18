@@ -1,4 +1,4 @@
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/signin_page/blocs/input/input_bloc.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/signin_page/widgets/signin_error.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/signin_page/widgets/signin_loading.dart';

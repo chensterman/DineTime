@@ -1,4 +1,4 @@
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/locationpreferences_page/blocs/locationallowed/locationallowed_bloc.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/locationpreferences_page/widgets/locationpreferences_error_dialog.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/welcome_page/welcome.dart';

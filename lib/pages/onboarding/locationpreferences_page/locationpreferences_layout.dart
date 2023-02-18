@@ -1,4 +1,4 @@
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';

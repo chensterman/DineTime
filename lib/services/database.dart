@@ -131,43 +131,61 @@ class DatabaseServiceApp extends DatabaseService {
       String instagramHandle = restaurantData['instagram_handle'];
       String email = restaurantData['email'];
       // Get restaurant gallery
-      List galleryRaw = restaurantData['gallery'];
       List<r.GalleryImage> gallery = [];
-      for (Map<String, dynamic> imageRaw in galleryRaw) {
-        gallery.add(r.GalleryImage(
-            imageId: imageRaw['photo_id'],
-            imageName: imageRaw['photo_name'],
-            imageRef: imageRaw['photo_location'],
-            imageDescription: imageRaw['photo_description'],
-            dateAdded: imageRaw['date_added']));
+      QuerySnapshot galleryQuery = await restaurantCollection
+          .doc(restaurantId)
+          .collection("gallery")
+          .orderBy("timestamp")
+          .get();
+      for (DocumentSnapshot doc in galleryQuery.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        gallery.add(
+          r.GalleryImage(
+            imageId: doc.id,
+            imageName: data["image_name"],
+            imageRef: data["image_ref"],
+            imageDescription: data["image_desc"],
+            timestamp: data["timestamp"],
+          ),
+        );
       }
       // Get restaurant menu
-      List menuRaw = restaurantData['menu'];
       List<r.MenuItem> menu = [];
-      for (Map<String, dynamic> menuItemRaw in menuRaw) {
+      QuerySnapshot menuQuery = await restaurantCollection
+          .doc(restaurantId)
+          .collection("menu")
+          .orderBy("timestamp")
+          .get();
+      for (DocumentSnapshot doc in menuQuery.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         menu.add(r.MenuItem(
-          dateAdded: menuItemRaw['date_added'],
-          dietaryTags: menuItemRaw['dietary_tags'],
-          itemDescription: menuItemRaw['item_description'],
-          itemId: menuItemRaw['item_id'],
-          itemName: menuItemRaw['item_name'],
-          itemPrice: menuItemRaw['item_price'],
-          itemImageRef: menuItemRaw['photo_location'],
+          timestamp: data["timestamp"],
+          dietaryTags: data["dietary_tags"],
+          itemDescription: data['item_desc'],
+          itemId: doc.id,
+          itemName: data["item_name"],
+          itemPrice: data["item_price"],
+          itemImageRef: data["item_image_ref"],
         ));
       }
       // Get restaurant lcoations
-      List locationsRaw = restaurantData['upcoming_locations'];
       List<r.PopUpLocation> upcomingLocations = [];
-      for (Map<String, dynamic> locationRaw in locationsRaw) {
+      QuerySnapshot locationsQuery = await restaurantCollection
+          .doc(restaurantId)
+          .collection("locations")
+          .orderBy("date_start")
+          .get();
+      for (DocumentSnapshot doc in locationsQuery.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         upcomingLocations.add(
           r.PopUpLocation(
-            locationId: locationRaw['location_id'],
-            locationAddress: locationRaw['address'],
-            locationDateStart: locationRaw['date_start'],
-            locationDateEnd: locationRaw['date_end'],
-            dateAdded: locationRaw['date_added'],
-            geocode: locationRaw['geocode'],
-            name: locationRaw['name'],
+            locationId: doc.id,
+            locationAddress: data["location_address"],
+            locationDateStart: data["location_date_start"],
+            locationDateEnd: data["location_date_end"],
+            timestamp: data["timestamp"],
+            geolocation: data['geolocation'],
+            locationName: data['location_name'],
           ),
         );
       }

@@ -36,12 +36,12 @@ class GalleryImage {
   String imageRef;
   String imageName;
   String imageDescription;
-  Timestamp dateAdded;
+  Timestamp timestamp;
   GalleryImage({
     required this.imageId,
     required this.imageDescription,
     required this.imageRef,
-    required this.dateAdded,
+    required this.timestamp,
     required this.imageName,
   });
 }
@@ -51,7 +51,7 @@ class MenuItem {
   String itemId;
   String itemName;
   num itemPrice;
-  Timestamp dateAdded;
+  Timestamp timestamp;
   List dietaryTags;
   String itemImageRef;
   String itemDescription;
@@ -59,7 +59,7 @@ class MenuItem {
     required this.itemId,
     required this.itemName,
     required this.itemPrice,
-    required this.dateAdded,
+    required this.timestamp,
     required this.dietaryTags,
     required this.itemImageRef,
     required this.itemDescription,
@@ -72,17 +72,17 @@ class PopUpLocation {
   String locationAddress;
   Timestamp locationDateStart;
   Timestamp locationDateEnd;
-  Timestamp dateAdded;
-  GeoPoint geocode;
-  String name;
+  Timestamp timestamp;
+  GeoPoint geolocation;
+  String locationName;
   PopUpLocation({
     required this.locationId,
     required this.locationAddress,
     required this.locationDateStart,
     required this.locationDateEnd,
-    required this.dateAdded,
-    required this.geocode,
-    required this.name,
+    required this.timestamp,
+    required this.geolocation,
+    required this.locationName,
   });
 }
 

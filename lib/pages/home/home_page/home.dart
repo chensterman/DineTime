@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';

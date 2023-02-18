@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/backgroundshadow.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/cuisinedetails.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/dietary.dart';
@@ -23,11 +23,13 @@ import 'stamps.dart';
 import 'upcominglocations.dart';
 
 class FoodCard extends StatefulWidget {
+  final Customer customer;
   final r.Restaurant restaurant;
   final bool isFront;
   final Services services;
   const FoodCard({
     Key? key,
+    required this.customer,
     required this.restaurant,
     required this.isFront,
     required this.services,
@@ -194,13 +196,15 @@ class _FoodCardState extends State<FoodCard> {
                 CuisineDetails(
                   cuisine: widget.restaurant.cuisine,
                   pricing: widget.restaurant.pricing,
+                  customerLocation: widget.customer.geolocation,
+                  locations: widget.restaurant.upcomingLocations,
                   color: Theme.of(context).colorScheme.background,
                 ),
                 const SizedBox(height: 18),
                 widget.restaurant.upcomingLocations.isNotEmpty
                     ? NextLocation(
                         locationName:
-                            widget.restaurant.upcomingLocations[0].name,
+                            widget.restaurant.upcomingLocations[0].locationName,
                         imagePath: 'lib/assets/location_white.png',
                         color: Theme.of(context).colorScheme.background,
                       )
@@ -254,12 +258,15 @@ class _FoodCardState extends State<FoodCard> {
           CuisineDetails(
             cuisine: widget.restaurant.cuisine,
             pricing: widget.restaurant.pricing,
+            customerLocation: widget.customer.geolocation,
+            locations: widget.restaurant.upcomingLocations,
             color: Theme.of(context).colorScheme.onBackground,
           ),
           const SizedBox(height: 15),
           widget.restaurant.upcomingLocations.isNotEmpty
               ? NextLocation(
-                  locationName: widget.restaurant.upcomingLocations[0].name,
+                  locationName:
+                      widget.restaurant.upcomingLocations[0].locationName,
                   imagePath: 'lib/assets/location_arrow_orange.png',
                   color: Theme.of(context).colorScheme.onBackground,
                 )
@@ -306,6 +313,7 @@ class _FoodCardState extends State<FoodCard> {
           const Divider(),
           const SizedBox(height: 10.0),
           UpcomingLocations(
+              customerLocation: widget.customer.geolocation,
               popUpLocations: widget.restaurant.upcomingLocations),
         ],
       ),

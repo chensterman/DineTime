@@ -2,7 +2,7 @@ import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/foodlistcard.dart';

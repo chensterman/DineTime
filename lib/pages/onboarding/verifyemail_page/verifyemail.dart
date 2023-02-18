@@ -1,13 +1,8 @@
 import 'dart:async';
 import 'package:dinetime_mobile_mvp/models/user.dart';
-import 'package:dinetime_mobile_mvp/services/analytics.dart';
-import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
-import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:flutter/material.dart';
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/emailverified_page/emailverified.dart';
 
 // Email verification page

@@ -7,10 +7,11 @@ import 'package:location/location.dart';
 
 class LocationServiceMock extends LocationService {
   PermissionStatus _locationPermission = PermissionStatus.denied;
+  final GeoPoint _locationData = const GeoPoint(47.60, 122.33);
 
   @override
-  Stream<PermissionStatus> getLocationPermissionStatus() async* {
-    yield _locationPermission;
+  Stream<PermissionStatus> getLocationPermissionStatus() {
+    return Stream.periodic(Duration.zero, (_) => _locationPermission);
   }
 
   @override
@@ -23,7 +24,7 @@ class LocationServiceMock extends LocationService {
   @override
   Future<GeoPoint?> getLocationData() async {
     await Future.delayed(Duration.zero);
-    return const GeoPoint(47.60, 122.33);
+    return _locationData;
   }
 
   double _geopointToRadians(double geopoint) {

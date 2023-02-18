@@ -5,7 +5,7 @@ import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Cards that display list items in saved
 class FoodListCard extends StatelessWidget {
@@ -22,10 +22,16 @@ class FoodListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
-    String infoText = "TEST";
-    // String infoText = distance != null
-    //     ? '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}  ·  $distance mi'
-    //     : '${restaurantPreview!.cuisine}  ·  ${'\$' * restaurantPreview!.pricing}';
+    double? distance;
+    if (restaurant.upcomingLocations.isNotEmpty) {
+      distance = services.clientLocation.distanceBetweenTwoPoints(
+        customer.geolocation,
+        restaurant.upcomingLocations[0].geolocation,
+      );
+    }
+    String infoText = distance != null
+        ? '${restaurant.cuisine}  ·  ${'\$' * restaurant.pricing}  ·  $distance mi'
+        : '${restaurant.cuisine}  ·  ${'\$' * restaurant.pricing}';
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: SizedBox(
