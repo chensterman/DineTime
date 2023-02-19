@@ -1,13 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dinetime_mobile_mvp/models/user.dart';
+import 'package:dinetime_mobile_mvp/services/analytics.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
+import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:flutter/material.dart';
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'services/auth.dart';
 import 'services/location.dart';
-import 'ui/root/start_page/start.dart';
+import 'pages/root/start_page/start.dart';
+import 'services/services.dart';
 
 // Main function starts the app
 void main() async {
@@ -16,21 +20,37 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 // The base widget for the app using the MatieralApp class
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({
+    super.key,
+  });
+
+  final services = Services(
+    clientAuth: AuthServiceApp(),
+    clientLocation: LocationServiceApp(),
+    clientDB: DatabaseServiceApp(),
+    clientStorage: StorageServiceApp(),
+    clientAnalytics: AnalyticsServiceApp(),
+  );
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        StreamProvider<User?>.value(
-            value: AuthService().streamUserState(), initialData: null),
+        Provider(create: (context) {
+          return services;
+        }),
+        StreamProvider<UserDT?>.value(
+            value: services.clientAuth.streamUserState(), initialData: null),
         StreamProvider<PermissionStatus>.value(
-            value: LocationService().getLocationPermissionStatus(),
+            value: services.clientLocation.getLocationPermissionStatus(),
             initialData: PermissionStatus.granted),
       ],
       child: MaterialApp(

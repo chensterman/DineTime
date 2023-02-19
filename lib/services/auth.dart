@@ -1,23 +1,55 @@
+import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 
+import 'services.dart';
+
 //  Contains all methods and data pertaining to user authentication
-class AuthService {
+class AuthServiceApp extends AuthService {
   // Instantiate FirebaseAuth
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Get current user info if logged in - returned null if not
-  User? getCurrentUser() {
-    return _auth.currentUser;
+  @override
+  UserDT? getCurrentUser() {
+    User? firebaseUser = _auth.currentUser;
+    if (firebaseUser == null) {
+      return null;
+    } else {
+      return UserDT(
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        emailVerified: firebaseUser.emailVerified,
+      );
+    }
+  }
+
+  @override
+  String? getCurrentUserUid() {
+    return _auth.currentUser?.uid;
   }
 
   // Stream that listens for authentication changes
-  Stream<User?> streamUserState() {
-    return _auth.authStateChanges();
+  @override
+  Stream<UserDT?> streamUserState() async* {
+    Stream<User?> firebaseUserStream = _auth.authStateChanges();
+    await for (User? firebaseUser in firebaseUserStream) {
+      if (firebaseUser == null) {
+        yield null;
+      } else {
+        UserDT user = UserDT(
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          emailVerified: firebaseUser.emailVerified,
+        );
+        yield user;
+      }
+    }
   }
 
   // Method for signing up
   // Should be caught with try/catch for error handling
+  @override
   Future<void> signUp(String email, String password) async {
     // Obtain User object (FireAuth function)
     UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -25,24 +57,32 @@ class AuthService {
 
     // Store in database
     User? user = result.user;
-    await DatabaseService().createCustomer(user!.uid);
+    await DatabaseServiceApp().customerCreate(user!.uid);
   }
 
   // Method for singing in
   // Should be caught with try/catch for error handling
+  @override
   Future<void> signIn(String email, String password) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
   // Method for signing out
   // Should be caught with try/catch for error handling
+  @override
   Future<void> signOut() async {
     await _auth.signOut();
   }
 
   // Method for sending password reset email
   // Should be caught with try/catch for error handling
+  @override
   Future<void> resetPassword(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future<void> sendEmailVerification() async {
+    await _auth.currentUser?.sendEmailVerification();
   }
 }
