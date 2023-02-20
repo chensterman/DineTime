@@ -1,9 +1,10 @@
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/views/home/foodcard.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:dinetime_mobile_mvp/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FindYourFood extends StatefulWidget {
   const FindYourFood({Key? key}) : super(key: key);
@@ -12,15 +13,15 @@ class FindYourFood extends StatefulWidget {
 }
 
 class _FindYourFoodState extends State<FindYourFood> {
+  User user = AuthService().getCurrentUser()!;
   @override
   Widget build(BuildContext context) {
     Analytics()
         .getInstance()
-        .logScreenView(screenClass: 'FYF', screenName: 'FYFPage');
+        .logScreenView(screenClass: 'FYFPage', screenName: 'FYFPage');
     return Scaffold(
       body: ChangeNotifierProvider(
-        create: (context) =>
-            CardProvider(customerId: '03xUN3CqYlRNwukQAorq1G748h62'),
+        create: (context) => CardProvider(customerId: user.uid),
         builder: (context, child) {
           return buildCards(context);
         },

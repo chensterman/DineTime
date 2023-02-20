@@ -20,10 +20,9 @@ class SavedFood extends StatefulWidget {
 class _SavedFoodState extends State<SavedFood> {
   @override
   Widget build(BuildContext context) {
-    print("savedfood lizza");
     Analytics()
         .getInstance()
-        .logScreenView(screenClass: 'FYF', screenName: 'SavedFood');
+        .logScreenView(screenClass: 'SavedFood', screenName: 'SavedFood');
     double height = MediaQuery.of(context).size.height;
     return Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),

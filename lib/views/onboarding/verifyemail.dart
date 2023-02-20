@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
 import 'package:dinetime_mobile_mvp/views/onboarding/emailverified.dart';
+import 'package:dinetime_mobile_mvp/services/analytics_service.dart';
 
 // Email verification page
 // TODO:
@@ -94,6 +95,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
     // Send to onboarding if verified
     if (user.emailVerified && mounted) {
       timer.cancel();
+      AnalyticsService().getInstance().logEvent(name: 'completed_sign_up');
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const EmailVerified()));
     }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/provider/cardprovider.dart';
 import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/link.dart';
 
@@ -24,6 +25,19 @@ class FoodCard extends StatefulWidget {
 }
 
 class _FoodCardState extends State<FoodCard> {
+  final ScrollController _controller = ScrollController();
+  final GlobalKey _mainDetailsKey = GlobalKey();
+  final GlobalKey _additionalDetailsKey = GlobalKey();
+  final GlobalKey _aboutAndStoryKey = GlobalKey();
+  final GlobalKey _photoGalleryKey = GlobalKey();
+  final GlobalKey _dietaryOptionsKey = GlobalKey();
+  final GlobalKey _menuItemsKey = GlobalKey();
+  double _mainDetailsHeight = 0;
+  double _additionalDetailsHeight = 0;
+  double _aboutAndStoryHeight = 0;
+  double _photoGalleryHeight = 0;
+  double _dietaryOptionsHeight = 0;
+  double _menuItemsHeight = 0;
   @override
   void initState() {
     super.initState();
@@ -145,31 +159,64 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
+  // Widget buildCardHelper()
   Widget buildCard(BuildContext context) {
     // Get size of screen
     Size size = MediaQuery.of(context).size;
     double width = size.width * 0.9;
     double height = size.height * 0.7;
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Stack(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: NotificationListener<ScrollEndNotification>(
+          child: SingleChildScrollView(
+            controller: _controller,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                mainBackground(width, height),
-                mainBackgroundShadow(width, height),
-                mainDetails(width, height),
+                Stack(
+                  children: [
+                    mainBackground(width, height),
+                    mainBackgroundShadow(width, height),
+                    mainDetails(width, height),
+                  ],
+                ),
+                additionalDetails(),
               ],
             ),
-            additionalDetails(),
-          ],
-        ),
-      ),
-    );
+          ),
+          onNotification: (t) {
+            if (_controller.position.pixels >= _mainDetailsHeight &&
+                _controller.position.pixels < _additionalDetailsHeight) {
+              Analytics()
+                  .getInstance()
+                  .logScreenView(screenClass: 'MainDet', screenName: 'MainDet');
+            } else if (_controller.position.pixels >=
+                    _additionalDetailsHeight &&
+                _controller.position.pixels < _aboutAndStoryHeight) {
+              Analytics()
+                  .getInstance()
+                  .logScreenView(screenClass: 'AddtDet', screenName: 'AddtDet');
+            } else if (_controller.position.pixels >= _aboutAndStoryHeight &&
+                _controller.position.pixels < _photoGalleryHeight) {
+              Analytics().getInstance().logScreenView(
+                  screenClass: 'AboutAndStory', screenName: 'AboutAndStory');
+            } else if (_controller.position.pixels >= _photoGalleryHeight &&
+                _controller.position.pixels < _dietaryOptionsHeight) {
+              Analytics().getInstance().logScreenView(
+                  screenClass: 'PhotoGal', screenName: 'PhotoGal');
+            } else if (_controller.position.pixels >= _dietaryOptionsHeight &&
+                _controller.position.pixels < _menuItemsHeight) {
+              Analytics().getInstance().logScreenView(
+                  screenClass: 'DietOptions', screenName: 'DietOptions');
+            } else {
+              Analytics().getInstance().logScreenView(
+                  screenClass: 'UpcomingLocs', screenName: 'UpcomingLocs');
+            }
+            return true;
+          },
+        ));
   }
 
   Widget mainBackground(double width, double height) {
@@ -207,12 +254,13 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget mainDetails(double width, double height) {
-    return Container(
+    Container mainDetails = Container(
       width: width,
       height: height,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          key: _mainDetailsKey,
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -233,12 +281,15 @@ class _FoodCardState extends State<FoodCard> {
         ),
       ),
     );
+    _mainDetailsHeight = _mainDetailsKey.currentContext!.size!.height;
+    return mainDetails;
   }
 
   Widget additionalDetails() {
-    return Padding(
+    Padding additionalDetails = Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        key: _additionalDetailsKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           aboutAndStory(),
@@ -261,10 +312,14 @@ class _FoodCardState extends State<FoodCard> {
         ],
       ),
     );
+    _additionalDetailsHeight =
+        _additionalDetailsKey.currentContext!.size!.height;
+    return additionalDetails;
   }
 
   Widget aboutAndStory() {
-    return Column(
+    Column aboutAndStory = Column(
+      key: _aboutAndStoryKey,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -284,10 +339,13 @@ class _FoodCardState extends State<FoodCard> {
         ),
       ],
     );
+    _aboutAndStoryHeight = _aboutAndStoryKey.currentContext!.size!.height;
+    return aboutAndStory;
   }
 
   Widget photoGallery() {
-    return Column(
+    Column photoGallery = Column(
+      key: _photoGalleryKey,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -341,10 +399,13 @@ class _FoodCardState extends State<FoodCard> {
         ),
       ],
     );
+    _photoGalleryHeight = _photoGalleryKey.currentContext!.size!.height;
+    return photoGallery;
   }
 
   Widget dietaryOptions() {
-    return Column(
+    Column dietaryOptions = Column(
+      key: _dietaryOptionsKey,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -443,10 +504,13 @@ class _FoodCardState extends State<FoodCard> {
         ),
       ],
     );
+    _dietaryOptionsHeight = _dietaryOptionsKey.currentContext!.size!.height;
+    return dietaryOptions;
   }
 
   Widget menuItems() {
-    return Column(
+    Column menuItems = Column(
+      key: _menuItemsKey,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -536,6 +600,8 @@ class _FoodCardState extends State<FoodCard> {
         ),
       ],
     );
+    _menuItemsHeight = _menuItemsKey.currentContext!.size!.height;
+    return menuItems;
   }
 
   Widget upcomingLocations() {

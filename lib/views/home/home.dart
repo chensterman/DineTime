@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     Analytics()
         .getInstance()
-        .logScreenView(screenClass: 'FYF', screenName: 'Home');
+        .logScreenView(screenClass: 'Home', screenName: 'Home');
     double height = MediaQuery.of(context).size.height;
     // Widget list for bottom nav bar
     final List<Widget> pages = <Widget>[
