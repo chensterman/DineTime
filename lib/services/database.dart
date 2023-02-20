@@ -173,7 +173,7 @@ class DatabaseServiceApp extends DatabaseService {
       QuerySnapshot locationsQuery = await restaurantCollection
           .doc(restaurantId)
           .collection("locations")
-          .orderBy("date_start")
+          .orderBy("timestamp")
           .get();
       for (DocumentSnapshot doc in locationsQuery.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
