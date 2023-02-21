@@ -29,6 +29,7 @@ abstract class AuthService {
   Future<void> signOut();
   Future<void> resetPassword(String email);
   Future<void> sendEmailVerification();
+  Future<void> deleteAccount();
 }
 
 abstract class LocationService {
@@ -44,6 +45,7 @@ abstract class DatabaseService {
   Future<void> customerCreate(String customerId);
   Future<void> customerUpdate(
       String customerId, Map<String, dynamic> customerData);
+  Future<void> customerDelete(String customerId);
   Future<Customer?> customerGet(String customerId);
   Future<void> customerAddFavorite(String customerId, String restaurantId);
   Future<void> customerDeleteFavorite(String customerId, String restaurantId);

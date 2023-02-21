@@ -85,4 +85,9 @@ class AuthServiceApp extends AuthService {
   Future<void> sendEmailVerification() async {
     await _auth.currentUser?.sendEmailVerification();
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    await _auth.currentUser?.delete();
+  }
 }

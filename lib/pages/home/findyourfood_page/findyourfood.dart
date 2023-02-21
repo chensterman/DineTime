@@ -50,20 +50,14 @@ class _FindYourFoodState extends State<FindYourFood> {
 
   Widget topLocationBar(BuildContext context) {
     Services services = Provider.of<Services>(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        InkWell(
-          onTap: () {
-            services.clientAuth.signOut();
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const Routing(),
-              ),
-            );
-          },
-          child: Container(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(width: 20.0),
+          const Spacer(),
+          Container(
             width: 15.0,
             height: 15.0,
             decoration: BoxDecoration(
@@ -75,44 +69,137 @@ class _FindYourFoodState extends State<FindYourFood> {
               borderRadius: BorderRadius.circular(20.0),
             ),
           ),
-        ),
-        const SizedBox(
-          width: 13.0,
-        ),
-        FutureBuilder(
-          future: services.clientLocation
-              .geoPointToAddress(widget.customer.geolocation),
-          builder: (context, AsyncSnapshot<String?> snapshot) {
-            if (snapshot.hasError) {
-              return Text(
-                "Error retrieving location",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+          const SizedBox(
+            width: 13.0,
+          ),
+          FutureBuilder(
+            future: services.clientLocation
+                .geoPointToAddress(widget.customer.geolocation),
+            builder: (context, AsyncSnapshot<String?> snapshot) {
+              if (snapshot.hasError) {
+                return Text(
+                  "Error retrieving location",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1
+                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                );
+                // On success.
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                String address = snapshot.data!;
+                return Text(
+                  address,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1
+                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                );
+              } else {
+                return Text(
+                  "Retrieving location...",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1
+                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                );
+              }
+            },
+          ),
+          const Spacer(),
+          InkWell(
+            child: Icon(
+              Icons.settings,
+              color: Theme.of(context).colorScheme.primary,
+              size: 20.0,
+            ),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return settingsDialog(context);
+                },
               );
-              // On success.
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              String address = snapshot.data!;
-              return Text(
-                address,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
-              );
-            } else {
-              return Text(
-                "Retrieving location...",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
-              );
-            }
-          },
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget settingsDialog(BuildContext context) {
+    Services services = Provider.of<Services>(context);
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Row(
+                    children: [
+                      const Image(
+                          image: AssetImage('lib/assets/back_arrow.png'),
+                          height: 12,
+                          width: 12),
+                      const SizedBox(width: 10),
+                      Text(
+                        "Go Back",
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            fontSize: 12.0,
+                            fontFamily: 'Lato',
+                            color: Theme.of(context).colorScheme.primary),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              ButtonFilled(
+                text: "Log Out",
+                isDisabled: false,
+                onPressed: () {
+                  services.clientAuth.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Routing(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20.0),
+              ButtonFilled(
+                text: "Delete Account",
+                isDisabled: false,
+                onPressed: () {
+                  String customerId = services.clientAuth.getCurrentUserUid()!;
+                  services.clientAuth.deleteAccount();
+                  services.clientDB.customerDelete(customerId);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Routing(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20.0),
+              ButtonOutlined(
+                text: "Privacy Policy",
+                onPressed: () {},
+              ),
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 
@@ -120,7 +207,6 @@ class _FindYourFoodState extends State<FindYourFood> {
     final provider = Provider.of<CardProvider>(context);
     Services services = Provider.of<Services>(context);
     final restaurants = provider.restaurants;
-
     return restaurants.isEmpty
         ? const Expanded(
             child: Center(

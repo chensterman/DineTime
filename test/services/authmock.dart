@@ -64,4 +64,10 @@ class AuthServiceMock extends AuthService {
     );
     ;
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    await Future.delayed(Duration.zero);
+    _mockUser = null;
+  }
 }
