@@ -1,70 +1,48 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Restaurant data model
 class Restaurant {
   String restaurantId;
   String restaurantName;
-  ImageProvider<Object> restaurantLogo;
+  String bio;
+  String cuisine;
+  String restaurantLogoRef;
   int pricing;
   List<GalleryImage> gallery;
   List<MenuItem> menu;
   List<PopUpLocation> upcomingLocations;
-  String? bio;
-  String? cuisine;
   String? website;
   String? instagramHandle;
-
+  String? email;
   Restaurant({
     required this.restaurantId,
     required this.restaurantName,
-    required this.restaurantLogo,
+    required this.restaurantLogoRef,
     required this.pricing,
     required this.gallery,
     required this.menu,
     required this.upcomingLocations,
-    this.bio,
-    this.cuisine,
+    required this.bio,
+    required this.cuisine,
     this.website,
     this.instagramHandle,
-  });
-}
-
-// Restaurant preview class that only displays necessary data for the saved list cards
-class RestaurantPreview {
-  String restaurantId;
-  String restaurantName;
-  ImageProvider<Object> restaurantLogo;
-  List<PopUpLocation> upcomingLocations;
-  int pricing;
-  String? cuisine;
-  String? instagramHandle;
-  String? website;
-
-  RestaurantPreview({
-    required this.restaurantId,
-    required this.restaurantName,
-    required this.restaurantLogo,
-    required this.upcomingLocations,
-    required this.pricing,
-    this.cuisine,
-    this.instagramHandle,
-    this.website,
+    this.email,
   });
 }
 
 // Gallery image data model for restaurants
 class GalleryImage {
   String imageId;
+  String imageRef;
+  String imageName;
   String imageDescription;
-  ImageProvider<Object> image;
-  Timestamp dateAdded;
-
+  Timestamp timestamp;
   GalleryImage({
     required this.imageId,
     required this.imageDescription,
-    required this.image,
-    required this.dateAdded,
+    required this.imageRef,
+    required this.timestamp,
+    required this.imageName,
   });
 }
 
@@ -73,17 +51,18 @@ class MenuItem {
   String itemId;
   String itemName;
   num itemPrice;
-  Timestamp dateAdded;
-  ImageProvider<Object>? itemPhoto;
-  String? itemDescription;
-
+  Timestamp timestamp;
+  List dietaryTags;
+  String itemImageRef;
+  String itemDescription;
   MenuItem({
     required this.itemId,
     required this.itemName,
     required this.itemPrice,
-    required this.dateAdded,
-    this.itemPhoto,
-    this.itemDescription,
+    required this.timestamp,
+    required this.dietaryTags,
+    required this.itemImageRef,
+    required this.itemDescription,
   });
 }
 
@@ -93,17 +72,22 @@ class PopUpLocation {
   String locationAddress;
   Timestamp locationDateStart;
   Timestamp locationDateEnd;
-  Timestamp dateAdded;
-  GeoPoint geocode;
-  String name;
-
+  Timestamp timestamp;
+  GeoPoint geolocation;
+  String locationName;
   PopUpLocation({
     required this.locationId,
     required this.locationAddress,
     required this.locationDateStart,
     required this.locationDateEnd,
-    required this.dateAdded,
-    required this.geocode,
-    required this.name,
+    required this.timestamp,
+    required this.geolocation,
+    required this.locationName,
   });
 }
+
+Map<String, String> dietToImagePath = {
+  "Vegan": "lib/assets/vegan.png",
+  "Vegetarian": "lib/assets/vegetarian.png",
+  "Nut Free": "lib/assets/nut_free.png",
+};

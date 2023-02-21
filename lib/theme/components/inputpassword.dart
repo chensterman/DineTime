@@ -1,16 +1,12 @@
-import 'package:dinetime_mobile_mvp/designsystem.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 
 // Input password text for form fields
 class InputPassword extends StatefulWidget {
-  final FormFieldValidator<String>? validator;
-  final TextEditingController? editingController;
   final ValueChanged<String>? onChanged;
   final String? hintText;
   const InputPassword({
     super.key,
-    this.validator,
-    this.editingController,
     this.onChanged,
     this.hintText,
   });
@@ -41,9 +37,7 @@ class _InputPasswordState extends State<InputPassword> {
       ),
       TextFormField(
         obscureText: passObscure,
-        controller: widget.editingController,
         cursorColor: Theme.of(context).colorScheme.onBackground,
-        validator: widget.validator,
         onChanged: widget.onChanged,
         style: Theme.of(context)
             .textTheme

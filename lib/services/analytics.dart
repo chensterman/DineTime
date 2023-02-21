@@ -1,11 +1,11 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-class Analytics {
-  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
-  FirebaseAnalytics getInstance() {
-    return _analytics;
-  }
+import 'services.dart';
 
+class AnalyticsServiceApp extends AnalyticsService {
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+
+  @override
   void trackEvent(String eventName) {
     _analytics.logEvent(
       name: eventName,
@@ -13,7 +13,8 @@ class Analytics {
     );
   }
 
-  void trackScreenView(String pageName) {
-    _analytics.logScreenView(screenName: pageName);
+  @override
+  void trackScreenView(String pageName, String screenClass) {
+    _analytics.logScreenView(screenName: pageName, screenClass: screenClass);
   }
 }

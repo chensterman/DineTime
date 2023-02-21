@@ -1,14 +1,11 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+
+import 'services.dart';
 
 // Contains all methods and data pertaining to the user database
-class DatabaseService {
-  // Firebase Storage instance.
-  final FirebaseStorage _storage = FirebaseStorage.instance;
+class DatabaseServiceApp extends DatabaseService {
   // Access to 'restaurants' collection
   final CollectionReference restaurantCollection =
       FirebaseFirestore.instance.collection('restaurants');
@@ -16,198 +13,197 @@ class DatabaseService {
   final CollectionReference customerCollection =
       FirebaseFirestore.instance.collection('customers');
 
-  // Retrieves the stored image from a given reference to Firebase Storage.
-  Future<ImageProvider<Object>> getPhoto(String photoPath) async {
-    ImageProvider<Object> photo;
-    Uint8List? photoData = await _storage.ref().child(photoPath).getData();
-    if (photoData == null) {
-      photo = const AssetImage('lib/assets/dinetime-orange.png');
-    } else {
-      photo = MemoryImage(photoData);
-    }
-    return photo;
-  }
-
-  /* CUSTOMER FIRESTORE INTERACTIONS */
-
   // Add user document to 'users' collection and initialize fields
-  Future<void> createCustomer(String customerId) async {
+  @override
+  Future<void> customerCreate(String customerId) async {
     await customerCollection.doc(customerId).set({
       'geolocation': null,
-      'saved_businesses': [],
     });
   }
 
-  // Update user data
-  Future<void> updateCustomer(
+  // Update customer data
+  @override
+  Future<void> customerUpdate(
       String customerId, Map<String, dynamic> customerData) async {
     await customerCollection.doc(customerId).update(customerData);
   }
 
+  // Get customer data
+  @override
+  Future<Customer?> customerGet(String customerId) async {
+    DocumentSnapshot snapshot = await customerCollection.doc(customerId).get();
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      return Customer(
+          customerId: snapshot.id, geolocation: data['geolocation']);
+    } else {
+      return null;
+    }
+  }
+
   // Add saved restaurant to customer
-  Future<void> addCustomerSaved(String customerId, String restaurantId) async {
-    await customerCollection.doc(customerId).update({
-      'saved_businesses': FieldValue.arrayUnion([
-        {'restaurant_ref': restaurantCollection.doc(restaurantId)}
-      ])
+  @override
+  Future<void> customerAddFavorite(
+      String customerId, String restaurantId) async {
+    await customerCollection
+        .doc(customerId)
+        .collection("favorites")
+        .doc(restaurantId)
+        .set({
+      'timestamp': Timestamp.now(),
+      'restaurant-ref': restaurantCollection.doc(restaurantId),
     });
   }
 
   // Delete saved restaurant from customer
-  Future<void> deleteCustomerSaved(
+  @override
+  Future<void> customerDeleteFavorite(
       String customerId, String restaurantId) async {
-    await customerCollection.doc(customerId).update({
-      'saved_businesses': FieldValue.arrayRemove([
-        {'restaurant_ref': restaurantCollection.doc(restaurantId)}
-      ])
-    });
+    await customerCollection
+        .doc(customerId)
+        .collection("favorites")
+        .doc(restaurantId)
+        .delete();
   }
 
   // Stream of specific customer document
-  Stream<DocumentSnapshot> customerStream(String customerId) {
-    return customerCollection.doc(customerId).snapshots();
-  }
-
-  /* RESTAURANT FIRESTORE INTERACTIONS */
-
-  // Retrieves a data from a restaurant to obtain a RestaurantPreview object
-  Future<r.RestaurantPreview> getRestaurantPreview(String restaurantId) async {
-    // Retrieve restaurant document data
-    DocumentSnapshot restaurantSnapshot =
-        await restaurantCollection.doc(restaurantId).get();
-    Map<String, dynamic> restaurantData =
-        restaurantSnapshot.data() as Map<String, dynamic>;
-    // Isolate all fields
-    String restaurantName = restaurantData['restaurant_name'];
-    String photoPath = restaurantData['logo_location'];
-    ImageProvider<Object> restaurantLogo = await getPhoto(photoPath);
-    List restaurantLocationDataRaw = restaurantData['upcoming_locations'];
-    int pricing = restaurantData['pricing'];
-    String? cuisine = restaurantData['cuisine'];
-    String? instagramHandle = restaurantData['instagram_handle'];
-    String? website = restaurantData['website'];
-    // Refactor location data into a list of PopUpLocation objects
-    List<r.PopUpLocation> restaurantLocationData = [];
-    if (restaurantLocationDataRaw.isNotEmpty) {
-      for (Object location in restaurantLocationDataRaw) {
-        Map<String, dynamic> locationMap = location as Map<String, dynamic>;
-        restaurantLocationData.add(r.PopUpLocation(
-            locationId: locationMap['location_id'],
-            locationAddress: locationMap['address'],
-            locationDateStart: locationMap['date_start'],
-            locationDateEnd: locationMap['date_end'],
-            dateAdded: locationMap['date_added'],
-            geocode: locationMap['geocode'],
-            name: locationMap['name']));
+  @override
+  Stream<List<r.Restaurant>> customerFavoritesStream(String customerId) async* {
+    Stream<QuerySnapshot> customerFavoritesStream = customerCollection
+        .doc(customerId)
+        .collection('favorites')
+        .orderBy('timestamp')
+        .snapshots();
+    await for (QuerySnapshot querySnapshot in customerFavoritesStream) {
+      List<r.Restaurant> restaurantList = [];
+      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        r.Restaurant? restaurant = await restaurantGet(documentSnapshot.id);
+        if (restaurant != null) {
+          restaurantList.add(restaurant);
+        }
       }
+      yield restaurantList;
     }
-    // Construct and return RestaurantPreview object
-    return r.RestaurantPreview(
-        restaurantId: restaurantId,
-        restaurantName: restaurantName,
-        restaurantLogo: restaurantLogo,
-        upcomingLocations: restaurantLocationData,
-        pricing: pricing,
-        cuisine: cuisine,
-        instagramHandle: instagramHandle,
-        website: website);
   }
 
-  Future<r.Restaurant> getRestaurant(String restaurantId) async {
-    DocumentSnapshot restaurantSnapshot =
-        await restaurantCollection.doc(restaurantId).get();
-    // Get initial restaurant information
-    Map<String, dynamic> restaurantData =
-        restaurantSnapshot.data() as Map<String, dynamic>;
-    String restaurantName = restaurantData['restaurant_name'];
-    int pricing = restaurantData['pricing'];
-    ImageProvider<Object> restaurantLogo =
-        await getPhoto(restaurantData['logo_location']);
-    String bio = restaurantData['restaurant_bio'];
-    String cuisine = restaurantData['cuisine'];
-    String website = restaurantData['website'];
-    String instagramHandle = restaurantData['instagram_handle'];
-
-    // Get restaurant gallery
-    List galleryRaw = restaurantData['gallery'];
-    List<r.GalleryImage> gallery = [];
-    for (Map<String, dynamic> imageRaw in galleryRaw) {
-      gallery.add(r.GalleryImage(
-          imageId: imageRaw['photo_id'],
-          image: await getPhoto(imageRaw['photo_location']),
-          imageDescription: imageRaw['photo_description'],
-          dateAdded: imageRaw['date_added']));
-    }
-
-    // Get restaurant menu
-    List menuRaw = restaurantData['menu'];
-    List<r.MenuItem> menu = [];
-    for (Map<String, dynamic> menuItemRaw in menuRaw) {
-      menu.add(r.MenuItem(
-        dateAdded: menuItemRaw['date_added'],
-        itemDescription: menuItemRaw['item_description'],
-        itemId: menuItemRaw['item_id'],
-        itemName: menuItemRaw['item_name'],
-        itemPrice: menuItemRaw['item_price'],
-        itemPhoto: await getPhoto(menuItemRaw['photo_location']),
-      ));
-    }
-
-    // Get restaurant lcoations
-    List locationsRaw = restaurantData['upcoming_locations'];
-    List<r.PopUpLocation> upcomingLocations = [];
-    for (Map<String, dynamic> locationRaw in locationsRaw) {
-      upcomingLocations.add(r.PopUpLocation(
-          locationId: locationRaw['location_id'],
-          locationAddress: locationRaw['address'],
-          locationDateStart: locationRaw['date_start'],
-          locationDateEnd: locationRaw['date_end'],
-          dateAdded: locationRaw['date_added'],
-          geocode: locationRaw['geocode'],
-          name: locationRaw['name']));
-    }
-
-    return r.Restaurant(
-      restaurantId: restaurantId,
-      restaurantName: restaurantName,
-      restaurantLogo: restaurantLogo,
-      pricing: pricing,
-      gallery: gallery,
-      menu: menu,
-      upcomingLocations: upcomingLocations,
-      cuisine: cuisine,
-      bio: bio,
-      website: website,
-    );
-  }
-
-  Future<List<r.Restaurant>> getRestaurantsSwipe(String customerId) async {
-    // Get saved business document references from customer
-    DocumentSnapshot customerDoc =
-        await customerCollection.doc(customerId).get();
-    Map<String, dynamic> customerData =
-        customerDoc.data() as Map<String, dynamic>;
-    List customerSavedRaw = customerData['saved_businesses'];
-    Set savedRefSet =
-        customerSavedRaw.map((e) => e['restaurant_ref'].id).toSet();
-
+  // Get list of restaurants for customer to swipe on
+  @override
+  Future<List<r.Restaurant>> customerSwipe(String customerId) async {
+    // Get customer's current favorited restaurants
+    QuerySnapshot customerFavoritesQuery =
+        await customerCollection.doc(customerId).collection('favorites').get();
+    List<String> customerFavoriteDocIds =
+        customerFavoritesQuery.docs.map((doc) => doc.id).toList();
     // Get all restaurants and filter on what has already been saved by customer
     QuerySnapshot restaurantQuery = await restaurantCollection.get();
     List<DocumentSnapshot> restaurantDocs = restaurantQuery.docs;
     restaurantDocs = restaurantDocs
-        .where((snapshot) => !savedRefSet.contains(snapshot.id))
+        .where((snapshot) => !customerFavoriteDocIds.contains(snapshot.id))
         .toList();
-
     // Convert all remaining restaurant snapshots into list of Restaurant objects
     List<r.Restaurant> restaurantList = [];
     for (DocumentSnapshot snapshot in restaurantDocs) {
-      r.Restaurant restaurant = await getRestaurant(snapshot.id);
-
+      r.Restaurant? restaurant = await restaurantGet(snapshot.id);
       // Add Restaurant object to list
-      restaurantList.add(restaurant);
+      if (restaurant != null) {
+        restaurantList.add(restaurant);
+      }
     }
-
-    restaurantDocs.map((snapshot) {}).toList();
     return restaurantList;
+  }
+
+  @override
+  Future<r.Restaurant?> restaurantGet(String restaurantId) async {
+    DocumentSnapshot restaurantSnapshot =
+        await restaurantCollection.doc(restaurantId).get();
+    if (!restaurantSnapshot.exists) {
+      return null;
+    } else {
+      // Get initial restaurant information
+      Map<String, dynamic> restaurantData =
+          restaurantSnapshot.data() as Map<String, dynamic>;
+      String restaurantName = restaurantData['restaurant_name'];
+      int pricing = restaurantData['pricing'];
+      String restaurantLogoRef = restaurantData['logo_location'];
+      String bio = restaurantData['restaurant_bio'];
+      String cuisine = restaurantData['cuisine'];
+      String website = restaurantData['website'];
+      String instagramHandle = restaurantData['instagram_handle'];
+      String email = restaurantData['email'];
+      // Get restaurant gallery
+      List<r.GalleryImage> gallery = [];
+      QuerySnapshot galleryQuery = await restaurantCollection
+          .doc(restaurantId)
+          .collection("gallery")
+          .orderBy("timestamp")
+          .get();
+      for (DocumentSnapshot doc in galleryQuery.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        gallery.add(
+          r.GalleryImage(
+            imageId: doc.id,
+            imageName: data["image_name"],
+            imageRef: data["image_ref"],
+            imageDescription: data["image_desc"],
+            timestamp: data["timestamp"],
+          ),
+        );
+      }
+      // Get restaurant menu
+      List<r.MenuItem> menu = [];
+      QuerySnapshot menuQuery = await restaurantCollection
+          .doc(restaurantId)
+          .collection("menu")
+          .orderBy("timestamp")
+          .get();
+      for (DocumentSnapshot doc in menuQuery.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        menu.add(r.MenuItem(
+          timestamp: data["timestamp"],
+          dietaryTags: data["dietary_tags"],
+          itemDescription: data['item_desc'],
+          itemId: doc.id,
+          itemName: data["item_name"],
+          itemPrice: data["item_price"],
+          itemImageRef: data["item_image_ref"],
+        ));
+      }
+      // Get restaurant lcoations
+      List<r.PopUpLocation> upcomingLocations = [];
+      QuerySnapshot locationsQuery = await restaurantCollection
+          .doc(restaurantId)
+          .collection("locations")
+          .orderBy("date_start")
+          .get();
+      for (DocumentSnapshot doc in locationsQuery.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        upcomingLocations.add(
+          r.PopUpLocation(
+            locationId: doc.id,
+            locationAddress: data["location_address"],
+            locationDateStart: data["location_date_start"],
+            locationDateEnd: data["location_date_end"],
+            timestamp: data["timestamp"],
+            geolocation: data['geolocation'],
+            locationName: data['location_name'],
+          ),
+        );
+      }
+      // Return final restaurant object
+      return r.Restaurant(
+        restaurantId: restaurantId,
+        restaurantName: restaurantName,
+        restaurantLogoRef: restaurantLogoRef,
+        pricing: pricing,
+        gallery: gallery,
+        menu: menu,
+        instagramHandle: instagramHandle,
+        upcomingLocations: upcomingLocations,
+        cuisine: cuisine,
+        bio: bio,
+        website: website,
+        email: email,
+      );
+    }
   }
 }

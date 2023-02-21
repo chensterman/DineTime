@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 
 // Input text for form fields
 class InputText extends StatelessWidget {
-  final FormFieldValidator<String>? validator;
-  final TextEditingController? editingController;
   final ValueChanged<String>? onChanged;
   final String? hintText;
   final Widget? icon;
   const InputText({
     super.key,
-    this.validator,
-    this.editingController,
     this.onChanged,
     this.hintText,
     this.icon,
@@ -31,8 +27,6 @@ class InputText extends StatelessWidget {
           ),
         ),
         TextFormField(
-          validator: validator,
-          controller: editingController,
           cursorColor: Theme.of(context).colorScheme.onBackground,
           onChanged: onChanged,
           style: Theme.of(context)
