@@ -20,11 +20,16 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
+  Future<void> customerDelete(String customerId) async {
+    await Future.delayed(Duration.zero);
+  }
+
+  @override
   Future<Customer?> customerGet(String customerId) async {
     await Future.delayed(Duration.zero);
     return Customer(
       customerId: "123",
-      geolocation: const GeoPoint(47.60, 122.33),
+      geolocation: const GeoPoint(47.60, -122.33),
     );
   }
 
@@ -108,7 +113,7 @@ class DataMock {
           locationDateStart: Timestamp.now(),
           locationDateEnd: Timestamp.now(),
           timestamp: Timestamp.now(),
-          geolocation: const GeoPoint(47.60, 122.33),
+          geolocation: const GeoPoint(47.60, -122.33),
           locationName: "Location Name",
         ),
       ],
@@ -122,7 +127,7 @@ class DataMock {
     Restaurant(
       restaurantId: "1",
       restaurantName: "David Dai's",
-      restaurantLogoRef: "test/images/david_dais_logo.png",
+      restaurantLogoRef: "test/images/david_dais_logo.jpeg",
       pricing: 2,
       gallery: [
         GalleryImage(
@@ -153,7 +158,7 @@ class DataMock {
           locationDateStart: Timestamp.now(),
           locationDateEnd: Timestamp.now(),
           timestamp: Timestamp.now(),
-          geolocation: const GeoPoint(47.60, 122.33),
+          geolocation: const GeoPoint(47.60, -122.33),
           locationName: "Location Name",
         ),
       ],
@@ -164,14 +169,14 @@ class DataMock {
     Restaurant(
       restaurantId: "2",
       restaurantName: "Literal Dogshit",
-      restaurantLogoRef: "test/images/literal_dogshit_logo.png",
+      restaurantLogoRef: "test/images/dogshit.jpeg",
       pricing: 2,
       gallery: [
         GalleryImage(
           imageId: "21",
           imageDescription:
               "This is just a test gallery image. This is just a test gallery image. This is just a test gallery image.",
-          imageRef: "test/images/gallery_image.png",
+          imageRef: "test/images/gallery_image.jpeg",
           timestamp: Timestamp.now(),
           imageName: "Image Name",
         ),
@@ -183,7 +188,7 @@ class DataMock {
           itemPrice: 4,
           timestamp: Timestamp.now(),
           dietaryTags: ["Vegan"],
-          itemImageRef: "test/images/menu_item.png",
+          itemImageRef: "test/images/menu_item.jpeg",
           itemDescription:
               "This is just a test menu item. This is just a test menu item. This is just a test menu item.",
         ),
@@ -195,7 +200,7 @@ class DataMock {
           locationDateStart: Timestamp.now(),
           locationDateEnd: Timestamp.now(),
           timestamp: Timestamp.now(),
-          geolocation: const GeoPoint(47.60, 122.33),
+          geolocation: const GeoPoint(47.60, -122.33),
           locationName: "Location Name",
         ),
       ],
