@@ -16,6 +16,7 @@ class AuthServiceApp extends AuthService {
     if (firebaseUser == null) {
       return null;
     } else {
+      firebaseUser.reload();
       return UserDT(
         uid: firebaseUser.uid,
         email: firebaseUser.email,
