@@ -44,14 +44,12 @@ class _FoodCardState extends State<FoodCard> {
   double _opacity = 0.0;
   final ScrollController _controller = ScrollController();
   final GlobalKey _mainDetailsKey = GlobalKey();
-  final GlobalKey _additionalDetailsKey = GlobalKey();
   final GlobalKey _aboutAndStoryKey = GlobalKey();
   final GlobalKey _photoGalleryKey = GlobalKey();
   final GlobalKey _dietaryOptionsKey = GlobalKey();
   final GlobalKey _menuItemsKey = GlobalKey();
   final GlobalKey _upcomingLocationsKey = GlobalKey();
   double _mainDetailsHeight = 0;
-  double _additionalDetailsHeight = 0;
   double _aboutAndStoryHeight = 0;
   double _photoGalleryHeight = 0;
   double _dietaryOptionsHeight = 0;
@@ -73,12 +71,15 @@ class _FoodCardState extends State<FoodCard> {
 
   _getHeights(_) {
     _mainDetailsHeight = _mainDetailsKey.currentContext!.size!.height;
-    _additionalDetailsHeight =
-        _additionalDetailsKey.currentContext!.size!.height;
-    _aboutAndStoryHeight = _aboutAndStoryKey.currentContext!.size!.height;
-    _photoGalleryHeight = _photoGalleryKey.currentContext!.size!.height;
-    _dietaryOptionsHeight = _dietaryOptionsKey.currentContext!.size!.height;
-    _menuItemsHeight = _menuItemsKey.currentContext!.size!.height;
+    _aboutAndStoryHeight = _aboutAndStoryKey.currentContext!.size!.height + 40;
+    _photoGalleryHeight = _aboutAndStoryHeight +
+        _photoGalleryKey.currentContext!.size!.height +
+        40;
+    _dietaryOptionsHeight = _photoGalleryHeight +
+        _dietaryOptionsKey.currentContext!.size!.height +
+        40;
+    _menuItemsHeight =
+        _dietaryOptionsHeight + _menuItemsKey.currentContext!.size!.height + 40;
     _upcomingLocationsHeight =
         _upcomingLocationsKey.currentContext!.size!.height;
   }
@@ -140,6 +141,7 @@ class _FoodCardState extends State<FoodCard> {
     double width = size.width * 0.9;
     double height = size.height * 0.77;
     double scrollLimit = MediaQuery.of(context).size.height * 0.12;
+    double startTracking = MediaQuery.of(context).size.height * 0.48;
     double opacitydelta = 1.0 / scrollLimit;
 
     return Container(
@@ -156,32 +158,26 @@ class _FoodCardState extends State<FoodCard> {
             // Notifications for Analytics
 
             if (scrollNotification is ScrollEndNotification) {
-              print(_controller.position.pixels);
-              print(_mainDetailsHeight);
-              print(_additionalDetailsHeight);
-              print(_aboutAndStoryHeight);
-              print(_photoGalleryHeight);
-              print(_dietaryOptionsHeight);
-              print(_upcomingLocationsHeight);
-              if (_controller.position.pixels >= _mainDetailsHeight &&
-                  _controller.position.pixels < _additionalDetailsHeight) {
+              if (_controller.position.pixels < scrollLimit) {
+              } else if (_controller.position.pixels >= scrollLimit &&
+                  _controller.position.pixels < startTracking) {
                 widget.services.clientAnalytics
                     .trackScreenView('MainDetails', 'FYFPage');
-              } else if (_controller.position.pixels >=
-                      _additionalDetailsHeight &&
-                  _controller.position.pixels < _aboutAndStoryHeight) {
-                widget.services.clientAnalytics
-                    .trackScreenView('AddDetails', 'FYFPage');
-              } else if (_controller.position.pixels >= _aboutAndStoryHeight &&
-                  _controller.position.pixels < _photoGalleryHeight) {
+              } else if (_controller.position.pixels >= startTracking &&
+                  _controller.position.pixels <
+                      startTracking + _aboutAndStoryHeight) {
                 widget.services.clientAnalytics
                     .trackScreenView('AboutAndStory', 'FYFPage');
-              } else if (_controller.position.pixels >= _photoGalleryHeight &&
-                  _controller.position.pixels < _dietaryOptionsHeight) {
+              } else if (_controller.position.pixels >=
+                      startTracking + _aboutAndStoryHeight &&
+                  _controller.position.pixels <
+                      startTracking + _photoGalleryHeight) {
                 widget.services.clientAnalytics
                     .trackScreenView('PhotoGallery', 'FYFPage');
-              } else if (_controller.position.pixels >= _dietaryOptionsHeight &&
-                  _controller.position.pixels < _menuItemsHeight) {
+              } else if (_controller.position.pixels >=
+                      startTracking + _photoGalleryHeight &&
+                  _controller.position.pixels <
+                      startTracking + _dietaryOptionsHeight) {
                 widget.services.clientAnalytics
                     .trackScreenView('DietOptions', 'FYFPage');
               } else {
@@ -239,13 +235,13 @@ class _FoodCardState extends State<FoodCard> {
       child: Opacity(
         opacity: 1.0 - _opacity,
         child: Container(
-          key: _mainDetailsKey,
           width: width,
           height: height,
           child: Padding(
             padding: const EdgeInsets.only(
                 left: 25.0, right: 25.0, top: 30.0, bottom: 30.0),
             child: Column(
+              key: _mainDetailsKey,
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -307,7 +303,6 @@ class _FoodCardState extends State<FoodCard> {
       padding: const EdgeInsets.only(
           left: 25.0, right: 25.0, top: 15.0, bottom: 15.0),
       child: Column(
-        key: _additionalDetailsKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 5),
