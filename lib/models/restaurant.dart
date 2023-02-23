@@ -71,7 +71,7 @@ class PopUpLocation {
   String locationId;
   String locationAddress;
   Timestamp locationDateStart;
-  Timestamp locationDateEnd;
+  Timestamp? locationDateEnd;
   Timestamp timestamp;
   GeoPoint geolocation;
   String locationName;

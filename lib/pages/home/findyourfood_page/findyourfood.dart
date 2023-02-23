@@ -6,6 +6,7 @@ import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/foodcard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FindYourFood extends StatefulWidget {
   final Customer customer;
@@ -194,7 +195,10 @@ class _FindYourFoodState extends State<FindYourFood> {
               const SizedBox(height: 20.0),
               ButtonOutlined(
                 text: "Privacy Policy",
-                onPressed: () {},
+                onPressed: () => launchUrl(
+                  Uri.parse(
+                      "https://app.termly.io/document/privacy-policy/fe314525-5052-4111-b6ab-248cd2aa41c9"),
+                ),
               ),
             ],
           ),
