@@ -49,16 +49,19 @@ class _FoodCardState extends State<FoodCard> {
   final GlobalKey _photoGalleryKey = GlobalKey();
   final GlobalKey _dietaryOptionsKey = GlobalKey();
   final GlobalKey _menuItemsKey = GlobalKey();
+  final GlobalKey _upcomingLocationsKey = GlobalKey();
   double _mainDetailsHeight = 0;
   double _additionalDetailsHeight = 0;
   double _aboutAndStoryHeight = 0;
   double _photoGalleryHeight = 0;
   double _dietaryOptionsHeight = 0;
   double _menuItemsHeight = 0;
+  double _upcomingLocationsHeight = 0;
   @override
   void initState() {
     super.initState();
     if (widget.isFront) {
+      WidgetsBinding.instance.addPostFrameCallback(_getHeights);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final size = MediaQuery.of(context).size;
 
@@ -66,6 +69,18 @@ class _FoodCardState extends State<FoodCard> {
         provider.setScreenSize(size);
       });
     }
+  }
+
+  _getHeights(_) {
+    _mainDetailsHeight = _mainDetailsKey.currentContext!.size!.height;
+    _additionalDetailsHeight =
+        _additionalDetailsKey.currentContext!.size!.height;
+    _aboutAndStoryHeight = _aboutAndStoryKey.currentContext!.size!.height;
+    _photoGalleryHeight = _photoGalleryKey.currentContext!.size!.height;
+    _dietaryOptionsHeight = _dietaryOptionsKey.currentContext!.size!.height;
+    _menuItemsHeight = _menuItemsKey.currentContext!.size!.height;
+    _upcomingLocationsHeight =
+        _upcomingLocationsKey.currentContext!.size!.height;
   }
 
   @override
@@ -142,6 +157,12 @@ class _FoodCardState extends State<FoodCard> {
 
             if (scrollNotification is ScrollEndNotification) {
               print(_controller.position.pixels);
+              print(_mainDetailsHeight);
+              print(_additionalDetailsHeight);
+              print(_aboutAndStoryHeight);
+              print(_photoGalleryHeight);
+              print(_dietaryOptionsHeight);
+              print(_upcomingLocationsHeight);
               if (_controller.position.pixels >= _mainDetailsHeight &&
                   _controller.position.pixels < _additionalDetailsHeight) {
                 widget.services.clientAnalytics
@@ -213,7 +234,7 @@ class _FoodCardState extends State<FoodCard> {
   }
 
   Widget mainDetails(double width, double height) {
-    Visibility mainDetails = Visibility(
+    return Visibility(
       visible: _isMainDetailsVisible,
       child: Opacity(
         opacity: 1.0 - _opacity,
@@ -279,11 +300,10 @@ class _FoodCardState extends State<FoodCard> {
         ),
       ),
     );
-    return mainDetails;
   }
 
   Widget additionalDetails() {
-    Padding additionalDetails = Padding(
+    return Padding(
       padding: const EdgeInsets.only(
           left: 25.0, right: 25.0, top: 15.0, bottom: 15.0),
       child: Column(
@@ -340,30 +360,33 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          AboutAndStory(restaurantBio: widget.restaurant.bio),
+          AboutAndStory(
+              key: _aboutAndStoryKey, restaurantBio: widget.restaurant.bio),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          PhotoGallery(gallery: widget.restaurant.gallery),
+          PhotoGallery(
+              key: _photoGalleryKey, gallery: widget.restaurant.gallery),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          Dietary(menu: widget.restaurant.menu),
+          Dietary(key: _dietaryOptionsKey, menu: widget.restaurant.menu),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
           Menu(
+            key: _menuItemsKey,
             menu: widget.restaurant.menu,
           ),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
           UpcomingLocations(
+              key: _upcomingLocationsKey,
               customerLocation: widget.customer.geolocation,
               popUpLocations: widget.restaurant.upcomingLocations),
         ],
       ),
     );
-    return additionalDetails;
   }
 }
