@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +34,14 @@ class NextDate extends StatelessWidget {
     String nextDate =
         '${_months[locationDateStart.toDate().month - 1]} ${locationDateStart.toDate().day}, ${locationDateStart.toDate().year}';
     String daysAway =
-        '${locationDateStart.toDate().difference(DateTime.now()).inDays} days away';
+        '${locationDateStart.toDate().difference(DateTime.now()).inDays}';
+
+    if (int.parse(daysAway) < 0) {
+      daysAway = 'Event over';
+    } else {
+      daysAway = '$daysAway days away';
+    }
+
     return Row(
       children: [
         const SizedBox(width: 0.5),

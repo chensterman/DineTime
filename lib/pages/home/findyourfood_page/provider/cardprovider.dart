@@ -38,7 +38,7 @@ class CardProvider extends ChangeNotifier {
     _position += details.delta;
 
     final x = _position.dx;
-    _angle = 40 * x / _screenSize.width;
+    _angle = 3 * x;
 
     notifyListeners();
   }
@@ -83,7 +83,7 @@ class CardProvider extends ChangeNotifier {
     final y = _position.dy;
 
     if (force) {
-      const delta = 100;
+      final delta = 100;
 
       if (x >= delta) {
         return CardStatus.like;
@@ -91,7 +91,7 @@ class CardProvider extends ChangeNotifier {
         return CardStatus.dislike;
       }
     } else {
-      const delta = 20;
+      final delta = 20;
 
       if (x >= delta) {
         return CardStatus.like;

@@ -79,7 +79,8 @@ class _FoodCardState extends State<FoodCard> {
           return AnimatedContainer(
             curve: Curves.easeInOut,
             duration: Duration(milliseconds: milliseconds),
-            transform: rotatedMatrix..translate(position.dx, position.dy),
+            transform: Matrix4.translationValues(position.dx, position.dy, 0)
+              ..rotateZ(angle * pi / 180),
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -110,7 +111,7 @@ class _FoodCardState extends State<FoodCard> {
 
   Widget buildCard(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double width = size.width * 0.9;
+    double width = size.width * 0.98;
     double height = size.height * 0.77;
     double scrollLimit = MediaQuery.of(context).size.height * 0.12;
     double opacitydelta = 1.0 / scrollLimit;
@@ -151,11 +152,11 @@ class _FoodCardState extends State<FoodCard> {
                     children: [
                       Background(
                         width: width,
-                        height: height,
+                        height: height - 3,
                         restaurantMenu: widget.restaurant.menu,
                         services: widget.services,
                       ),
-                      BackgroundShadow(width: width, height: height),
+                      BackgroundShadow(width: width, height: height - 3),
                       mainDetails(width, height)
                     ],
                   ),
