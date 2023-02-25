@@ -75,7 +75,7 @@ class _FindYourFoodState extends State<FindYourFood> {
           ),
           FutureBuilder(
             future: services.clientLocation
-                .geoPointToAddress(widget.customer.geolocation),
+                .geoPointToAddress(widget.customer.geolocation!),
             builder: (context, AsyncSnapshot<String?> snapshot) {
               if (snapshot.hasError) {
                 return Text(
@@ -171,6 +171,7 @@ class _FindYourFoodState extends State<FindYourFood> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
+                      fullscreenDialog: true,
                       builder: (context) => const Routing(),
                     ),
                   );
@@ -180,16 +181,20 @@ class _FindYourFoodState extends State<FindYourFood> {
               ButtonFilled(
                 text: "Delete Account",
                 isDisabled: false,
-                onPressed: () {
+                onPressed: () async {
+                  Navigator.pop(context);
                   String customerId = services.clientAuth.getCurrentUserUid()!;
-                  services.clientAuth.deleteAccount();
-                  services.clientDB.customerDelete(customerId);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Routing(),
-                    ),
-                  );
+                  await services.clientAuth.deleteAccount();
+                  await services.clientDB.customerDelete(customerId);
+                  if (mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => const Routing(),
+                      ),
+                    );
+                  }
                 },
               ),
               const SizedBox(height: 20.0),
@@ -211,24 +216,33 @@ class _FindYourFoodState extends State<FindYourFood> {
     final provider = Provider.of<CardProvider>(context);
     Services services = Provider.of<Services>(context);
     final restaurants = provider.restaurants;
-    return restaurants.isEmpty
-        ? const Expanded(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
-        : Stack(
-            alignment: Alignment.center,
-            children: restaurants
-                .map(
-                  (restaurant) => FoodCard(
-                    customer: widget.customer,
-                    restaurant: restaurant,
-                    isFront: restaurants.last == restaurant,
-                    services: services,
-                  ),
-                )
-                .toList(),
-          );
+    final isLoading = provider.isLoading;
+    if (isLoading) {
+      return const Expanded(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else if (restaurants.isEmpty) {
+      return const Expanded(
+        child: Center(
+          child: Text("You have swiped through all of the Food Cards."),
+        ),
+      );
+    } else {
+      return Stack(
+        alignment: Alignment.center,
+        children: restaurants
+            .map(
+              (restaurant) => FoodCard(
+                customer: widget.customer,
+                restaurant: restaurant,
+                isFront: restaurants!.last == restaurant,
+                services: services,
+              ),
+            )
+            .toList(),
+      );
+    }
   }
 }

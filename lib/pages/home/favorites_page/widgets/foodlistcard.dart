@@ -25,7 +25,7 @@ class FoodListCard extends StatelessWidget {
     double? distance;
     if (restaurant.upcomingLocations.isNotEmpty) {
       distance = services.clientLocation.distanceBetweenTwoPoints(
-        customer.geolocation,
+        customer.geolocation!,
         restaurant.upcomingLocations[0].geolocation,
       );
     }
@@ -61,6 +61,7 @@ class FoodListCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => FoodDisplay(
                             customer: customer,
                             restaurant: restaurant,

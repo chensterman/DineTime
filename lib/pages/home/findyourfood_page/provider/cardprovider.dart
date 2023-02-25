@@ -8,12 +8,14 @@ enum CardStatus { like, dislike }
 
 class CardProvider extends ChangeNotifier {
   List<Restaurant> _restaurants = [];
+  bool _isLoading = false;
   bool _isDragging = false;
   double _angle = 0;
   Offset _position = Offset.zero;
   Size _screenSize = Size.zero;
 
   List<Restaurant> get restaurants => _restaurants;
+  bool get isLoading => _isLoading;
   bool get isDragging => _isDragging;
   Offset get position => _position;
   double get angle => _angle;
@@ -26,7 +28,7 @@ class CardProvider extends ChangeNotifier {
     required this.clientDB,
     required this.clientAnalytics,
   }) {
-    resetUsers();
+    _resetUsers();
   }
 
   void setScreenSize(Size screenSize) => _screenSize = screenSize;
@@ -126,13 +128,20 @@ class CardProvider extends ChangeNotifier {
   Future _nextCard() async {
     if (_restaurants.isEmpty) return;
 
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     _restaurants.removeLast();
     resetPosition();
+
+    if (_restaurants.isEmpty) {
+      await _resetUsers();
+    }
   }
 
-  Future resetUsers() async {
+  Future _resetUsers() async {
+    _isLoading = true;
+    notifyListeners();
     _restaurants = await clientDB.customerSwipe(customerId);
+    _isLoading = false;
     notifyListeners();
   }
 }

@@ -99,8 +99,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
     if (user.emailVerified! && mounted) {
       timer.cancel();
       widget.services.clientAnalytics.trackEvent('completed_sign_up');
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const EmailVerified()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => const EmailVerified(),
+      ));
     }
   }
 }

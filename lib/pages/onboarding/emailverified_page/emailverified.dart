@@ -65,6 +65,7 @@ class EmailVerified extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => const LocationPreferences(),
                         ),
                       );
@@ -72,6 +73,7 @@ class EmailVerified extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => const Welcome(),
                         ),
                       );
