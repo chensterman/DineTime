@@ -23,7 +23,7 @@ class _FindYourFoodState extends State<FindYourFood> {
   @override
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
-    services.clientAnalytics.trackScreenView('FYFPage');
+    services.clientAnalytics.trackScreenView('FYFPage', 'FYFPage');
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -37,6 +37,7 @@ class _FindYourFoodState extends State<FindYourFood> {
               create: (context) => CardProvider(
                 customerId: services.clientAuth.getCurrentUserUid()!,
                 clientDB: services.clientDB,
+                clientAnalytics: services.clientAnalytics,
               ),
               builder: (context, child) {
                 return buildCards(context);

@@ -5,5 +5,7 @@ class AnalyticsServiceMock extends AnalyticsService {
   void trackEvent(String eventName) {}
 
   @override
-  void trackScreenView(String pageName) {}
+  void trackScreenView(String pageName, String className) {
+    print("page view:" + pageName + "class: " + className);
+  }
 }

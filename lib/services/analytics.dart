@@ -14,7 +14,7 @@ class AnalyticsServiceApp extends AnalyticsService {
   }
 
   @override
-  void trackScreenView(String pageName) {
-    _analytics.logScreenView(screenName: pageName);
+  void trackScreenView(String pageName, String screenClass) {
+    _analytics.logScreenView(screenName: pageName, screenClass: screenClass);
   }
 }

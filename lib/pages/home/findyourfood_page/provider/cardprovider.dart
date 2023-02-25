@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
+import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +22,11 @@ class CardProvider extends ChangeNotifier {
 
   final String customerId;
   final DatabaseService clientDB;
+  final AnalyticsService clientAnalytics;
   CardProvider({
     required this.customerId,
     required this.clientDB,
+    required this.clientAnalytics,
   }) {
     _resetUsers();
   }
@@ -53,10 +56,13 @@ class CardProvider extends ChangeNotifier {
 
     switch (status) {
       case CardStatus.like:
+        // Add analytics code here
+        clientAnalytics.trackEvent("like_restaurant");
         clientDB.customerAddFavorite(customerId, restaurantId);
         like();
         break;
       case CardStatus.dislike:
+        clientAnalytics.trackEvent("dislike_restaurant");
         dislike();
         break;
       default:
