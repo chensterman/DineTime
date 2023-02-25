@@ -22,6 +22,7 @@ class LocationPreferencesButton extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
+              fullscreenDialog: true,
               builder: (context) => const Welcome(),
             ),
           );

@@ -17,6 +17,7 @@ class Start extends StatelessWidget {
       () {
         Navigator.of(context).push(
           MaterialPageRoute(
+            fullscreenDialog: true,
             builder: (context) => const Routing(),
           ),
         );

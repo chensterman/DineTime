@@ -196,7 +196,7 @@ class _FoodCardState extends State<FoodCard> {
                 CuisineDetails(
                   cuisine: widget.restaurant.cuisine,
                   pricing: widget.restaurant.pricing,
-                  customerLocation: widget.customer.geolocation,
+                  customerLocation: widget.customer.geolocation!,
                   locations: widget.restaurant.upcomingLocations,
                   color: Theme.of(context).colorScheme.background,
                 ),
@@ -258,7 +258,7 @@ class _FoodCardState extends State<FoodCard> {
           CuisineDetails(
             cuisine: widget.restaurant.cuisine,
             pricing: widget.restaurant.pricing,
-            customerLocation: widget.customer.geolocation,
+            customerLocation: widget.customer.geolocation!,
             locations: widget.restaurant.upcomingLocations,
             color: Theme.of(context).colorScheme.onBackground,
           ),
@@ -298,7 +298,10 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          PhotoGallery(gallery: widget.restaurant.gallery),
+          PhotoGallery(
+            gallery: widget.restaurant.gallery,
+            clientStorage: widget.services.clientStorage,
+          ),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
@@ -313,7 +316,7 @@ class _FoodCardState extends State<FoodCard> {
           const Divider(),
           const SizedBox(height: 10.0),
           UpcomingLocations(
-              customerLocation: widget.customer.geolocation,
+              customerLocation: widget.customer.geolocation!,
               popUpLocations: widget.restaurant.upcomingLocations),
         ],
       ),

@@ -53,6 +53,7 @@ class Welcome extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => Home(
                             services: services,
                           ),

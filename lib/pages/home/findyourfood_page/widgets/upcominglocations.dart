@@ -25,6 +25,15 @@ class UpcomingLocations extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
       ),
+      popUpLocations.isEmpty
+          ? Text(
+              'No upcoming locations.',
+              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    fontSize: 12.0,
+                    fontFamily: 'Lato',
+                  ),
+            )
+          : Container(),
     ];
     num count = 0;
     for (PopUpLocation popUpLocation in popUpLocations) {

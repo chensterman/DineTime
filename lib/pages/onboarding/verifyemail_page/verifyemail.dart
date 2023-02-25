@@ -98,8 +98,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
     // Send to onboarding if verified
     if (user.emailVerified! && mounted) {
       timer.cancel();
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const EmailVerified()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => const EmailVerified(),
+      ));
     }
   }
 }

@@ -49,6 +49,15 @@ class Menu extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
             ),
+            menu.isEmpty
+                ? Text(
+                    'No menu items.',
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          fontSize: 12.0,
+                          fontFamily: 'Lato',
+                        ),
+                  )
+                : Container(),
             menuButton(context),
           ],
         ),
