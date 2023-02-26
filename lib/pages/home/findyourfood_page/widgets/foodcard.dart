@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorderbutton.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/backgroundshadow.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/cuisinedetails.dart';
@@ -58,10 +59,22 @@ class _FoodCardState extends State<FoodCard> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isFront ? buildFrontCard() : buildCard(context);
+    Size size = MediaQuery.of(context).size;
+    double foodCardWidth = size.width * 0.98;
+    double foodCardHeight = size.height * 0.77;
+    return widget.isFront
+        ? buildFrontCard(
+            foodCardWidth,
+            foodCardHeight,
+          )
+        : buildCard(
+            context,
+            foodCardWidth,
+            foodCardHeight,
+          );
   }
 
-  Widget buildFrontCard() {
+  Widget buildFrontCard(double width, double height) {
     return GestureDetector(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -84,8 +97,11 @@ class _FoodCardState extends State<FoodCard> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                buildCard(context),
+                buildCard(context, width, height),
                 const Stamps(),
+                PreorderButton(
+                  fromTop: height,
+                ),
               ],
             ),
           );
@@ -109,10 +125,7 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
-  Widget buildCard(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double width = size.width * 0.98;
-    double height = size.height * 0.77;
+  Widget buildCard(BuildContext context, double width, double height) {
     double scrollLimit = MediaQuery.of(context).size.height * 0.12;
     double opacitydelta = 1.0 / scrollLimit;
 
@@ -161,6 +174,7 @@ class _FoodCardState extends State<FoodCard> {
                     ],
                   ),
                   additionalDetails(),
+                  const SizedBox(height: 70.0), // For preorder button
                 ],
               ),
             ),
