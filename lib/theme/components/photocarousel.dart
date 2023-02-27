@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 class PhotoCarousel extends StatefulWidget {
   final List<ImageProvider<Object>> images;
   final List<String> descriptions;
 
-  PhotoCarousel({required this.images, required this.descriptions});
+  const PhotoCarousel(
+      {super.key, required this.images, required this.descriptions});
 
   @override
   _PhotoCarouselState createState() => _PhotoCarouselState();
@@ -40,7 +42,7 @@ class _PhotoCarouselState extends State<PhotoCarousel> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       widget.descriptions[index],
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: dineTimeTypography.bodySmall,
                     ),
                   ),
                 ),
@@ -56,21 +58,19 @@ class _PhotoCarouselState extends State<PhotoCarousel> {
             },
           ),
         ),
-        Container(
-          child: Padding(
-            padding: EdgeInsets.all(8),
-            child: DotsIndicator(
-              dotsCount: widget.images.length,
-              position: _currentPage.toDouble(),
-              decorator: DotsDecorator(
-                size: const Size.square(8.0),
-                activeSize: const Size.square(8.0),
-                color: Theme.of(context).colorScheme.onSurface,
-                activeColor: Theme.of(context).colorScheme.primary,
-                spacing: const EdgeInsets.all(3.0),
-                activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: DotsIndicator(
+            dotsCount: widget.images.length,
+            position: _currentPage.toDouble(),
+            decorator: DotsDecorator(
+              size: const Size.square(8.0),
+              activeSize: const Size.square(8.0),
+              color: dineTimeColorScheme.onSurface,
+              activeColor: dineTimeColorScheme.primary,
+              spacing: const EdgeInsets.all(3.0),
+              activeShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
               ),
             ),
           ),

@@ -59,8 +59,8 @@ class _FindYourFoodState extends State<FindYourFood> {
           const SizedBox(width: 20.0),
           const Spacer(),
           Container(
-            width: 15.0,
-            height: 15.0,
+            width: 20.0,
+            height: 20.0,
             decoration: BoxDecoration(
               image: const DecorationImage(
                 fit: BoxFit.contain,
@@ -80,28 +80,19 @@ class _FindYourFoodState extends State<FindYourFood> {
               if (snapshot.hasError) {
                 return Text(
                   "Error retrieving location",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                  style: dineTimeTypography.headlineSmall,
                 );
                 // On success.
               } else if (snapshot.connectionState == ConnectionState.done) {
                 String address = snapshot.data!;
                 return Text(
                   address,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                  style: dineTimeTypography.headlineSmall,
                 );
               } else {
                 return Text(
                   "Retrieving location...",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                  style: dineTimeTypography.headlineSmall,
                 );
               }
             },
@@ -110,7 +101,7 @@ class _FindYourFoodState extends State<FindYourFood> {
           InkWell(
             child: Icon(
               Icons.settings,
-              color: Theme.of(context).colorScheme.primary,
+              color: dineTimeColorScheme.primary,
               size: 20.0,
             ),
             onTap: () {
@@ -153,10 +144,8 @@ class _FindYourFoodState extends State<FindYourFood> {
                       const SizedBox(width: 10),
                       Text(
                         "Go Back",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            fontSize: 12.0,
-                            fontFamily: 'Lato',
-                            color: Theme.of(context).colorScheme.primary),
+                        style: dineTimeTypography.bodySmall
+                            ?.copyWith(color: dineTimeColorScheme.primary),
                       ),
                     ],
                   ),
@@ -226,7 +215,8 @@ class _FindYourFoodState extends State<FindYourFood> {
     } else if (restaurants.isEmpty) {
       return const Expanded(
         child: Center(
-          child: Text("You have swiped through all of the Food Cards."),
+          child: Text(
+              "You have swiped through all of the food cards. Please be patient as we are onboarding new popups every month!"),
         ),
       );
     } else {

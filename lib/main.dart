@@ -53,14 +53,10 @@ class MyApp extends StatelessWidget {
             value: services.clientLocation.getLocationPermissionStatus(),
             initialData: PermissionStatus.granted),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'DineTime Demo',
-        theme: ThemeData(
-          colorScheme: dineTimeColorScheme,
-          textTheme: dineTimeTypography,
-        ),
-        home: const Start(),
+        home: Start(),
       ),
     );
   }

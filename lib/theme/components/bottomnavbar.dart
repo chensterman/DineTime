@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Bottom navigation bar
 class BottomNavBar extends StatelessWidget {
@@ -18,7 +19,7 @@ class BottomNavBar extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     // Container to add padding and reduce spacing between nav bar items
     return Container(
-      color: Theme.of(context).colorScheme.onPrimary,
+      color: dineTimeColorScheme.onPrimary,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.25),
         child: BottomNavigationBar(
@@ -27,13 +28,11 @@ class BottomNavBar extends StatelessWidget {
           elevation: 0.0,
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
-          backgroundColor: Theme.of(context).colorScheme.onPrimary,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Theme.of(context).colorScheme.onSurface,
-          selectedLabelStyle:
-              Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 12.0),
-          unselectedLabelStyle:
-              Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 12.0),
+          backgroundColor: dineTimeColorScheme.onPrimary,
+          selectedItemColor: dineTimeColorScheme.primary,
+          unselectedItemColor: dineTimeColorScheme.onSurface,
+          selectedLabelStyle: dineTimeTypography.bodySmall,
+          unselectedLabelStyle: dineTimeTypography.bodySmall,
           onTap: onTap,
         ),
       ),

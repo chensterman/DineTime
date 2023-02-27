@@ -2,6 +2,7 @@ import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 class PhotoGallery extends StatelessWidget {
   final List<GalleryImage> gallery;
@@ -43,19 +44,15 @@ class PhotoGallery extends StatelessWidget {
       children: [
         Text(
           'Photo Gallery',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-              ),
+          style: dineTimeTypography.headlineMedium,
         ),
         const SizedBox(height: 15.0),
         gallery.isEmpty
             ? Text(
                 'No gallery images.',
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                      fontSize: 12.0,
-                      fontFamily: 'Lato',
-                    ),
+                style: dineTimeTypography.bodyMedium?.copyWith(
+                  color: dineTimeColorScheme.onSurface,
+                ),
               )
             : Container(),
         InkWell(
@@ -166,8 +163,8 @@ class _PhotoCardState extends State<PhotoCard> {
           // On success
         } else if (snapshot.connectionState == ConnectionState.done) {
           return Container(
-            height: 80,
-            width: 80,
+            height: 100,
+            width: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white.withOpacity(0.5),
@@ -244,10 +241,7 @@ class _PhotoOnGalleryState extends State<PhotoOnGallery> {
         children: [
           Text(
             widget.imageName,
-            style: Theme.of(context)
-                .textTheme
-                .headline1
-                ?.copyWith(fontSize: 20.0, fontWeight: FontWeight.w500),
+            style: dineTimeTypography.headlineMedium,
           ),
           const SizedBox(height: 10),
           AspectRatio(
@@ -292,10 +286,9 @@ class _PhotoOnGalleryState extends State<PhotoOnGallery> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Text(
               widget.imageDesc,
-              style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                    fontSize: 12.0,
-                    fontFamily: 'Lato',
-                  ),
+              style: dineTimeTypography.bodyMedium?.copyWith(
+                color: dineTimeColorScheme.onSurface,
+              ),
             ),
           ),
         ],

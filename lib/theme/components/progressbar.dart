@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Progress bar indicator
 class ProgressBar extends StatelessWidget {
@@ -11,8 +12,8 @@ class ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LinearProgressIndicator(
-      backgroundColor: Theme.of(context).colorScheme.onSurface,
-      color: Theme.of(context).colorScheme.primary,
+      backgroundColor: dineTimeColorScheme.onSurface,
+      color: dineTimeColorScheme.primary,
       value: percentCompletion,
     );
   }

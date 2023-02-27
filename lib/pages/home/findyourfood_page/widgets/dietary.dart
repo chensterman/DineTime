@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 class Dietary extends StatelessWidget {
   final List<r.MenuItem> menu;
@@ -10,7 +11,7 @@ class Dietary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Set dietSet = Set();
+    Set dietSet = {};
     for (r.MenuItem menuItem in menu) {
       dietSet.addAll(menuItem.dietaryTags);
     }
@@ -24,19 +25,15 @@ class Dietary extends StatelessWidget {
       children: [
         Text(
           'Dietary Options',
-          style: Theme.of(context)
-              .textTheme
-              .headline1
-              ?.copyWith(fontSize: 18.0, fontWeight: FontWeight.w500),
+          style: dineTimeTypography.headlineMedium,
         ),
         const SizedBox(height: 10),
         wrapChildren.isEmpty
             ? Text(
                 'No dietary information.',
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                      fontSize: 12.0,
-                      fontFamily: 'Lato',
-                    ),
+                style: dineTimeTypography.bodyMedium?.copyWith(
+                  color: dineTimeColorScheme.onSurface,
+                ),
               )
             : Wrap(
                 spacing: 10.0,
@@ -50,7 +47,7 @@ class Dietary extends StatelessWidget {
   Widget dietCard(BuildContext context, String imagePath, String diet) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
-      height: 25,
+      height: 30,
       decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
@@ -62,14 +59,13 @@ class Dietary extends StatelessWidget {
         children: [
           Image.asset(
             imagePath,
-            width: 15,
-            height: 15,
+            width: 20,
+            height: 20,
           ),
           const SizedBox(width: 10),
           Text(
             diet,
-            style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                fontSize: 12.0, color: Colors.black, fontFamily: 'Lato'),
+            style: dineTimeTypography.bodyMedium,
           ),
         ],
       ),

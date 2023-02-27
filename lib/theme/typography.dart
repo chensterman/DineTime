@@ -3,29 +3,34 @@ import 'package:dinetime_mobile_mvp/theme/colorscheme.dart';
 
 // Class containing the typography of the app
 TextTheme dineTimeTypography = TextTheme(
-  headline1: TextStyle(
+  headlineLarge: TextStyle(
     fontSize: 32,
     fontFamily: 'Futura PT',
-    fontWeight: FontWeight.bold,
     color: dineTimeColorScheme.onBackground,
   ),
-  subtitle1: TextStyle(
-    fontSize: 20,
-    fontFamily: 'Lato',
-    color: dineTimeColorScheme.primary,
+  headlineMedium: TextStyle(
+    fontSize: 24,
+    fontFamily: 'Futura PT',
+    color: dineTimeColorScheme.onBackground,
   ),
-  bodyText1: TextStyle(
-    fontSize: 20,
-    fontFamily: 'Lato',
-    color: dineTimeColorScheme.onSurface,
+  headlineSmall: TextStyle(
+    fontSize: 16,
+    fontFamily: 'Futura PT',
+    color: dineTimeColorScheme.onBackground,
   ),
-  bodyText2: TextStyle(
+  bodyLarge: TextStyle(
+    fontSize: 18,
+    fontFamily: 'Lato',
+    color: dineTimeColorScheme.onBackground,
+  ),
+  bodyMedium: TextStyle(
     fontSize: 16,
     fontFamily: 'Lato',
-    color: dineTimeColorScheme.onSurface,
+    color: dineTimeColorScheme.onBackground,
   ),
-  button: const TextStyle(
-    fontSize: 20,
-    fontFamily: 'Futura PT',
+  bodySmall: TextStyle(
+    fontSize: 14,
+    fontFamily: 'Lato',
+    color: dineTimeColorScheme.onBackground,
   ),
 );

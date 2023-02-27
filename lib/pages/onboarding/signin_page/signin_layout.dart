@@ -35,12 +35,14 @@ class SignInLayout extends StatelessWidget {
                 children: [
                   Text(
                     "Sign In",
-                    style: Theme.of(context).textTheme.headline1,
+                    style: dineTimeTypography.headlineLarge,
                   ),
                   const SizedBox(height: 9.0),
                   Text(
                     "Welcome to DineTime",
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: dineTimeTypography.bodyLarge?.copyWith(
+                      color: dineTimeColorScheme.primary,
+                    ),
                   ),
                   const SizedBox(height: 27.0),
                   // Email text input widget
@@ -71,21 +73,22 @@ class SignInLayout extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         'Need an account? ',
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: dineTimeTypography.bodySmall?.copyWith(
+                          color: dineTimeColorScheme.onSurface,
+                        ),
                       ),
                       GestureDetector(
-                          onTap: () {
-                            callBack();
-                          },
-                          child: Text(
-                            'Sign Up',
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1
-                                ?.copyWith(
-                                    fontSize: 16.0,
-                                    decoration: TextDecoration.underline),
-                          )),
+                        onTap: () {
+                          callBack();
+                        },
+                        child: Text(
+                          'Sign Up',
+                          style: dineTimeTypography.bodySmall?.copyWith(
+                            color: dineTimeColorScheme.primary,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   // Display on loading

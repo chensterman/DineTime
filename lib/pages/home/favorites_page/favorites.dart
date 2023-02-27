@@ -49,13 +49,7 @@ class Favorites extends StatelessWidget {
                                   const EdgeInsets.only(left: 15, right: 15),
                               child: Text(
                                 "My Favorites",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    ?.copyWith(
-                                      fontSize: 30.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                style: dineTimeTypography.headlineLarge,
                               ),
                             ),
                             const SizedBox(
@@ -65,13 +59,12 @@ class Favorites extends StatelessWidget {
                               padding: const EdgeInsets.only(
                                 left: 15,
                               ),
-                              child: Text('${restaurants.length} items',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.copyWith(
-                                        fontSize: 15,
-                                      )),
+                              child: Text(
+                                '${restaurants.length} items',
+                                style: dineTimeTypography.bodyLarge?.copyWith(
+                                  color: dineTimeColorScheme.primary,
+                                ),
+                              ),
                             ),
                             const SizedBox(
                               height: 15,
