@@ -227,7 +227,7 @@ class _FindYourFoodState extends State<FindYourFood> {
               (restaurant) => FoodCard(
                 customer: widget.customer,
                 restaurant: restaurant,
-                isFront: restaurants!.last == restaurant,
+                isFront: restaurants.last == restaurant,
                 services: services,
               ),
             )
