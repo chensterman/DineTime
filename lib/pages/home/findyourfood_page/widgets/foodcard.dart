@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorderbutton.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/backgroundshadow.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/cuisinedetails.dart';
@@ -8,6 +9,7 @@ import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/dietary
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/logo.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/menu.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/photogallery.dart';
+import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorders.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/provider/cardprovider.dart';
@@ -41,7 +43,10 @@ class FoodCard extends StatefulWidget {
 
 class _FoodCardState extends State<FoodCard> {
   bool _isMainDetailsVisible = true;
+  bool _isTopPreorderButtonVisible = true;
+  bool _isBottomPreorderButtonVisible = false;
   double _opacity = 0.0;
+  double _opacityPreorder = 0.0;
 
   @override
   void initState() {
@@ -58,10 +63,22 @@ class _FoodCardState extends State<FoodCard> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isFront ? buildFrontCard() : buildCard(context);
+    Size size = MediaQuery.of(context).size;
+    double foodCardWidth = size.width * 0.98;
+    double foodCardHeight = size.height * 0.77;
+    return widget.isFront
+        ? buildFrontCard(
+            foodCardWidth,
+            foodCardHeight,
+          )
+        : buildCard(
+            context,
+            foodCardWidth,
+            foodCardHeight,
+          );
   }
 
-  Widget buildFrontCard() {
+  Widget buildFrontCard(double width, double height) {
     return GestureDetector(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -84,8 +101,32 @@ class _FoodCardState extends State<FoodCard> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                buildCard(context),
+                buildCard(context, width, height),
                 const Stamps(),
+                Visibility(
+                  visible: _isMainDetailsVisible,
+                  child: Positioned(
+                    top: 20, // Distance from the bottom of the stack
+                    child: Opacity(
+                      opacity: 1 - _opacityPreorder,
+                      child: Preorders(
+                        menu: widget.restaurant.menu,
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _isBottomPreorderButtonVisible,
+                  child: Positioned(
+                    bottom: 20, // Distance from the bottom of the stack
+                    child: Opacity(
+                      opacity: _opacityPreorder,
+                      child: Preorders(
+                        menu: widget.restaurant.menu,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           );
@@ -109,10 +150,7 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
-  Widget buildCard(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double width = size.width * 0.98;
-    double height = size.height * 0.77;
+  Widget buildCard(BuildContext context, double width, double height) {
     double scrollLimit = MediaQuery.of(context).size.height * 0.12;
     double opacitydelta = 1.0 / scrollLimit;
 
@@ -130,14 +168,24 @@ class _FoodCardState extends State<FoodCard> {
             if (scrollNotification.metrics.pixels >= scrollLimit) {
               setState(() {
                 _isMainDetailsVisible = false;
+                _isTopPreorderButtonVisible = false;
+                _isBottomPreorderButtonVisible = true;
               });
             } else {
               setState(() {
                 _isMainDetailsVisible = true;
                 if (scrollNotification.metrics.pixels <= 0) {
                   _opacity = 0.0;
+                  _opacityPreorder = 0.0;
+                  // } else if (scrollNotification.metrics.pixels >= 1.0) {
+                  //   _opacityPreorder = 1.0;
                 } else {
                   _opacity = scrollNotification.metrics.pixels * opacitydelta;
+                  _opacityPreorder =
+                      scrollNotification.metrics.pixels * opacitydelta;
+                }
+                if (scrollNotification.metrics.pixels >= 1.0) {
+                  _opacityPreorder = 1.0;
                 }
               });
             }
@@ -161,6 +209,7 @@ class _FoodCardState extends State<FoodCard> {
                     ],
                   ),
                   additionalDetails(),
+                  const SizedBox(height: 70.0), // For preorder button
                 ],
               ),
             ),
