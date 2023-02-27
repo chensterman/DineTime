@@ -17,6 +17,8 @@ class UpcomingLocations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Services services = Provider.of<Services>(context);
+    services.clientAnalytics.trackScreenView("UpcomingLocs", "FYFPage");
     List<Widget> columnChildren = [
       Text(
         'Upcoming Locations',

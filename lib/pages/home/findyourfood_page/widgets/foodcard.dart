@@ -182,7 +182,7 @@ class _FoodCardState extends State<FoodCard> {
                     .trackScreenView('DietOptions', 'FYFPage');
               } else {
                 widget.services.clientAnalytics
-                    .trackScreenView('UpcomingLocs', 'UpcomingLocs');
+                    .trackScreenView('UpcomingLocs', 'FYFPage');
               }
             }
             if (scrollNotification.metrics.pixels >= scrollLimit) {
@@ -361,9 +361,9 @@ class _FoodCardState extends State<FoodCard> {
           const Divider(),
           const SizedBox(height: 10.0),
           PhotoGallery(
-              key: _photoGalleryKey, 
-              gallery: widget.restaurant.gallery, 
-              clientStorage: widget.services.clientStorage,
+            key: _photoGalleryKey,
+            gallery: widget.restaurant.gallery,
+            clientStorage: widget.services.clientStorage,
           ),
           const SizedBox(height: 10.0),
           const Divider(),

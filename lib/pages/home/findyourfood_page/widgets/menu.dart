@@ -14,6 +14,7 @@ class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
+    services.clientAnalytics.trackScreenView("Menu", "FYFPage");
     List<Widget> columnChildren = [];
     num count = 0;
     for (r.MenuItem menuItem in menu) {
