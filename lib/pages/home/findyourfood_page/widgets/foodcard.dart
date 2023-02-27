@@ -159,34 +159,28 @@ class _FoodCardState extends State<FoodCard> {
 
             if (scrollNotification is ScrollEndNotification) {
               if (_controller.position.pixels < scrollLimit) {
-                print("beginning");
               } else if (_controller.position.pixels >= scrollLimit &&
                   _controller.position.pixels < startTracking) {
-                print("MainDetails");
                 widget.services.clientAnalytics
                     .trackScreenView('MainDetails', 'FYFPage');
               } else if (_controller.position.pixels >= startTracking &&
                   _controller.position.pixels <
                       startTracking + _aboutAndStoryHeight) {
-                print("AboutAndStory");
                 widget.services.clientAnalytics
                     .trackScreenView('AboutAndStory', 'FYFPage');
               } else if (_controller.position.pixels >=
                       startTracking + _aboutAndStoryHeight &&
                   _controller.position.pixels <
                       startTracking + _photoGalleryHeight) {
-                print("PhotoGallery");
                 widget.services.clientAnalytics
                     .trackScreenView('PhotoGallery', 'FYFPage');
               } else if (_controller.position.pixels >=
                       startTracking + _photoGalleryHeight &&
                   _controller.position.pixels <
                       startTracking + _dietaryOptionsHeight) {
-                print("DietOptions");
                 widget.services.clientAnalytics
                     .trackScreenView('DietOptions', 'FYFPage');
               } else {
-                print("UpcomingLocs");
                 widget.services.clientAnalytics
                     .trackScreenView('UpcomingLocs', 'FYFPage');
               }
