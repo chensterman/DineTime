@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 class NextTime extends StatelessWidget {
   final Timestamp locationDateStart;
@@ -40,17 +41,15 @@ class NextTime extends StatelessWidget {
         const SizedBox(width: 1.0),
         Image.asset(
           imagePath,
-          width: 13,
-          height: 13,
+          width: 20,
+          height: 20,
         ),
         const SizedBox(width: 10.5),
         Text(
           timeDisplay,
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 12.0,
-              color: color,
-              fontFamily: 'Lato',
-              fontWeight: FontWeight.normal),
+          style: dineTimeTypography.bodyMedium?.copyWith(
+            color: color,
+          ),
         ),
       ],
     );

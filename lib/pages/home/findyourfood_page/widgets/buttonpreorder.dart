@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Outlined button used across multiple forms
 class ButtonPreOrder extends StatelessWidget {
@@ -22,7 +23,7 @@ class ButtonPreOrder extends StatelessWidget {
             width: 135,
             height: 25,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              color: dineTimeColorScheme.primary.withOpacity(0.2),
               shape: BoxShape.rectangle,
             ),
             child: Center(
@@ -37,10 +38,9 @@ class ButtonPreOrder extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       text,
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          fontSize: 10.0,
-                          color: Theme.of(context).colorScheme.primary,
-                          fontFamily: 'Lato'),
+                      style: dineTimeTypography.headlineSmall?.copyWith(
+                        color: dineTimeColorScheme.onPrimary,
+                      ),
                     ),
                   ],
                 ),

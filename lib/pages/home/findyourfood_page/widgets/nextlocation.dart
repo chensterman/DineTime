@@ -1,3 +1,4 @@
+import 'package:dinetime_mobile_mvp/theme/typography.dart';
 import 'package:flutter/material.dart';
 
 class NextLocation extends StatelessWidget {
@@ -17,17 +18,15 @@ class NextLocation extends StatelessWidget {
       children: [
         Image.asset(
           imagePath,
-          width: 13,
-          height: 13,
+          width: 20,
+          height: 20,
         ),
         const SizedBox(width: 10.5),
         Text(
           locationName,
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 12.0,
-              color: color,
-              fontFamily: 'Lato',
-              fontWeight: FontWeight.w500),
+          style: dineTimeTypography.bodyMedium?.copyWith(
+            color: color,
+          ),
         ),
       ],
     );

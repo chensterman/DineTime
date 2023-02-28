@@ -37,40 +37,39 @@ class _InputPasswordState extends State<InputPassword> {
       ),
       TextFormField(
         obscureText: passObscure,
-        cursorColor: Theme.of(context).colorScheme.onBackground,
+        cursorColor: dineTimeColorScheme.onBackground,
         onChanged: widget.onChanged,
-        style: Theme.of(context)
-            .textTheme
-            .bodyText2
-            ?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+        style: dineTimeTypography.bodySmall,
         // Additional styling added to the input form field
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
               borderRadius: componentShape,
               borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: dineTimeColorScheme.onSurface,
                 width: 1.0,
               )),
           enabledBorder: OutlineInputBorder(
               borderRadius: componentShape,
               borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: dineTimeColorScheme.onSurface,
                 width: 1.0,
               )),
           // Centers the hinttext better
           contentPadding:
               const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           hintText: widget.hintText,
-          hintStyle: Theme.of(context).textTheme.bodyText2,
+          hintStyle: dineTimeTypography.bodySmall?.copyWith(
+            color: dineTimeColorScheme.onSurface,
+          ),
           // Border colors when normal and on error
           border: OutlineInputBorder(
               borderRadius: componentShape,
-              borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.onSurface, width: 1.0)),
+              borderSide:
+                  BorderSide(color: dineTimeColorScheme.onSurface, width: 1.0)),
           errorBorder: OutlineInputBorder(
               borderRadius: componentShape,
-              borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.onError, width: 1.0)),
+              borderSide:
+                  BorderSide(color: dineTimeColorScheme.onError, width: 1.0)),
           suffixIcon: IconButton(
             onPressed: () {
               // Logic to reveal typed password

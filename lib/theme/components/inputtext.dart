@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Input text for form fields
 class InputText extends StatelessWidget {
@@ -27,43 +28,42 @@ class InputText extends StatelessWidget {
           ),
         ),
         TextFormField(
-          cursorColor: Theme.of(context).colorScheme.onBackground,
+          cursorColor: dineTimeColorScheme.onBackground,
           onChanged: onChanged,
-          style: Theme.of(context)
-              .textTheme
-              .bodyText2
-              ?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: dineTimeTypography.bodySmall,
           // Additional styling added to the input form field
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
                 borderRadius: componentShape,
                 borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: dineTimeColorScheme.onSurface,
                   width: 1.0,
                 )),
             focusedBorder: OutlineInputBorder(
                 borderRadius: componentShape,
                 borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: dineTimeColorScheme.onSurface,
                   width: 1.0,
                 )),
             // Centers the hinttext better
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
             hintText: hintText,
-            hintStyle: Theme.of(context).textTheme.bodyText2,
+            hintStyle: dineTimeTypography.bodySmall?.copyWith(
+              color: dineTimeColorScheme.onSurface,
+            ),
             prefixIcon: icon,
             // Border colors when normal and on error
             border: OutlineInputBorder(
                 borderRadius: componentShape,
                 borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: dineTimeColorScheme.onSurface,
                   width: 1.0,
                 )),
             errorBorder: OutlineInputBorder(
                 borderRadius: componentShape,
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.onError, width: 1.0)),
+                borderSide:
+                    BorderSide(color: dineTimeColorScheme.onError, width: 1.0)),
           ),
         ),
       ],

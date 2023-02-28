@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dinetime_mobile_mvp/theme/colorscheme.dart';
+import 'package:dinetime_mobile_mvp/theme/typography.dart';
 import 'package:flutter/material.dart';
 
 class NextDate extends StatelessWidget {
@@ -38,33 +40,32 @@ class NextDate extends StatelessWidget {
         const SizedBox(width: 0.5),
         Image.asset(
           imagePath,
-          width: 12,
-          height: 12,
+          width: 20,
+          height: 20,
         ),
         const SizedBox(width: 10.5),
         Text(
           nextDate,
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              fontSize: 12.0, color: color, fontWeight: FontWeight.normal),
+          style: dineTimeTypography.bodyMedium?.copyWith(
+            color: color,
+          ),
         ),
         const SizedBox(width: 13),
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Container(
             width: 60,
-            height: 15,
+            height: 25,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
               shape: BoxShape.rectangle,
             ),
-            child: Center(
-              child: Text(
-                daysAway,
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                    fontSize: 8.0,
-                    color: Theme.of(context).colorScheme.background,
-                    fontFamily: 'Lato'),
+            child: Text(
+              daysAway,
+              style: dineTimeTypography.bodyMedium?.copyWith(
+                color: dineTimeColorScheme.onPrimary,
               ),
+              textAlign: TextAlign.center,
             ),
           ),
         ),

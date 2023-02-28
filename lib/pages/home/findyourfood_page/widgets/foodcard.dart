@@ -138,7 +138,7 @@ class _FoodCardState extends State<FoodCard> {
 
   Widget buildCard(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double width = size.width * 0.9;
+    double width = size.width * 0.95;
     double height = size.height * 0.77;
     double scrollLimit = MediaQuery.of(context).size.height * 0.12;
     double startTracking = MediaQuery.of(context).size.height * 0.48;
@@ -307,7 +307,7 @@ class _FoodCardState extends State<FoodCard> {
   Widget additionalDetails() {
     return Padding(
       padding: const EdgeInsets.only(
-          left: 25.0, right: 25.0, top: 15.0, bottom: 15.0),
+          left: 15.0, right: 15.0, top: 15.0, bottom: 15.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
