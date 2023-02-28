@@ -33,7 +33,7 @@ class EmailVerified extends StatelessWidget {
                 const SizedBox(height: 100.0),
                 Text(
                   "Email Verified.",
-                  style: Theme.of(context).textTheme.headline1,
+                  style: dineTimeTypography.headlineLarge,
                 ),
                 const SizedBox(height: 30.0),
                 Row(
@@ -41,18 +41,21 @@ class EmailVerified extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         'Your email has been ',
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: dineTimeTypography.bodySmall?.copyWith(
+                          color: dineTimeColorScheme.onSurface,
+                        ),
                       ),
                       Text(
                         'successfully ',
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            ?.copyWith(fontSize: 16.0),
+                        style: dineTimeTypography.bodySmall?.copyWith(
+                          color: dineTimeColorScheme.primary,
+                        ),
                       ),
                       Text(
                         'verified!',
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: dineTimeTypography.bodySmall?.copyWith(
+                          color: dineTimeColorScheme.onSurface,
+                        ),
                       ),
                     ]),
                 const SizedBox(height: 45.0),
@@ -65,6 +68,7 @@ class EmailVerified extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => const LocationPreferences(),
                         ),
                       );
@@ -72,6 +76,7 @@ class EmailVerified extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => const Welcome(),
                         ),
                       );

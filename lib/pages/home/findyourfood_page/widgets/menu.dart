@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:provider/provider.dart';
@@ -44,11 +44,16 @@ class Menu extends StatelessWidget {
           children: [
             Text(
               'Our Menu',
-              style: Theme.of(context).textTheme.headline1?.copyWith(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w500,
-                  ),
+              style: dineTimeTypography.headlineMedium,
             ),
+            menu.isEmpty
+                ? Text(
+                    'No menu items.',
+                    style: dineTimeTypography.bodyMedium?.copyWith(
+                      color: dineTimeColorScheme.onSurface,
+                    ),
+                  )
+                : Container(),
             menuButton(context),
           ],
         ),
@@ -56,8 +61,8 @@ class Menu extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(
-                  color: Theme.of(context).colorScheme.onSurface, width: 1),
+              border:
+                  Border.all(color: dineTimeColorScheme.onSurface, width: 1),
               borderRadius: BorderRadius.circular(15)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +115,7 @@ class Menu extends StatelessWidget {
             width: 135,
             height: 25,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              color: dineTimeColorScheme.primary.withOpacity(0.2),
               shape: BoxShape.rectangle,
             ),
             child: Center(
@@ -119,16 +124,16 @@ class Menu extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Image(
-                        image: AssetImage('lib/assets/view_menu.png'),
-                        height: 10,
-                        width: 10),
+                      image: AssetImage('lib/assets/view_menu.png'),
+                      height: 15,
+                      width: 15,
+                    ),
                     const SizedBox(width: 5),
                     Text(
                       "View full menu",
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          fontSize: 10.0,
-                          color: Theme.of(context).colorScheme.primary,
-                          fontFamily: 'Lato'),
+                      style: dineTimeTypography.bodySmall?.copyWith(
+                        color: dineTimeColorScheme.primary,
+                      ),
                     ),
                   ],
                 ),
@@ -165,10 +170,9 @@ class Menu extends StatelessWidget {
                       const SizedBox(width: 10),
                       Text(
                         "Go Back",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            fontSize: 12.0,
-                            fontFamily: 'Lato',
-                            color: Theme.of(context).colorScheme.primary),
+                        style: dineTimeTypography.bodySmall?.copyWith(
+                          color: dineTimeColorScheme.primary,
+                        ),
                       ),
                     ],
                   ),
@@ -181,8 +185,7 @@ class Menu extends StatelessWidget {
                   children: [
                     Text(
                       "Menu",
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                          fontSize: 23.0, fontWeight: FontWeight.w500),
+                      style: dineTimeTypography.headlineSmall,
                     ),
                   ],
                 ),
@@ -237,10 +240,9 @@ class _MenuOptionState extends State<MenuOption> {
     List<Widget> pricingDietRowChildren = [
       Text(
         '\$${widget.price}',
-        style: Theme.of(context).textTheme.headline1?.copyWith(
-            fontSize: 14.0,
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.w500),
+        style: dineTimeTypography.bodySmall?.copyWith(
+          color: dineTimeColorScheme.primary,
+        ),
       ),
       const SizedBox(width: 10.0),
     ];
@@ -269,10 +271,7 @@ class _MenuOptionState extends State<MenuOption> {
                     Text(
                       widget.itemName,
                       softWrap: true,
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      style: dineTimeTypography.headlineSmall,
                     ),
                     const SizedBox(
                       height: 3,
@@ -287,10 +286,9 @@ class _MenuOptionState extends State<MenuOption> {
                       height: 40,
                       child: Text(
                         widget.itemDesc,
-                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                              fontSize: 10.0,
-                              fontFamily: 'Lato',
-                            ),
+                        style: dineTimeTypography.bodySmall?.copyWith(
+                          color: dineTimeColorScheme.onSurface,
+                        ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
                       ),

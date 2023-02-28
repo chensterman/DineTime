@@ -16,6 +16,7 @@ class AuthServiceApp extends AuthService {
     if (firebaseUser == null) {
       return null;
     } else {
+      firebaseUser.reload();
       return UserDT(
         uid: firebaseUser.uid,
         email: firebaseUser.email,
@@ -84,5 +85,10 @@ class AuthServiceApp extends AuthService {
   @override
   Future<void> sendEmailVerification() async {
     await _auth.currentUser?.sendEmailVerification();
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    await _auth.currentUser?.delete();
   }
 }

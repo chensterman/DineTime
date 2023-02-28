@@ -17,6 +17,7 @@ class Start extends StatelessWidget {
       () {
         Navigator.of(context).push(
           MaterialPageRoute(
+            fullscreenDialog: true,
             builder: (context) => const Routing(),
           ),
         );
@@ -26,9 +27,11 @@ class Start extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: const Padding(
-        padding: EdgeInsets.all(64.0),
+        padding: EdgeInsets.all(96.0),
         child: Center(
           child: Image(
+            width: 200.0,
+            height: 200.0,
             image: AssetImage('lib/assets/dinetime-combo-white.png'),
           ),
         ),

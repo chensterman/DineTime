@@ -28,6 +28,12 @@ class DatabaseServiceApp extends DatabaseService {
     await customerCollection.doc(customerId).update(customerData);
   }
 
+  // Delete customer in database
+  @override
+  Future<void> customerDelete(String customerId) async {
+    await customerCollection.doc(customerId).delete();
+  }
+
   // Get customer data
   @override
   Future<Customer?> customerGet(String customerId) async {
@@ -173,7 +179,7 @@ class DatabaseServiceApp extends DatabaseService {
       QuerySnapshot locationsQuery = await restaurantCollection
           .doc(restaurantId)
           .collection("locations")
-          .orderBy("date_start")
+          .orderBy("timestamp")
           .get();
       for (DocumentSnapshot doc in locationsQuery.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;

@@ -20,11 +20,16 @@ class UpcomingLocations extends StatelessWidget {
     List<Widget> columnChildren = [
       Text(
         'Upcoming Locations',
-        style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w500,
-            ),
+        style: dineTimeTypography.headlineMedium,
       ),
+      popUpLocations.isEmpty
+          ? Text(
+              'No upcoming locations.',
+              style: dineTimeTypography.bodyMedium?.copyWith(
+                color: dineTimeColorScheme.onSurface,
+              ),
+            )
+          : Container(),
     ];
     num count = 0;
     for (PopUpLocation popUpLocation in popUpLocations) {
@@ -86,18 +91,18 @@ class UpcomingLocations extends StatelessWidget {
         .distanceBetweenTwoPoints(customerLocation, geocode);
     String infoText = "$distance mi - $timeDisplay";
     return ListCard(
-      height: 50.0,
+      height: 60.0,
       width: double.infinity,
       child: Row(
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
-                '${locationDateStart.toDate().month}/${locationDateStart.toDate().day}',
-                style: Theme.of(context).textTheme.headline1?.copyWith(
-                    fontSize: 14.0,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500)),
+              '${locationDateStart.toDate().month}/${locationDateStart.toDate().day}',
+              style: dineTimeTypography.headlineSmall?.copyWith(
+                color: dineTimeColorScheme.onSurface,
+              ),
+            ),
           ),
           Expanded(
             flex: 5,
@@ -112,10 +117,9 @@ class UpcomingLocations extends StatelessWidget {
                     Flexible(
                       child: Text(
                         name,
-                        style: Theme.of(context).textTheme.headline1?.copyWith(
-                            fontSize: 14.0,
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontWeight: FontWeight.w500),
+                        style: dineTimeTypography.headlineSmall?.copyWith(
+                          color: dineTimeColorScheme.onSurface,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -123,10 +127,9 @@ class UpcomingLocations extends StatelessWidget {
                     Flexible(
                       child: Text(
                         infoText,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(fontSize: 10.0),
+                        style: dineTimeTypography.bodySmall?.copyWith(
+                          color: dineTimeColorScheme.onSurface,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     )
@@ -141,8 +144,8 @@ class UpcomingLocations extends StatelessWidget {
               onTap: () => launchUrl(Uri.parse(
                   'https://www.google.com/maps/search/?api=1&query=${address}')),
               child: Container(
-                width: 20.0,
-                height: 20.0,
+                width: 25.0,
+                height: 25.0,
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     // Display image based on availability of user uploaded image
@@ -191,7 +194,7 @@ class UpcomingLocations extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              width: 190,
+              width: 250,
               height: 26,
               decoration: BoxDecoration(
                 color: dineTimeColorScheme.primary.withOpacity(0.2),
@@ -210,10 +213,9 @@ class UpcomingLocations extends StatelessWidget {
                     const SizedBox(width: 7),
                     Text(
                       "View all upcoming locations",
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          fontSize: 10.0,
-                          color: dineTimeColorScheme.primary,
-                          fontFamily: 'Lato'),
+                      style: dineTimeTypography.bodySmall?.copyWith(
+                        color: dineTimeColorScheme.primary,
+                      ),
                     ),
                   ],
                 ),
@@ -249,10 +251,9 @@ class UpcomingLocations extends StatelessWidget {
                       const SizedBox(width: 10),
                       Text(
                         "Go Back",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            fontSize: 12.0,
-                            fontFamily: 'Lato',
-                            color: dineTimeColorScheme.primary),
+                        style: dineTimeTypography.bodySmall?.copyWith(
+                          color: dineTimeColorScheme.primary,
+                        ),
                       ),
                     ],
                   ),
@@ -265,10 +266,7 @@ class UpcomingLocations extends StatelessWidget {
                   children: [
                     Text(
                       'Upcoming Locations',
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      style: dineTimeTypography.headlineMedium,
                     ),
                   ],
                 ),

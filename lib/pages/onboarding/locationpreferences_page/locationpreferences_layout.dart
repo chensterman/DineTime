@@ -33,33 +33,43 @@ class LocationPreferencesLayout extends StatelessWidget {
                 const SizedBox(height: 40.0),
                 Text(
                   "Location",
-                  style: Theme.of(context).textTheme.headline1,
+                  style: dineTimeTypography.headlineLarge,
                 ),
                 Text(
                   "preferences",
-                  style: Theme.of(context).textTheme.headline1,
+                  style: dineTimeTypography.headlineLarge,
                 ),
                 const SizedBox(height: 30.0),
                 Text(
                   "Location services must be enabled",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: dineTimeTypography.bodyMedium?.copyWith(
+                    color: dineTimeColorScheme.primary,
+                  ),
                 ),
                 Text(
                   "in order to use DineTime",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: dineTimeTypography.bodyMedium?.copyWith(
+                    color: dineTimeColorScheme.primary,
+                  ),
                 ),
                 const SizedBox(height: 30.0),
                 Text(
                   "DineTime uses your location to ",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: dineTimeTypography.bodySmall?.copyWith(
+                    color: dineTimeColorScheme.onSurface,
+                  ),
                 ),
                 Text(
                   "help you find local restaurants and pop-ups ",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: dineTimeTypography.bodySmall?.copyWith(
+                    color: dineTimeColorScheme.onSurface,
+                  ),
                 ),
                 Text(
                   "around your area",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: dineTimeTypography.bodySmall?.copyWith(
+                    color: dineTimeColorScheme.onSurface,
+                  ),
                 ),
                 const SizedBox(height: 60.0),
                 const LocationPreferencesButton(),

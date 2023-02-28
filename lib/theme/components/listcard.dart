@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Cards that display list items in saved
 class ListCard extends StatelessWidget {
@@ -18,8 +19,7 @@ class ListCard extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(
-              color: Theme.of(context).colorScheme.onSurface, width: 1),
+          border: Border.all(color: dineTimeColorScheme.onSurface, width: 1),
           borderRadius: BorderRadius.circular(15)),
       child: child,
     );

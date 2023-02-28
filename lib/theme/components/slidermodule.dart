@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Slider module for range selection
 class SliderModule extends StatelessWidget {
@@ -30,8 +31,8 @@ class SliderModule extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle1),
             SliderTheme(
               data: SliderThemeData(
-                thumbColor: Theme.of(context).colorScheme.onPrimary,
-                activeTrackColor: Theme.of(context).colorScheme.primary,
+                thumbColor: dineTimeColorScheme.onPrimary,
+                activeTrackColor: dineTimeColorScheme.primary,
               ),
               child: RangeSlider(
                 values: values,

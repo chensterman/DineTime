@@ -32,19 +32,22 @@ class Welcome extends StatelessWidget {
                   const SizedBox(height: 20.0),
                   Text(
                     "Welcome to DineTime.",
-                    style: Theme.of(context).textTheme.headline1?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                    style: dineTimeTypography.headlineLarge?.copyWith(
+                      color: dineTimeColorScheme.onPrimary,
+                    ),
                   ),
                   const SizedBox(height: 50.0),
                   Text(
                     "Discover food you can't",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                    style: dineTimeTypography.bodyLarge?.copyWith(
+                      color: dineTimeColorScheme.onPrimary,
+                    ),
                   ),
                   Text(
                     "find anywhere else.",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                    style: dineTimeTypography.bodyLarge?.copyWith(
+                      color: dineTimeColorScheme.onPrimary,
+                    ),
                   ),
                   const SizedBox(height: 60.0),
                   ButtonOutlined(
@@ -53,6 +56,7 @@ class Welcome extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => Home(
                             services: services,
                           ),

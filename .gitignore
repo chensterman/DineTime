@@ -2,4 +2,10 @@
 .flutter-plugins
 .flutter-plugins-dependencies
 .dart_tool/
+
+# Build directory
 build/
+
+# Upload keystore
+upload-keystore.jks
+android/key.properties

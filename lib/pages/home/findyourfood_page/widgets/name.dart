@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 class Name extends StatelessWidget {
   final String restaurantName;
@@ -13,11 +14,9 @@ class Name extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       restaurantName,
-      style: Theme.of(context).textTheme.headline1?.copyWith(
-            fontSize: 25.0,
-            color: color,
-            fontWeight: FontWeight.normal,
-          ),
+      style: dineTimeTypography.headlineLarge?.copyWith(
+        color: color,
+      ),
     );
   }
 }

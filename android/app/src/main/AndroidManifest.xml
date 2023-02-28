@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.itsdinetime.dinetime">
-   <application
-        android:label="dmm"
+    
+    <application
+        android:label="DineTime"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

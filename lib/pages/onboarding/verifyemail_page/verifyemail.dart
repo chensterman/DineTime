@@ -62,24 +62,27 @@ class _VerifyEmailState extends State<VerifyEmail> {
                 const SizedBox(height: 100.0),
                 Text(
                   "Verify your email.",
-                  style: Theme.of(context).textTheme.headline1,
+                  style: dineTimeTypography.headlineLarge,
                 ),
                 const SizedBox(height: 30.0),
                 Text(
                   "Please click the verification link",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: dineTimeTypography.bodySmall?.copyWith(
+                    color: dineTimeColorScheme.onSurface,
+                  ),
                 ),
                 Row(children: [
                   Text(
                     "we sent to ",
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: dineTimeTypography.bodySmall?.copyWith(
+                      color: dineTimeColorScheme.onSurface,
+                    ),
                   ),
                   Text(
                     widget.email,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle1
-                        ?.copyWith(fontSize: 16.0),
+                    style: dineTimeTypography.bodySmall?.copyWith(
+                      color: dineTimeColorScheme.primary,
+                    ),
                   ),
                 ]),
               ],
@@ -98,8 +101,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
     // Send to onboarding if verified
     if (user.emailVerified! && mounted) {
       timer.cancel();
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const EmailVerified()));
+      widget.services.clientAnalytics.trackEvent('completed_sign_up');
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => const EmailVerified(),
+      ));
     }
   }
 }

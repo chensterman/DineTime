@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 class AboutAndStory extends StatelessWidget {
   final String restaurantBio;
@@ -14,18 +15,14 @@ class AboutAndStory extends StatelessWidget {
       children: [
         Text(
           'Our Story',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-              ),
+          style: dineTimeTypography.headlineMedium,
         ),
         const SizedBox(height: 13),
         Text(
           restaurantBio,
-          style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                fontSize: 12.0,
-                fontFamily: 'Lato',
-              ),
+          style: dineTimeTypography.bodyMedium?.copyWith(
+            color: dineTimeColorScheme.onSurface,
+          ),
         ),
       ],
     );

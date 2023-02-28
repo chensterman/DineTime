@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Selector buttons for price tolerance
 class PriceSelector extends StatelessWidget {
@@ -16,11 +17,11 @@ class PriceSelector extends StatelessWidget {
     return ToggleButtons(
       onPressed: onPressed,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
-      borderColor: Theme.of(context).colorScheme.primary,
-      selectedBorderColor: Theme.of(context).colorScheme.primary,
+      borderColor: dineTimeColorScheme.primary,
+      selectedBorderColor: dineTimeColorScheme.primary,
       selectedColor: Colors.white,
-      fillColor: Theme.of(context).colorScheme.primary,
-      color: Theme.of(context).colorScheme.primary,
+      fillColor: dineTimeColorScheme.primary,
+      color: dineTimeColorScheme.primary,
       isSelected: isSelected,
       children: children,
     );

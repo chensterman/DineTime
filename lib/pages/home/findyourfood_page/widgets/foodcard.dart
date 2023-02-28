@@ -42,11 +42,24 @@ class FoodCard extends StatefulWidget {
 class _FoodCardState extends State<FoodCard> {
   bool _isMainDetailsVisible = true;
   double _opacity = 0.0;
-
+  final ScrollController _controller = ScrollController();
+  final GlobalKey _mainDetailsKey = GlobalKey();
+  final GlobalKey _aboutAndStoryKey = GlobalKey();
+  final GlobalKey _photoGalleryKey = GlobalKey();
+  final GlobalKey _dietaryOptionsKey = GlobalKey();
+  final GlobalKey _menuItemsKey = GlobalKey();
+  final GlobalKey _upcomingLocationsKey = GlobalKey();
+  double _mainDetailsHeight = 0;
+  double _aboutAndStoryHeight = 0;
+  double _photoGalleryHeight = 0;
+  double _dietaryOptionsHeight = 0;
+  double _menuItemsHeight = 0;
+  double _upcomingLocationsHeight = 0;
   @override
   void initState() {
     super.initState();
     if (widget.isFront) {
+      WidgetsBinding.instance.addPostFrameCallback(_getHeights);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final size = MediaQuery.of(context).size;
 
@@ -54,6 +67,21 @@ class _FoodCardState extends State<FoodCard> {
         provider.setScreenSize(size);
       });
     }
+  }
+
+  _getHeights(_) {
+    _mainDetailsHeight = _mainDetailsKey.currentContext!.size!.height;
+    _aboutAndStoryHeight = _aboutAndStoryKey.currentContext!.size!.height + 40;
+    _photoGalleryHeight = _aboutAndStoryHeight +
+        _photoGalleryKey.currentContext!.size!.height +
+        40;
+    _dietaryOptionsHeight = _photoGalleryHeight +
+        _dietaryOptionsKey.currentContext!.size!.height +
+        40;
+    _menuItemsHeight =
+        _dietaryOptionsHeight + _menuItemsKey.currentContext!.size!.height + 40;
+    _upcomingLocationsHeight =
+        _upcomingLocationsKey.currentContext!.size!.height;
   }
 
   @override
@@ -110,9 +138,10 @@ class _FoodCardState extends State<FoodCard> {
 
   Widget buildCard(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double width = size.width * 0.9;
+    double width = size.width * 0.95;
     double height = size.height * 0.77;
     double scrollLimit = MediaQuery.of(context).size.height * 0.12;
+    double startTracking = MediaQuery.of(context).size.height * 0.48;
     double opacitydelta = 1.0 / scrollLimit;
 
     return Container(
@@ -126,6 +155,36 @@ class _FoodCardState extends State<FoodCard> {
       child: Center(
         child: NotificationListener<ScrollNotification>(
           onNotification: (scrollNotification) {
+            // Notifications for Analytics
+
+            if (scrollNotification is ScrollEndNotification) {
+              if (_controller.position.pixels < scrollLimit) {
+              } else if (_controller.position.pixels >= scrollLimit &&
+                  _controller.position.pixels < startTracking) {
+                widget.services.clientAnalytics
+                    .trackScreenView('MainDetails', 'FYFPage');
+              } else if (_controller.position.pixels >= startTracking &&
+                  _controller.position.pixels <
+                      startTracking + _aboutAndStoryHeight) {
+                widget.services.clientAnalytics
+                    .trackScreenView('AboutAndStory', 'FYFPage');
+              } else if (_controller.position.pixels >=
+                      startTracking + _aboutAndStoryHeight &&
+                  _controller.position.pixels <
+                      startTracking + _photoGalleryHeight) {
+                widget.services.clientAnalytics
+                    .trackScreenView('PhotoGallery', 'FYFPage');
+              } else if (_controller.position.pixels >=
+                      startTracking + _photoGalleryHeight &&
+                  _controller.position.pixels <
+                      startTracking + _dietaryOptionsHeight) {
+                widget.services.clientAnalytics
+                    .trackScreenView('DietOptions', 'FYFPage');
+              } else {
+                widget.services.clientAnalytics
+                    .trackScreenView('UpcomingLocs', 'FYFPage');
+              }
+            }
             if (scrollNotification.metrics.pixels >= scrollLimit) {
               setState(() {
                 _isMainDetailsVisible = false;
@@ -143,6 +202,7 @@ class _FoodCardState extends State<FoodCard> {
             return false;
           },
           child: SingleChildScrollView(
+            controller: _controller,
             child: Scrollbar(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -181,6 +241,7 @@ class _FoodCardState extends State<FoodCard> {
             padding: const EdgeInsets.only(
                 left: 25.0, right: 25.0, top: 30.0, bottom: 30.0),
             child: Column(
+              key: _mainDetailsKey,
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -196,7 +257,7 @@ class _FoodCardState extends State<FoodCard> {
                 CuisineDetails(
                   cuisine: widget.restaurant.cuisine,
                   pricing: widget.restaurant.pricing,
-                  customerLocation: widget.customer.geolocation,
+                  customerLocation: widget.customer.geolocation!,
                   locations: widget.restaurant.upcomingLocations,
                   color: Theme.of(context).colorScheme.background,
                 ),
@@ -240,7 +301,7 @@ class _FoodCardState extends State<FoodCard> {
   Widget additionalDetails() {
     return Padding(
       padding: const EdgeInsets.only(
-          left: 25.0, right: 25.0, top: 15.0, bottom: 15.0),
+          left: 15.0, right: 15.0, top: 15.0, bottom: 15.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -258,7 +319,7 @@ class _FoodCardState extends State<FoodCard> {
           CuisineDetails(
             cuisine: widget.restaurant.cuisine,
             pricing: widget.restaurant.pricing,
-            customerLocation: widget.customer.geolocation,
+            customerLocation: widget.customer.geolocation!,
             locations: widget.restaurant.upcomingLocations,
             color: Theme.of(context).colorScheme.onBackground,
           ),
@@ -294,26 +355,33 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          AboutAndStory(restaurantBio: widget.restaurant.bio),
+          AboutAndStory(
+              key: _aboutAndStoryKey, restaurantBio: widget.restaurant.bio),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          PhotoGallery(gallery: widget.restaurant.gallery),
+          PhotoGallery(
+            key: _photoGalleryKey,
+            gallery: widget.restaurant.gallery,
+            clientStorage: widget.services.clientStorage,
+          ),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
-          Dietary(menu: widget.restaurant.menu),
+          Dietary(key: _dietaryOptionsKey, menu: widget.restaurant.menu),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
           Menu(
+            key: _menuItemsKey,
             menu: widget.restaurant.menu,
           ),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
           UpcomingLocations(
-              customerLocation: widget.customer.geolocation,
+              key: _upcomingLocationsKey,
+              customerLocation: widget.customer.geolocation!,
               popUpLocations: widget.restaurant.upcomingLocations),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,11 +33,9 @@ class CuisineDetails extends StatelessWidget {
         : '$cuisine  ·  ${'\$' * pricing}';
     return RichText(
       text: TextSpan(
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                fontSize: 12.0,
-                color: color,
-                fontFamily: 'Lato',
-              ),
+          style: dineTimeTypography.bodyMedium?.copyWith(
+            color: color,
+          ),
           children: [
             TextSpan(text: infoText),
           ]),
