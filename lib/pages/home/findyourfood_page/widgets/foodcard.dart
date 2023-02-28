@@ -180,6 +180,12 @@ class _FoodCardState extends State<FoodCard> {
                       startTracking + _dietaryOptionsHeight) {
                 widget.services.clientAnalytics
                     .trackScreenView('DietOptions', 'FYFPage');
+              } else if (_controller.position.pixels >=
+                      startTracking + _dietaryOptionsHeight &&
+                  _controller.position.pixels <
+                      startTracking + _menuItemsHeight) {
+                widget.services.clientAnalytics
+                    .trackScreenView('Menu', 'FYFPage');
               } else {
                 widget.services.clientAnalytics
                     .trackScreenView('UpcomingLocs', 'FYFPage');
