@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorderbutton.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/backgroundshadow.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/cuisinedetails.dart';
@@ -104,26 +103,11 @@ class _FoodCardState extends State<FoodCard> {
                 buildCard(context, width, height),
                 const Stamps(),
                 Visibility(
-                  visible: _isMainDetailsVisible,
-                  child: Positioned(
-                    top: 20, // Distance from the bottom of the stack
-                    child: Opacity(
-                      opacity: 1 - _opacityPreorder,
-                      child: Preorders(
-                        menu: widget.restaurant.menu,
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
                   visible: _isBottomPreorderButtonVisible,
                   child: Positioned(
                     bottom: 20, // Distance from the bottom of the stack
-                    child: Opacity(
-                      opacity: _opacityPreorder,
-                      child: Preorders(
-                        menu: widget.restaurant.menu,
-                      ),
+                    child: Preorders(
+                      menu: widget.restaurant.menu,
                     ),
                   ),
                 ),
@@ -168,17 +152,15 @@ class _FoodCardState extends State<FoodCard> {
             if (scrollNotification.metrics.pixels >= scrollLimit) {
               setState(() {
                 _isMainDetailsVisible = false;
-                _isTopPreorderButtonVisible = false;
                 _isBottomPreorderButtonVisible = true;
               });
             } else {
               setState(() {
                 _isMainDetailsVisible = true;
+                _isBottomPreorderButtonVisible = false;
                 if (scrollNotification.metrics.pixels <= 0) {
                   _opacity = 0.0;
                   _opacityPreorder = 0.0;
-                  // } else if (scrollNotification.metrics.pixels >= 1.0) {
-                  //   _opacityPreorder = 1.0;
                 } else {
                   _opacity = scrollNotification.metrics.pixels * opacitydelta;
                   _opacityPreorder =
@@ -279,6 +261,10 @@ class _FoodCardState extends State<FoodCard> {
                         color: Theme.of(context).colorScheme.background,
                       )
                     : Container(),
+                const SizedBox(height: 7),
+                Preorders(
+                  menu: widget.restaurant.menu,
+                ),
               ],
             ),
           ),

@@ -7,7 +7,6 @@ import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:provider/provider.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorderbutton.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/menuoption.dart';
 
 class Preorders extends StatelessWidget {
@@ -43,15 +42,11 @@ class Preorders extends StatelessWidget {
         break;
       }
     }
-    return Align(
-      alignment:
-          Alignment.bottomCenter, // Align to the bottom center of the screen
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          preorderMainButton(context),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        preorderMainButton(context),
+      ],
     );
   }
 
@@ -119,74 +114,51 @@ class Preorders extends StatelessWidget {
         ),
       );
     }
-    return Padding(
-      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-      child: InkWell(
-        onTap: () {
-          showModalBottomSheet(
-            isScrollControlled: true,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(10),
-              ),
-            ),
-            context: context,
-            builder: (context) => Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                preorderMenu(context, columnChildren),
-                viewPreorderButton(context)
-              ],
-            ),
-          );
-        },
-        child: Positioned(
-          bottom: 40.0,
-          child: SizedBox(
-            width: 130,
-            height: 40,
-            child: Opacity(
-              opacity: 0.8,
-              child: ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(10),
-                      ),
-                    ),
-                    context: context,
-                    builder: (context) => Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        preorderMenu(context, columnChildren),
-                        viewPreorderButton(context)
-                      ],
-                    ),
-                  );
-                },
-                style: style,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return Positioned(
+      bottom: 40.0,
+      child: SizedBox(
+        width: 130,
+        height: 40,
+        child: Opacity(
+          opacity: 0.8,
+          child: ElevatedButton(
+            onPressed: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(10),
+                  ),
+                ),
+                context: context,
+                builder: (context) => Stack(
+                  alignment: Alignment.bottomCenter,
                   children: [
-                    Image.asset(
-                      '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/preorderfork.png',
-                      width: 14,
-                      height: 14,
-                    ),
-                    const SizedBox(
-                      width: 8.0,
-                    ),
-                    Text(
-                      "Pre-Order",
-                      style: TextStyle(
-                        fontSize: 14.0,
-                      ),
-                    ),
+                    preorderMenu(context, columnChildren),
+                    viewPreorderButton(context),
                   ],
                 ),
-              ),
+              );
+            },
+            style: style,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/preorderfork.png',
+                  width: 14,
+                  height: 14,
+                ),
+                const SizedBox(
+                  width: 8.0,
+                ),
+                Text(
+                  "Pre-Order",
+                  style: TextStyle(
+                    fontSize: 14.0,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -293,6 +265,9 @@ class Preorders extends StatelessWidget {
   }
 
   Widget preorderMenu(BuildContext context, List<Widget> columnChildren) {
+    columnChildren.add(
+      const SizedBox(height: 70.0),
+    );
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.85,
       child: DraggableScrollableSheet(
@@ -344,7 +319,6 @@ class Preorders extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 70.0),
             ],
           ),
         ),
