@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PreorderButton extends StatelessWidget {
-  final double fromTop;
   const PreorderButton({
     Key? key,
-    required this.fromTop,
   }) : super(key: key);
 
   @override
