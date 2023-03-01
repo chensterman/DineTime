@@ -30,7 +30,10 @@ class LogoDisplay extends StatelessWidget {
         border: Border.all(color: dineTimeColorScheme.primary, width: 3),
       ),
       child: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(
+              color: dineTimeColorScheme.primary,
+            ))
           : Container(),
     );
   }

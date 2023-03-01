@@ -1,3 +1,4 @@
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatelessWidget {
@@ -6,9 +7,11 @@ class LoadingScreen extends StatelessWidget {
   @override
   Widget build(context) {
     // Loading screen
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: dineTimeColorScheme.primary,
+        ),
       ),
     );
   }

@@ -50,7 +50,7 @@ class Stamps extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               gradient: const RadialGradient(
                 colors: [
-                  Color.fromARGB(200, 255, 255, 255),
+                  Color.fromARGB(189, 255, 255, 255),
                   Colors.transparent,
                 ],
                 stops: [0.5, 1],

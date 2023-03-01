@@ -61,10 +61,6 @@ class MyAppTest extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'DineTime Demo',
-        theme: ThemeData(
-          colorScheme: dineTimeColorScheme,
-          textTheme: dineTimeTypography,
-        ),
         home: page,
       ),
     );

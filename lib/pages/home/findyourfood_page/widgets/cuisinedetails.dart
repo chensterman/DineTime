@@ -10,14 +10,14 @@ class CuisineDetails extends StatelessWidget {
   final int pricing;
   final GeoPoint customerLocation;
   final List<PopUpLocation> locations;
-  final Color color;
+  final bool onMainDetails;
   const CuisineDetails({
     Key? key,
     required this.cuisine,
     required this.pricing,
     required this.customerLocation,
     required this.locations,
-    required this.color,
+    required this.onMainDetails,
   }) : super(key: key);
 
   @override
@@ -34,7 +34,9 @@ class CuisineDetails extends StatelessWidget {
     return RichText(
       text: TextSpan(
           style: dineTimeTypography.bodyMedium?.copyWith(
-            color: color,
+            color: onMainDetails
+                ? dineTimeColorScheme.background
+                : dineTimeColorScheme.onBackground,
           ),
           children: [
             TextSpan(text: infoText),

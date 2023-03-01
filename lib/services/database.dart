@@ -131,6 +131,7 @@ class DatabaseServiceApp extends DatabaseService {
       String restaurantName = restaurantData['restaurant_name'];
       int pricing = restaurantData['pricing'];
       String restaurantLogoRef = restaurantData['logo_location'];
+      String restaurantCoverRef = restaurantData['cover_location'];
       String bio = restaurantData['restaurant_bio'];
       String cuisine = restaurantData['cuisine'];
       String website = restaurantData['website'];
@@ -155,6 +156,15 @@ class DatabaseServiceApp extends DatabaseService {
           ),
         );
       }
+      gallery.add(
+        r.GalleryImage(
+          imageId: "cover",
+          imageName: "Cover Photo",
+          imageRef: restaurantCoverRef,
+          imageDescription: "",
+          timestamp: Timestamp.now(),
+        ),
+      );
       // Get restaurant menu
       List<r.MenuItem> menu = [];
       QuerySnapshot menuQuery = await restaurantCollection
@@ -173,6 +183,16 @@ class DatabaseServiceApp extends DatabaseService {
           itemPrice: data["item_price"],
           itemImageRef: data["item_image_ref"],
         ));
+        // Add menu photos to gallery
+        gallery.add(
+          r.GalleryImage(
+            imageId: doc.id,
+            imageName: data["item_name"],
+            imageRef: data["item_image_ref"],
+            imageDescription: data["item_desc"],
+            timestamp: data["timestamp"],
+          ),
+        );
       }
       // Get restaurant lcoations
       List<r.PopUpLocation> upcomingLocations = [];
@@ -200,6 +220,7 @@ class DatabaseServiceApp extends DatabaseService {
         restaurantId: restaurantId,
         restaurantName: restaurantName,
         restaurantLogoRef: restaurantLogoRef,
+        restaurantCoverRef: restaurantCoverRef,
         pricing: pricing,
         gallery: gallery,
         menu: menu,

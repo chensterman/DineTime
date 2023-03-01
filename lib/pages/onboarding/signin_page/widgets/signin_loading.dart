@@ -1,3 +1,4 @@
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,10 +11,12 @@ class SignInLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<fb.FormBloc, fb.FormState>(builder: (context, state) {
       if (state is fb.FormLoading) {
-        return const Center(
+        return Center(
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: dineTimeColorScheme.primary,
+            ),
           ),
         );
       } else {

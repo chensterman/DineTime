@@ -14,7 +14,7 @@ TextTheme dineTimeTypography = TextTheme(
     color: dineTimeColorScheme.onBackground,
   ),
   headlineSmall: TextStyle(
-    fontSize: 16,
+    fontSize: 20,
     fontFamily: 'Futura PT',
     color: dineTimeColorScheme.onBackground,
   ),

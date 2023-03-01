@@ -7,6 +7,7 @@ class DataMock {
       restaurantId: "0",
       restaurantName: "Steph Curry's Pop Up",
       restaurantLogoRef: "test/images/steph_curry_logo.png",
+      restaurantCoverRef: "test/images/gallery_image.jpeg",
       pricing: 2,
       gallery: [
         GalleryImage(
@@ -52,6 +53,7 @@ class DataMock {
       restaurantId: "1",
       restaurantName: "David Dai's",
       restaurantLogoRef: "test/images/david_dais_logo.jpeg",
+      restaurantCoverRef: "test/images/gallery_image.jpeg",
       pricing: 2,
       gallery: [
         GalleryImage(
@@ -72,7 +74,7 @@ class DataMock {
           dietaryTags: ["Vegan"],
           itemImageRef: "test/images/menu_item.jpeg",
           itemDescription:
-              "This is just a test menu item. This is just a test menu item. This is just a test menu item.",
+              "This is just a test menu item. This is just a test menu item. This is just a test menu item. This is just a test menu item. This is just a test menu item.",
         ),
       ],
       upcomingLocations: [
@@ -94,6 +96,7 @@ class DataMock {
       restaurantId: "2",
       restaurantName: "Literal Dogshit",
       restaurantLogoRef: "test/images/dogshit.jpeg",
+      restaurantCoverRef: "test/images/gallery_image.jpeg",
       pricing: 2,
       gallery: [
         GalleryImage(
@@ -160,6 +163,7 @@ class DataMock {
       restaurantId: "3",
       restaurantName: "Empty's",
       restaurantLogoRef: "test/images/dogshit.jpeg",
+      restaurantCoverRef: "test/images/gallery_image.jpeg",
       pricing: 2,
       gallery: [],
       menu: [],
