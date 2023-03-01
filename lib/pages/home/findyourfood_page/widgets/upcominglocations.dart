@@ -22,6 +22,7 @@ class UpcomingLocations extends StatelessWidget {
         'Upcoming Locations',
         style: dineTimeTypography.headlineMedium,
       ),
+      const SizedBox(height: 10),
       popUpLocations.isEmpty
           ? Text(
               'No upcoming locations.',
@@ -31,7 +32,7 @@ class UpcomingLocations extends StatelessWidget {
             )
           : Container(),
     ];
-    num count = 0;
+    // num count = 0;
     for (PopUpLocation popUpLocation in popUpLocations) {
       columnChildren.add(const SizedBox(
         height: 10.0,
@@ -44,14 +45,14 @@ class UpcomingLocations extends StatelessWidget {
         popUpLocation.locationName,
         popUpLocation.locationAddress,
       ));
-      count += 1;
-      if (count == 3) {
-        break;
-      }
+      // count += 1;
+      // if (count == 3) {
+      //   break;
+      // }
     }
-    columnChildren.add(Center(
-      child: locationsButton(context),
-    ));
+    // columnChildren.add(Center(
+    //   child: locationsButton(context),
+    // ));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: columnChildren,
@@ -166,123 +167,123 @@ class UpcomingLocations extends StatelessWidget {
     );
   }
 
-  Widget locationsButton(BuildContext context) {
-    List<Widget> columnChildren = [];
-    for (PopUpLocation popUpLocation in popUpLocations) {
-      columnChildren.add(const SizedBox(
-        height: 10.0,
-      ));
-      columnChildren.add(upcomingLocationCard(
-          context,
-          popUpLocation.geolocation,
-          popUpLocation.locationDateStart,
-          popUpLocation.locationDateEnd,
-          popUpLocation.locationName,
-          popUpLocation.locationAddress));
-    }
-    return Padding(
-      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-      child: InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return upcomingLocationsDialog(context, columnChildren);
-              },
-            );
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              width: 250,
-              height: 26,
-              decoration: BoxDecoration(
-                color: dineTimeColorScheme.primary.withOpacity(0.2),
-                shape: BoxShape.rectangle,
-              ),
-              child: Center(
-                  child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Image(
-                        image:
-                            AssetImage('lib/assets/location_arrow_orange.png'),
-                        height: 15,
-                        width: 15),
-                    const SizedBox(width: 7),
-                    Text(
-                      "View all upcoming locations",
-                      style: dineTimeTypography.bodySmall?.copyWith(
-                        color: dineTimeColorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-            ),
-          )),
-    );
-  }
+  // Widget locationsButton(BuildContext context) {
+  //   List<Widget> columnChildren = [];
+  //   for (PopUpLocation popUpLocation in popUpLocations) {
+  //     columnChildren.add(const SizedBox(
+  //       height: 10.0,
+  //     ));
+  //     columnChildren.add(upcomingLocationCard(
+  //         context,
+  //         popUpLocation.geolocation,
+  //         popUpLocation.locationDateStart,
+  //         popUpLocation.locationDateEnd,
+  //         popUpLocation.locationName,
+  //         popUpLocation.locationAddress));
+  //   }
+  //   return Padding(
+  //     padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+  //     child: InkWell(
+  //         onTap: () {
+  //           showDialog(
+  //             context: context,
+  //             builder: (BuildContext context) {
+  //               return upcomingLocationsDialog(context, columnChildren);
+  //             },
+  //           );
+  //         },
+  //         child: ClipRRect(
+  //           borderRadius: BorderRadius.circular(10),
+  //           child: Container(
+  //             width: 250,
+  //             height: 26,
+  //             decoration: BoxDecoration(
+  //               color: dineTimeColorScheme.primary.withOpacity(0.2),
+  //               shape: BoxShape.rectangle,
+  //             ),
+  //             child: Center(
+  //                 child: Center(
+  //               child: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   const Image(
+  //                       image:
+  //                           AssetImage('lib/assets/location_arrow_orange.png'),
+  //                       height: 15,
+  //                       width: 15),
+  //                   const SizedBox(width: 7),
+  //                   Text(
+  //                     "View all upcoming locations",
+  //                     style: dineTimeTypography.bodySmall?.copyWith(
+  //                       color: dineTimeColorScheme.primary,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             )),
+  //           ),
+  //         )),
+  //   );
+  // }
 
-  Widget upcomingLocationsDialog(
-      BuildContext context, List<Widget> columnChildren) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Row(
-                    children: [
-                      const Image(
-                          image: AssetImage('lib/assets/back_arrow.png'),
-                          height: 12,
-                          width: 12),
-                      const SizedBox(width: 10),
-                      Text(
-                        "Go Back",
-                        style: dineTimeTypography.bodySmall?.copyWith(
-                          color: dineTimeColorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Align(
-                alignment: Alignment.center,
-                child: Row(
-                  children: [
-                    Text(
-                      'Upcoming Locations',
-                      style: dineTimeTypography.headlineMedium,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Scrollbar(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: columnChildren,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget upcomingLocationsDialog(
+  //     BuildContext context, List<Widget> columnChildren) {
+  //   return Dialog(
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(20.0),
+  //     ),
+  //     child: SingleChildScrollView(
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(25.0),
+  //         child: Column(
+  //           children: [
+  //             Align(
+  //               alignment: Alignment.topLeft,
+  //               child: InkWell(
+  //                 onTap: () {
+  //                   Navigator.of(context).pop();
+  //                 },
+  //                 child: Row(
+  //                   children: [
+  //                     const Image(
+  //                         image: AssetImage('lib/assets/back_arrow.png'),
+  //                         height: 12,
+  //                         width: 12),
+  //                     const SizedBox(width: 10),
+  //                     Text(
+  //                       "Go Back",
+  //                       style: dineTimeTypography.bodySmall?.copyWith(
+  //                         color: dineTimeColorScheme.primary,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             const SizedBox(height: 20),
+  //             Align(
+  //               alignment: Alignment.center,
+  //               child: Row(
+  //                 children: [
+  //                   Text(
+  //                     'Upcoming Locations',
+  //                     style: dineTimeTypography.headlineMedium,
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //             const SizedBox(height: 20),
+  //             Scrollbar(
+  //               child: SingleChildScrollView(
+  //                 child: Column(
+  //                   children: columnChildren,
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

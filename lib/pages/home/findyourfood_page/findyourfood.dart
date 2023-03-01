@@ -207,16 +207,23 @@ class _FindYourFoodState extends State<FindYourFood> {
     final restaurants = provider.restaurants;
     final isLoading = provider.isLoading;
     if (isLoading) {
-      return const Expanded(
+      return Expanded(
         child: Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: dineTimeColorScheme.primary,
+          ),
         ),
       );
     } else if (restaurants.isEmpty) {
-      return const Expanded(
+      return Expanded(
         child: Center(
           child: Text(
-              "You have swiped through all of the food cards. Please be patient as we are onboarding new popups every month!"),
+            "You have swiped through all of the food cards. Please be patient as we are onboarding new popups every month!",
+            textAlign: TextAlign.center,
+            style: dineTimeTypography.bodyMedium?.copyWith(
+              color: dineTimeColorScheme.onSurface,
+            ),
+          ),
         ),
       );
     } else {

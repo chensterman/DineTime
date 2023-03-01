@@ -3,11 +3,11 @@ import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 class Name extends StatelessWidget {
   final String restaurantName;
-  final Color color;
+  final bool onMainDetails;
   const Name({
     Key? key,
     required this.restaurantName,
-    required this.color,
+    required this.onMainDetails,
   }) : super(key: key);
 
   @override
@@ -15,7 +15,9 @@ class Name extends StatelessWidget {
     return Text(
       restaurantName,
       style: dineTimeTypography.headlineLarge?.copyWith(
-        color: color,
+        color: onMainDetails
+            ? dineTimeColorScheme.background
+            : dineTimeColorScheme.onBackground,
       ),
     );
   }

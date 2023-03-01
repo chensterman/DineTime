@@ -8,6 +8,7 @@ import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/dietary
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/logo.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/menu.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/photogallery.dart';
+import 'package:dinetime_mobile_mvp/theme/colorscheme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/provider/cardprovider.dart';
@@ -16,9 +17,7 @@ import 'aboutandstory.dart';
 import 'background.dart';
 import 'contact.dart';
 import 'name.dart';
-import 'nextdate.dart';
 import 'nextlocation.dart';
-import 'nexttime.dart';
 import 'stamps.dart';
 import 'upcominglocations.dart';
 
@@ -41,6 +40,8 @@ class FoodCard extends StatefulWidget {
 
 class _FoodCardState extends State<FoodCard> {
   bool _isMainDetailsVisible = true;
+  bool _isTopPreorderButtonVisible = true;
+  bool _isBottomPreorderButtonVisible = false;
   double _opacity = 0.0;
   final ScrollController _controller = ScrollController();
   final GlobalKey _mainDetailsKey = GlobalKey();
@@ -55,6 +56,8 @@ class _FoodCardState extends State<FoodCard> {
   double _dietaryOptionsHeight = 0;
   double _menuItemsHeight = 0;
   double _upcomingLocationsHeight = 0;
+  double _opacityPreorder = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -86,10 +89,22 @@ class _FoodCardState extends State<FoodCard> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isFront ? buildFrontCard() : buildCard(context);
+    Size size = MediaQuery.of(context).size;
+    double foodCardWidth = size.width * 0.98;
+    double foodCardHeight = size.height * 0.77;
+    return widget.isFront
+        ? buildFrontCard(
+            foodCardWidth,
+            foodCardHeight,
+          )
+        : buildCard(
+            context,
+            foodCardWidth,
+            foodCardHeight,
+          );
   }
 
-  Widget buildFrontCard() {
+  Widget buildFrontCard(double width, double height) {
     return GestureDetector(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -107,11 +122,12 @@ class _FoodCardState extends State<FoodCard> {
           return AnimatedContainer(
             curve: Curves.easeInOut,
             duration: Duration(milliseconds: milliseconds),
-            transform: rotatedMatrix..translate(position.dx, position.dy),
+            transform: Matrix4.translationValues(position.dx, position.dy, 0)
+              ..rotateZ(angle * pi / 180),
             child: Stack(
               alignment: Alignment.center,
               children: [
-                buildCard(context),
+                buildCard(context, width, height),
                 const Stamps(),
               ],
             ),
@@ -136,10 +152,7 @@ class _FoodCardState extends State<FoodCard> {
     );
   }
 
-  Widget buildCard(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double width = size.width * 0.95;
-    double height = size.height * 0.77;
+  Widget buildCard(BuildContext context, double width, double height) {
     double scrollLimit = MediaQuery.of(context).size.height * 0.12;
     double startTracking = MediaQuery.of(context).size.height * 0.48;
     double opacitydelta = 1.0 / scrollLimit;
@@ -149,8 +162,7 @@ class _FoodCardState extends State<FoodCard> {
       width: width,
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(
-              color: Theme.of(context).colorScheme.onSurface, width: 1),
+          border: Border.all(color: dineTimeColorScheme.onSurface, width: 1),
           borderRadius: BorderRadius.circular(10)),
       child: Center(
         child: NotificationListener<ScrollNotification>(
@@ -188,14 +200,22 @@ class _FoodCardState extends State<FoodCard> {
             if (scrollNotification.metrics.pixels >= scrollLimit) {
               setState(() {
                 _isMainDetailsVisible = false;
+                _isBottomPreorderButtonVisible = true;
               });
             } else {
               setState(() {
                 _isMainDetailsVisible = true;
+                _isBottomPreorderButtonVisible = false;
                 if (scrollNotification.metrics.pixels <= 0) {
                   _opacity = 0.0;
+                  _opacityPreorder = 0.0;
                 } else {
                   _opacity = scrollNotification.metrics.pixels * opacitydelta;
+                  _opacityPreorder =
+                      scrollNotification.metrics.pixels * opacitydelta;
+                }
+                if (scrollNotification.metrics.pixels >= 1.0) {
+                  _opacityPreorder = 1.0;
                 }
               });
             }
@@ -211,11 +231,12 @@ class _FoodCardState extends State<FoodCard> {
                     children: [
                       Background(
                         width: width,
-                        height: height,
-                        restaurantMenu: widget.restaurant.menu,
+                        height: height - 3,
+                        restaurantCoverRef:
+                            widget.restaurant.restaurantCoverRef,
                         services: widget.services,
                       ),
-                      BackgroundShadow(width: width, height: height),
+                      BackgroundShadow(width: width, height: height - 3),
                       mainDetails(width, height)
                     ],
                   ),
@@ -252,44 +273,21 @@ class _FoodCardState extends State<FoodCard> {
                 const SizedBox(height: 18),
                 Name(
                   restaurantName: widget.restaurant.restaurantName,
-                  color: Theme.of(context).colorScheme.background,
+                  onMainDetails: true,
                 ),
                 CuisineDetails(
                   cuisine: widget.restaurant.cuisine,
                   pricing: widget.restaurant.pricing,
                   customerLocation: widget.customer.geolocation!,
                   locations: widget.restaurant.upcomingLocations,
-                  color: Theme.of(context).colorScheme.background,
+                  onMainDetails: true,
                 ),
                 const SizedBox(height: 18),
-                widget.restaurant.upcomingLocations.isNotEmpty
-                    ? NextLocation(
-                        locationName:
-                            widget.restaurant.upcomingLocations[0].locationName,
-                        imagePath: 'lib/assets/location_white.png',
-                        color: Theme.of(context).colorScheme.background,
-                      )
-                    : Container(),
+                NextLocation(
+                  upcomingLocations: widget.restaurant.upcomingLocations,
+                  onMainDetails: true,
+                ),
                 const SizedBox(height: 7),
-                widget.restaurant.upcomingLocations.isNotEmpty
-                    ? NextDate(
-                        locationDateStart: widget
-                            .restaurant.upcomingLocations[0].locationDateStart,
-                        imagePath: 'lib/assets/calendar.png',
-                        color: Theme.of(context).colorScheme.background,
-                      )
-                    : Container(),
-                const SizedBox(height: 7),
-                widget.restaurant.upcomingLocations.isNotEmpty
-                    ? NextTime(
-                        locationDateStart: widget
-                            .restaurant.upcomingLocations[0].locationDateStart,
-                        locationDateEnd: widget
-                            .restaurant.upcomingLocations[0].locationDateEnd,
-                        imagePath: 'lib/assets/clock_white.png',
-                        color: Theme.of(context).colorScheme.background,
-                      )
-                    : Container(),
               ],
             ),
           ),
@@ -314,49 +312,27 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 5),
           Name(
             restaurantName: widget.restaurant.restaurantName,
-            color: Theme.of(context).colorScheme.onBackground,
+            onMainDetails: false,
           ),
           CuisineDetails(
             cuisine: widget.restaurant.cuisine,
             pricing: widget.restaurant.pricing,
             customerLocation: widget.customer.geolocation!,
             locations: widget.restaurant.upcomingLocations,
-            color: Theme.of(context).colorScheme.onBackground,
+            onMainDetails: false,
           ),
           const SizedBox(height: 15),
-          widget.restaurant.upcomingLocations.isNotEmpty
-              ? NextLocation(
-                  locationName:
-                      widget.restaurant.upcomingLocations[0].locationName,
-                  imagePath: 'lib/assets/location_arrow_orange.png',
-                  color: Theme.of(context).colorScheme.onBackground,
-                )
-              : Container(),
-          const SizedBox(height: 7),
-          widget.restaurant.upcomingLocations.isNotEmpty
-              ? NextDate(
-                  locationDateStart:
-                      widget.restaurant.upcomingLocations[0].locationDateStart,
-                  imagePath: 'lib/assets/calendar_orange.png',
-                  color: Theme.of(context).colorScheme.onBackground,
-                )
-              : Container(),
-          const SizedBox(height: 7),
-          widget.restaurant.upcomingLocations.isNotEmpty
-              ? NextTime(
-                  locationDateStart:
-                      widget.restaurant.upcomingLocations[0].locationDateStart,
-                  locationDateEnd:
-                      widget.restaurant.upcomingLocations[0].locationDateEnd,
-                  imagePath: 'lib/assets/clock_orange.png',
-                  color: Theme.of(context).colorScheme.onBackground,
-                )
-              : Container(),
+          NextLocation(
+            upcomingLocations: widget.restaurant.upcomingLocations,
+            onMainDetails: false,
+          ),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
           AboutAndStory(
-              key: _aboutAndStoryKey, restaurantBio: widget.restaurant.bio),
+            key: _aboutAndStoryKey,
+            restaurantBio: widget.restaurant.bio,
+          ),
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
@@ -380,9 +356,10 @@ class _FoodCardState extends State<FoodCard> {
           const Divider(),
           const SizedBox(height: 10.0),
           UpcomingLocations(
-              key: _upcomingLocationsKey,
-              customerLocation: widget.customer.geolocation!,
-              popUpLocations: widget.restaurant.upcomingLocations),
+            key: _upcomingLocationsKey,
+            customerLocation: widget.customer.geolocation!,
+            popUpLocations: widget.restaurant.upcomingLocations,
+          ),
         ],
       ),
     );

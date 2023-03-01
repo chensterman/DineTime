@@ -86,6 +86,10 @@ class _HomeState extends State<Home> {
                     icon: Icon(Icons.favorite_border_rounded),
                     label: 'Favorites',
                   ),
+                  // BottomNavigationBarItem(
+                  //   icon: AssetImage('preorder.png'),
+                  //   label: 'Preorders',
+                  // ),
                 ],
               ),
             );

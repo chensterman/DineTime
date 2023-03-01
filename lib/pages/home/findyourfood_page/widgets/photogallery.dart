@@ -195,8 +195,10 @@ class _PhotoCardState extends State<PhotoCard> {
               borderRadius: BorderRadius.circular(10),
               color: Colors.white.withOpacity(0.5),
             ),
-            child: const Center(
-              child: CircularProgressIndicator(),
+            child: Center(
+              child: CircularProgressIndicator(
+                color: dineTimeColorScheme.primary,
+              ),
             ),
           );
         }
@@ -273,8 +275,10 @@ class _PhotoOnGalleryState extends State<PhotoOnGallery> {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white.withOpacity(0.5),
                     ),
-                    child: const Center(
-                      child: CircularProgressIndicator(),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: dineTimeColorScheme.primary,
+                      ),
                     ),
                   );
                 }

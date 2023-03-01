@@ -2,10 +2,8 @@ import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/locationpreferences_page/blocs/locationallowed/locationallowed_bloc.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/locationpreferences_page/widgets/locationpreferences_error_dialog.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/welcome_page/welcome.dart';
-import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 // Page to enable location settings
 class LocationPreferencesButton extends StatelessWidget {
@@ -15,7 +13,6 @@ class LocationPreferencesButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Services services = Provider.of<Services>(context);
     return BlocListener<LocationAllowedBloc, LocationAllowedState>(
       listener: (context, state) {
         if (state is PermissionGiven) {
