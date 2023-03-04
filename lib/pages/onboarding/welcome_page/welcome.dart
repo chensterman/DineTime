@@ -14,7 +14,7 @@ class Welcome extends StatelessWidget {
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: dineTimeColorScheme.primary,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

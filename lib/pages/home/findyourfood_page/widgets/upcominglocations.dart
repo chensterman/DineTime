@@ -62,29 +62,40 @@ class UpcomingLocations extends StatelessWidget {
   Widget upcomingLocationCard(
     BuildContext context,
     GeoPoint geocode,
-    Timestamp locationDateStart,
-    Timestamp? locationDateEnd,
+    Timestamp? dateStart,
+    Timestamp? dateEnd,
     String name,
     String address,
   ) {
-    String periodStart = locationDateStart.toDate().hour > 12 ? "PM" : "AM";
-    num hourStart = locationDateStart.toDate().hour % 12;
-    num minuteStart = locationDateStart.toDate().minute;
-    String? periodEnd;
-    num? hourEnd;
-    num? minuteEnd;
-    if (locationDateEnd != null) {
-      String periodEnd = locationDateEnd.toDate().hour > 12 ? "PM" : "AM";
-      num hourEnd = locationDateEnd.toDate().hour % 12;
-      num minuteEnd = locationDateEnd.toDate().minute;
-    }
-    String timeZoneName = locationDateStart.toDate().timeZoneName;
+    String timeDisplay = "TBD";
+    if (dateStart != null) {
+      String periodStart = dateStart.toDate().hour > 12 ? "PM" : "AM";
+      String timeZoneName = dateStart.toDate().timeZoneName;
+      num hourStart = dateStart.toDate().hour % 12;
+      String hourStartString =
+          (hourStart / 10).floor() == 0 ? "0$hourStart" : "$hourStart";
+      num minuteStart = dateStart.toDate().minute;
+      String minuteStartString =
+          (minuteStart / 10).floor() == 0 ? "0$minuteStart" : "$minuteStart";
 
-    String timeDisplay = "";
-    if (locationDateEnd != null) {
-      timeDisplay = "$hourStart:$minuteStart $periodStart $timeZoneName";
-    } else {
-      "$hourStart:$minuteStart $periodStart - $hourEnd:$minuteEnd $periodEnd $timeZoneName";
+      String? periodEnd;
+      num? hourEnd;
+      String? hourEndString;
+      num? minuteEnd;
+      String? minuteEndString;
+      if (dateEnd != null) {
+        periodEnd = dateEnd.toDate().hour > 12 ? "PM" : "AM";
+        hourEnd = dateEnd.toDate().hour % 12;
+        hourEndString = (hourEnd / 10).floor() == 0 ? "0$hourEnd" : "$hourEnd";
+        minuteEnd = dateEnd.toDate().minute;
+        minuteEndString =
+            (minuteEnd / 10).floor() == 0 ? "0$minuteEnd" : "$minuteEnd";
+        timeDisplay =
+            "$hourStartString:$minuteStartString $periodStart - $hourEndString:$minuteEndString $periodEnd $timeZoneName";
+      } else {
+        timeDisplay =
+            "$hourStartString:$minuteStartString $periodStart $timeZoneName - Until Sold Out";
+      }
     }
 
     Services services = Provider.of<Services>(context);
@@ -99,7 +110,9 @@ class UpcomingLocations extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
-              '${locationDateStart.toDate().month}/${locationDateStart.toDate().day}',
+              dateStart == null
+                  ? 'TBD'
+                  : '${dateStart.toDate().month}/${dateStart.toDate().day}',
               style: dineTimeTypography.headlineSmall?.copyWith(
                 color: dineTimeColorScheme.onSurface,
               ),
