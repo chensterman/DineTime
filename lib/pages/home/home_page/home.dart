@@ -10,6 +10,7 @@ import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/findyourfood.dart';
 import 'package:dinetime_mobile_mvp/pages/home/favorites_page/favorites.dart';
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/pages/home/completedpreorders_page/preorders.dart';
 
 class Home extends StatefulWidget {
   final Services services;
@@ -71,6 +72,9 @@ class _HomeState extends State<Home> {
               Favorites(
                 customer: customer,
               ),
+              PreorderPage(
+                customer: customer,
+              ),
             ];
             return Scaffold(
               extendBodyBehindAppBar: false,
@@ -82,7 +86,7 @@ class _HomeState extends State<Home> {
               bottomNavigationBar: BottomNavBar(
                 currentIndex: _selectedIndex,
                 onTap: _onItemTapped,
-                items: const <BottomNavigationBarItem>[
+                items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: 'Home',
@@ -91,10 +95,13 @@ class _HomeState extends State<Home> {
                     icon: Icon(Icons.favorite_border_rounded),
                     label: 'Favorites',
                   ),
-                  // BottomNavigationBarItem(
-                  //   icon: AssetImage('preorder.png'),
-                  //   label: 'Preorders',
-                  // ),
+                  BottomNavigationBarItem(
+                    icon: ImageIcon(
+                      AssetImage("lib/assets/preorder.png"),
+                      size: 34,
+                    ),
+                    label: 'Preorders',
+                  ),
                 ],
               ),
             );
