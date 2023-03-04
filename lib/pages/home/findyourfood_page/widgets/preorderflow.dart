@@ -370,8 +370,8 @@ class Preorders extends StatelessWidget {
                   const SizedBox(width: 15.0),
                   Text(
                     'Seattle Fremont Brewery',
-                    style: Theme.of(context).textTheme.headline1?.copyWith(
-                          fontSize: 16.0,
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          fontSize: 15.0,
                           fontWeight: FontWeight.w100,
                           color: Colors.grey,
                         ),
@@ -389,8 +389,8 @@ class Preorders extends StatelessWidget {
                   const SizedBox(width: 15.0),
                   Text(
                     'Pickup before 6:00 PM PST',
-                    style: Theme.of(context).textTheme.headline1?.copyWith(
-                          fontSize: 16.0,
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          fontSize: 15.0,
                           fontWeight: FontWeight.w100,
                           color: Colors.grey,
                         ),
