@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
@@ -18,7 +18,6 @@ class Menu extends StatelessWidget {
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
     List<Widget> columnChildren = [];
-    num count = 0;
     for (r.MenuItem menuItem in menu) {
       columnChildren.add(MenuOption(
         itemName: menuItem.itemName,
@@ -35,39 +34,36 @@ class Menu extends StatelessWidget {
           height: 1,
         ),
       );
-      count += 1;
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Our Menu',
-              style: Theme.of(context).textTheme.headline1?.copyWith(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            // menuButton(context),
-          ],
+        Text(
+          'Our Menu',
+          style: dineTimeTypography.headlineMedium,
         ),
         const SizedBox(
-          height: 15,
+          height: 10,
         ),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                  color: Theme.of(context).colorScheme.onSurface, width: 1),
-              borderRadius: BorderRadius.circular(15)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: columnChildren,
-          ),
-        ),
+        menu.isEmpty
+            ? Text(
+                'No menu items.',
+                style: dineTimeTypography.bodyMedium?.copyWith(
+                  color: dineTimeColorScheme.onSurface,
+                ),
+              )
+            : Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                        color: dineTimeColorScheme.onSurface, width: 1),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: columnChildren,
+                ),
+              ),
       ],
     );
   }

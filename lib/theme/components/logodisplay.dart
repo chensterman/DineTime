@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 class LogoDisplay extends StatelessWidget {
   final double width;
@@ -26,11 +27,13 @@ class LogoDisplay extends StatelessWidget {
                 image: image!,
               ),
         shape: BoxShape.circle,
-        border:
-            Border.all(color: Theme.of(context).colorScheme.primary, width: 3),
+        border: Border.all(color: dineTimeColorScheme.primary, width: 3),
       ),
       child: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(
+              color: dineTimeColorScheme.primary,
+            ))
           : Container(),
     );
   }

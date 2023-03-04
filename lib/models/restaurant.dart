@@ -7,6 +7,7 @@ class Restaurant {
   String bio;
   String cuisine;
   String restaurantLogoRef;
+  String restaurantCoverRef;
   int pricing;
   List<GalleryImage> gallery;
   List<MenuItem> menu;
@@ -18,6 +19,7 @@ class Restaurant {
     required this.restaurantId,
     required this.restaurantName,
     required this.restaurantLogoRef,
+    required this.restaurantCoverRef,
     required this.pricing,
     required this.gallery,
     required this.menu,

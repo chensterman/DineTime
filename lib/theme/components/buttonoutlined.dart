@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Outlined button used across multiple forms
 class ButtonOutlined extends StatelessWidget {
@@ -14,16 +15,16 @@ class ButtonOutlined extends StatelessWidget {
   Widget build(BuildContext context) {
     // Button styled with pimary colors on OutlinedButton class for outlined effect
     ButtonStyle style = OutlinedButton.styleFrom(
-      foregroundColor: Theme.of(context).colorScheme.primary,
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+      foregroundColor: dineTimeColorScheme.primary,
+      backgroundColor: dineTimeColorScheme.onPrimary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       // Outlined border
       side: BorderSide(
         width: 1.0,
-        color: Theme.of(context).colorScheme.primary,
+        color: dineTimeColorScheme.primary,
         style: BorderStyle.solid,
       ),
-      textStyle: Theme.of(context).textTheme.button,
+      textStyle: dineTimeTypography.headlineSmall,
       minimumSize: const Size.fromHeight(50), // 50 px height, inf width
     );
     return OutlinedButton(

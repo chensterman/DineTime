@@ -23,7 +23,7 @@ class _FindYourFoodState extends State<FindYourFood> {
   @override
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
-    services.clientAnalytics.trackScreenView('FYFPage');
+    services.clientAnalytics.trackScreenView('FYFPage', 'FYFPage');
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -37,6 +37,7 @@ class _FindYourFoodState extends State<FindYourFood> {
               create: (context) => CardProvider(
                 customerId: services.clientAuth.getCurrentUserUid()!,
                 clientDB: services.clientDB,
+                clientAnalytics: services.clientAnalytics,
               ),
               builder: (context, child) {
                 return buildCards(context);
@@ -58,8 +59,8 @@ class _FindYourFoodState extends State<FindYourFood> {
           const SizedBox(width: 20.0),
           const Spacer(),
           Container(
-            width: 15.0,
-            height: 15.0,
+            width: 20.0,
+            height: 20.0,
             decoration: BoxDecoration(
               image: const DecorationImage(
                 fit: BoxFit.contain,
@@ -74,33 +75,24 @@ class _FindYourFoodState extends State<FindYourFood> {
           ),
           FutureBuilder(
             future: services.clientLocation
-                .geoPointToAddress(widget.customer.geolocation),
+                .geoPointToAddress(widget.customer.geolocation!),
             builder: (context, AsyncSnapshot<String?> snapshot) {
               if (snapshot.hasError) {
                 return Text(
                   "Error retrieving location",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                  style: dineTimeTypography.headlineSmall,
                 );
                 // On success.
               } else if (snapshot.connectionState == ConnectionState.done) {
                 String address = snapshot.data!;
                 return Text(
                   address,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                  style: dineTimeTypography.headlineSmall,
                 );
               } else {
                 return Text(
                   "Retrieving location...",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      ?.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                  style: dineTimeTypography.headlineSmall,
                 );
               }
             },
@@ -109,7 +101,7 @@ class _FindYourFoodState extends State<FindYourFood> {
           InkWell(
             child: Icon(
               Icons.settings,
-              color: Theme.of(context).colorScheme.primary,
+              color: dineTimeColorScheme.primary,
               size: 20.0,
             ),
             onTap: () {
@@ -152,10 +144,8 @@ class _FindYourFoodState extends State<FindYourFood> {
                       const SizedBox(width: 10),
                       Text(
                         "Go Back",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            fontSize: 12.0,
-                            fontFamily: 'Lato',
-                            color: Theme.of(context).colorScheme.primary),
+                        style: dineTimeTypography.bodySmall
+                            ?.copyWith(color: dineTimeColorScheme.primary),
                       ),
                     ],
                   ),
@@ -170,6 +160,7 @@ class _FindYourFoodState extends State<FindYourFood> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
+                      fullscreenDialog: true,
                       builder: (context) => const Routing(),
                     ),
                   );
@@ -179,16 +170,20 @@ class _FindYourFoodState extends State<FindYourFood> {
               ButtonFilled(
                 text: "Delete Account",
                 isDisabled: false,
-                onPressed: () {
+                onPressed: () async {
+                  Navigator.pop(context);
                   String customerId = services.clientAuth.getCurrentUserUid()!;
-                  services.clientAuth.deleteAccount();
-                  services.clientDB.customerDelete(customerId);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Routing(),
-                    ),
-                  );
+                  await services.clientAuth.deleteAccount();
+                  await services.clientDB.customerDelete(customerId);
+                  if (mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => const Routing(),
+                      ),
+                    );
+                  }
                 },
               ),
               const SizedBox(height: 20.0),
@@ -210,24 +205,41 @@ class _FindYourFoodState extends State<FindYourFood> {
     final provider = Provider.of<CardProvider>(context);
     Services services = Provider.of<Services>(context);
     final restaurants = provider.restaurants;
-    return restaurants.isEmpty
-        ? const Expanded(
-            child: Center(
-              child: CircularProgressIndicator(),
+    final isLoading = provider.isLoading;
+    if (isLoading) {
+      return Expanded(
+        child: Center(
+          child: CircularProgressIndicator(
+            color: dineTimeColorScheme.primary,
+          ),
+        ),
+      );
+    } else if (restaurants.isEmpty) {
+      return Expanded(
+        child: Center(
+          child: Text(
+            "You have swiped through all of the food cards. Please be patient as we are onboarding new popups every month!",
+            textAlign: TextAlign.center,
+            style: dineTimeTypography.bodyMedium?.copyWith(
+              color: dineTimeColorScheme.onSurface,
             ),
-          )
-        : Stack(
-            alignment: Alignment.center,
-            children: restaurants
-                .map(
-                  (restaurant) => FoodCard(
-                    customer: widget.customer,
-                    restaurant: restaurant,
-                    isFront: restaurants.last == restaurant,
-                    services: services,
-                  ),
-                )
-                .toList(),
-          );
+          ),
+        ),
+      );
+    } else {
+      return Stack(
+        alignment: Alignment.center,
+        children: restaurants
+            .map(
+              (restaurant) => FoodCard(
+                customer: widget.customer,
+                restaurant: restaurant,
+                isFront: restaurants.last == restaurant,
+                services: services,
+              ),
+            )
+            .toList(),
+      );
+    }
   }
 }

@@ -1,12 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
-import 'package:dinetime_mobile_mvp/services/analytics.dart';
-import 'package:dinetime_mobile_mvp/services/auth.dart';
-import 'package:dinetime_mobile_mvp/services/database.dart';
-import 'package:dinetime_mobile_mvp/services/location.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/findyourfood.dart';
 import 'package:dinetime_mobile_mvp/pages/home/favorites_page/favorites.dart';
 import 'package:flutter/material.dart';
@@ -95,13 +90,10 @@ class _HomeState extends State<Home> {
                     icon: Icon(Icons.favorite_border_rounded),
                     label: 'Favorites',
                   ),
-                  BottomNavigationBarItem(
-                    icon: ImageIcon(
-                      AssetImage("lib/assets/preorder.png"),
-                      size: 34,
-                    ),
-                    label: 'Preorders',
-                  ),
+                  // BottomNavigationBarItem(
+                  //   icon: AssetImage('preorder.png'),
+                  //   label: 'Preorders',
+                  // ),
                 ],
               ),
             );

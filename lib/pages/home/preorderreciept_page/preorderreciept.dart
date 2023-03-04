@@ -48,8 +48,8 @@ class _PreorderRecieptState extends State<PreorderReciept> {
     ];
     List<int> preOrderItemCount = [2, 3, 4];
     List<String> preOrderDietOptions = [
-      '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/vegan.png',
-      '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/nut_free.png',
+      'lib/assets/vegan.png',
+      'lib/assets/nut_free.png',
     ];
     //Mock Data
     return SizedBox(

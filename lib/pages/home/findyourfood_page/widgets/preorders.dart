@@ -54,11 +54,13 @@ class Preorders extends StatelessWidget {
     Services services = Provider.of<Services>(context);
     List<Widget> columnChildren = [];
     ButtonStyle style = ElevatedButton.styleFrom(
-      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      disabledBackgroundColor: Theme.of(context).colorScheme.onSurface,
+      foregroundColor: dineTimeColorScheme.onPrimary,
+      disabledBackgroundColor: dineTimeColorScheme.onSurface,
       disabledForegroundColor: dineTimeColorScheme.primary,
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      textStyle: Theme.of(context).textTheme.button,
+      backgroundColor: dineTimeColorScheme.primary,
+      textStyle: dineTimeTypography.bodySmall?.copyWith(
+        color: dineTimeColorScheme.background,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     ); // 50 px height, inf width
     for (r.MenuItem menuItem in menu) {
@@ -145,7 +147,7 @@ class Preorders extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/preorderfork.png',
+                  'lib/assets/preorderfork.png',
                   width: 14,
                   height: 14,
                 ),
@@ -212,7 +214,7 @@ class Preorders extends StatelessWidget {
             child: Row(
               children: [
                 Image.asset(
-                  '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/cart_white.png',
+                  'lib/assets/cart_white.png',
                   width: 20,
                   height: 20,
                 ),

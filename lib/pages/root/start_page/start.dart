@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dinetime_mobile_mvp/pages/root/routing_page/routing.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 
 // Start page with a 5 second viewing of the DineTime logo
@@ -17,6 +18,7 @@ class Start extends StatelessWidget {
       () {
         Navigator.of(context).push(
           MaterialPageRoute(
+            fullscreenDialog: true,
             builder: (context) => const Routing(),
           ),
         );
@@ -24,7 +26,7 @@ class Start extends StatelessWidget {
     );
     // DineTime logo displayed
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: dineTimeColorScheme.primary,
       body: const Padding(
         padding: EdgeInsets.all(96.0),
         child: Center(

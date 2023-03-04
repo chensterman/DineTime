@@ -112,7 +112,7 @@ class Preorders extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/preorderfork.png',
+                  'lib/assets/preorderfork.png',
                   width: 14,
                   height: 14,
                 ),
@@ -173,7 +173,7 @@ class Preorders extends StatelessWidget {
             child: Row(
               children: [
                 Image.asset(
-                  '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/cart_white.png',
+                  'lib/assets/cart_white.png',
                   width: 20,
                   height: 20,
                 ),
@@ -311,8 +311,8 @@ class Preorders extends StatelessWidget {
     ];
     List<int> preOrderItemCount = [2, 3, 4];
     List<String> preOrderDietOptions = [
-      '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/vegan.png',
-      '/Users/jaypalamand/Dinetime/dinetime_mobile_mvp/lib/assets/nut_free.png',
+      'lib/assets/vegan.png',
+      'lib/assets/nut_free.png',
     ];
     //Mock Data
 
