@@ -36,11 +36,11 @@ class FoodDisplay extends StatelessWidget {
         ),
         body: Center(
           child: FoodCard(
-            customer: customer,
-            restaurant: restaurant,
-            isFront: false,
-            services: services,
-          ),
+              customer: customer,
+              restaurant: restaurant,
+              isFront: false,
+              services: services,
+              origin: 'Favorites'),
         ));
   }
 }

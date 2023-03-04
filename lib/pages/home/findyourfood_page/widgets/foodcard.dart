@@ -26,12 +26,14 @@ class FoodCard extends StatefulWidget {
   final r.Restaurant restaurant;
   final bool isFront;
   final Services services;
+  final String? origin;
   const FoodCard({
     Key? key,
     required this.customer,
     required this.restaurant,
     required this.isFront,
     required this.services,
+    this.origin,
   }) : super(key: key);
 
   @override
@@ -173,34 +175,64 @@ class _FoodCardState extends State<FoodCard> {
               if (_controller.position.pixels < scrollLimit) {
               } else if (_controller.position.pixels >= scrollLimit &&
                   _controller.position.pixels < startTracking) {
-                widget.services.clientAnalytics
-                    .trackScreenView('MainDetails', 'FYFPage');
+                if (widget.origin != null) {
+                  widget.services.clientAnalytics
+                      .trackScreenView('MainDetails', widget.origin!);
+                } else {
+                  widget.services.clientAnalytics
+                      .trackScreenView('MainDetails', 'FYFPage');
+                }
               } else if (_controller.position.pixels >= startTracking &&
                   _controller.position.pixels <
                       startTracking + _aboutAndStoryHeight) {
-                widget.services.clientAnalytics
-                    .trackScreenView('AboutAndStory', 'FYFPage');
+                if (widget.origin != null) {
+                  widget.services.clientAnalytics
+                      .trackScreenView('AboutAndStory', widget.origin!);
+                } else {
+                  widget.services.clientAnalytics
+                      .trackScreenView('AboutAndStory', 'FYFPage');
+                }
               } else if (_controller.position.pixels >=
                       startTracking + _aboutAndStoryHeight &&
                   _controller.position.pixels <
                       startTracking + _photoGalleryHeight) {
-                widget.services.clientAnalytics
-                    .trackScreenView('PhotoGallery', 'FYFPage');
+                if (widget.origin != null) {
+                  widget.services.clientAnalytics
+                      .trackScreenView('PhotoGallery', widget.origin!);
+                } else {
+                  widget.services.clientAnalytics
+                      .trackScreenView('PhotoGallery', 'FYFPage');
+                }
               } else if (_controller.position.pixels >=
                       startTracking + _photoGalleryHeight &&
                   _controller.position.pixels <
                       startTracking + _dietaryOptionsHeight) {
-                widget.services.clientAnalytics
-                    .trackScreenView('DietOptions', 'FYFPage');
+                if (widget.origin != null) {
+                  widget.services.clientAnalytics
+                      .trackScreenView('DietOptions', widget.origin!);
+                } else {
+                  widget.services.clientAnalytics
+                      .trackScreenView('DietOptions', 'FYFPage');
+                }
               } else if (_controller.position.pixels >=
                       startTracking + _dietaryOptionsHeight &&
                   _controller.position.pixels <
                       startTracking + _menuItemsHeight) {
-                widget.services.clientAnalytics
-                    .trackScreenView('Menu', 'FYFPage');
+                if (widget.origin != null) {
+                  widget.services.clientAnalytics
+                      .trackScreenView('Menu', widget.origin!);
+                } else {
+                  widget.services.clientAnalytics
+                      .trackScreenView('Menu', 'FYFPage');
+                }
               } else {
-                widget.services.clientAnalytics
-                    .trackScreenView('UpcomingLocs', 'FYFPage');
+                if (widget.origin != null) {
+                  widget.services.clientAnalytics
+                      .trackScreenView('UpcomingLocs', widget.origin!);
+                } else {
+                  widget.services.clientAnalytics
+                      .trackScreenView('UpcomingLocs', 'FYFPage');
+                }
               }
             }
             if (scrollNotification.metrics.pixels >= scrollLimit) {
