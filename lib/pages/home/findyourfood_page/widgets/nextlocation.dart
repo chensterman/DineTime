@@ -72,9 +72,10 @@ class NextLocation extends StatelessWidget {
     String nextDate = date == null
         ? 'TBD'
         : '${months[date.toDate().month - 1]} ${date.toDate().day}, ${date.toDate().year}';
-    String daysAway = date == null
-        ? ''
-        : '${date.toDate().difference(DateTime.now()).inDays} Days Away';
+
+    int daysAwayInt =
+        date == null ? 0 : date.toDate().difference(DateTime.now()).inDays;
+    String daysAway = daysAwayInt == 0 ? 'Today' : '$daysAwayInt Days Away';
 
     return Row(
       children: [
@@ -150,7 +151,7 @@ class NextLocation extends StatelessWidget {
             "$hourStartString:$minuteStartString $periodStart - $hourEndString:$minuteEndString $periodEnd $timeZoneName";
       } else {
         timeDisplay =
-            "$hourStartString:$minuteStartString $periodStart $timeZoneName";
+            "$hourStartString:$minuteStartString $periodStart $timeZoneName - Until Sold Out";
       }
     }
 
