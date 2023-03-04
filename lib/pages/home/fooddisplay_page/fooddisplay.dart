@@ -27,7 +27,11 @@ class FoodDisplay extends StatelessWidget {
               Icons.arrow_back,
               color: Theme.of(context).colorScheme.onBackground,
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              services.clientAnalytics
+                  .trackScreenView('Favorites', 'Favorites');
+              Navigator.of(context).pop();
+            },
           ),
         ),
         body: Center(
