@@ -232,11 +232,11 @@ class _FindYourFoodState extends State<FindYourFood> {
         children: restaurants
             .map(
               (restaurant) => FoodCard(
-                customer: widget.customer,
-                restaurant: restaurant,
-                isFront: restaurants.last == restaurant,
-                services: services,
-              ),
+                  customer: widget.customer,
+                  restaurant: restaurant,
+                  isFront: restaurants.last == restaurant,
+                  services: services,
+                  origin: 'FYFPage'),
             )
             .toList(),
       );

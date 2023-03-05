@@ -2,6 +2,7 @@ import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/foodcard.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,22 +22,26 @@ class FoodDisplay extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: height * 0.08,
-          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor: dineTimeColorScheme.onPrimary,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: Theme.of(context).colorScheme.onBackground,
+              color: dineTimeColorScheme.onBackground,
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              services.clientAnalytics
+                  .trackScreenView('Favorites', 'Favorites');
+              Navigator.of(context).pop();
+            },
           ),
         ),
         body: Center(
           child: FoodCard(
-            customer: customer,
-            restaurant: restaurant,
-            isFront: false,
-            services: services,
-          ),
+              customer: customer,
+              restaurant: restaurant,
+              isFront: false,
+              services: services,
+              origin: 'Favorites'),
         ));
   }
 }

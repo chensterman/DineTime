@@ -82,7 +82,7 @@ class DataMock {
           locationId: "11",
           locationAddress: "Location Address, WA 12345",
           locationDateStart: Timestamp.now(),
-          locationDateEnd: Timestamp.now(),
+          locationDateEnd: null,
           timestamp: Timestamp.now(),
           geolocation: const GeoPoint(47.60, -122.33),
           locationName: "Location Name",

@@ -196,10 +196,14 @@ class DatabaseServiceApp extends DatabaseService {
       }
       // Get restaurant lcoations
       List<r.PopUpLocation> upcomingLocations = [];
+      DateTime now = DateTime.now();
+      DateTime lastMidnight = DateTime(now.year, now.month, now.day);
       QuerySnapshot locationsQuery = await restaurantCollection
           .doc(restaurantId)
           .collection("locations")
-          .orderBy("timestamp")
+          .where("location_date_start",
+              isGreaterThan: Timestamp.fromDate(lastMidnight))
+          .orderBy("location_date_start")
           .get();
       for (DocumentSnapshot doc in locationsQuery.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
