@@ -695,7 +695,7 @@ class _ItemDescriptionState extends State<ItemDescription> {
 }
 
 class AddItemsBag extends StatefulWidget {
-  final Double? itemPrice;
+  final double? itemPrice;
   final int? itemCount;
   final String? option;
   final String? specialInstructions;
