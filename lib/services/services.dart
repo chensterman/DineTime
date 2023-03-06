@@ -60,5 +60,6 @@ abstract class StorageService {
 
 abstract class AnalyticsService {
   void trackEvent(String eventName);
-  void trackScreenView(String pageName, String screenName);
+  void trackScreenView(String pageName, String screenClass);
+  void trackEventNum(String eventName, double value);
 }

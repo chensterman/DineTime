@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
               bottomNavigationBar: BottomNavBar(
                 currentIndex: _selectedIndex,
                 onTap: _onItemTapped,
-                items: <BottomNavigationBarItem>[
+                items: const <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: 'Home',
@@ -90,10 +90,13 @@ class _HomeState extends State<Home> {
                     icon: Icon(Icons.favorite_border_rounded),
                     label: 'Favorites',
                   ),
-                  // BottomNavigationBarItem(
-                  //   icon: AssetImage('preorder.png'),
-                  //   label: 'Preorders',
-                  // ),
+                  BottomNavigationBarItem(
+                    icon: ImageIcon(
+                      AssetImage("lib/assets/preorder.png"),
+                      size: 34,
+                    ),
+                    label: 'Preorders',
+                  ),
                 ],
               ),
             );

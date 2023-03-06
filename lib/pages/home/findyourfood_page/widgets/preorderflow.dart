@@ -90,6 +90,7 @@ class Preorders extends StatelessWidget {
           opacity: 0.8,
           child: ElevatedButton(
             onPressed: () {
+              services.clientAnalytics.trackEvent("start_preorder");
               showModalBottomSheet(
                 isScrollControlled: true,
                 shape: RoundedRectangleBorder(
@@ -152,6 +153,7 @@ class Preorders extends StatelessWidget {
           opacity: 0.9,
           child: ElevatedButton(
             onPressed: () {
+              services.clientAnalytics.trackEvent("view_bag");
               showModalBottomSheet(
                 isScrollControlled: true,
                 shape: RoundedRectangleBorder(
@@ -974,7 +976,7 @@ class AddItemsBag extends StatefulWidget {
   }) : super(key: key);
 
   final int? itemCount;
-  final Double? itemPrice;
+  final double? itemPrice;
   final String? option;
   final String? specialInstructions;
 
@@ -985,6 +987,7 @@ class AddItemsBag extends StatefulWidget {
 class _AddItemsBagState extends State<AddItemsBag> {
   @override
   Widget build(BuildContext context) {
+    Services services = Provider.of<Services>(context);
     // Button styled with pimary colors on ElevatedButton class for filled effect
     ButtonStyle style = ElevatedButton.styleFrom(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -1002,7 +1005,13 @@ class _AddItemsBagState extends State<AddItemsBag> {
         child: Opacity(
           opacity: 0.9,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              double num = 1;
+              if (widget.itemCount != null) {
+                num = (widget.itemCount!) as double;
+              }
+              services.clientAnalytics.trackEventNum("add_item", num);
+            },
             style: style,
             child: Row(
               children: [
@@ -1070,7 +1079,7 @@ class ConfirmPreorderButton extends StatefulWidget {
   }) : super(key: key);
 
   final int? itemCount;
-  final Double? itemPrice;
+  final double? itemPrice;
   final String? option;
   final String? specialInstructions;
 
@@ -1090,6 +1099,7 @@ class _ConfirmPreorderButtonState extends State<ConfirmPreorderButton> {
       textStyle: Theme.of(context).textTheme.button,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     ); // 50 px height, inf width
+    Services services = Provider.of<Services>(context);
     return Positioned(
       bottom: 40.0,
       child: SizedBox(
@@ -1099,6 +1109,11 @@ class _ConfirmPreorderButtonState extends State<ConfirmPreorderButton> {
           opacity: 0.9,
           child: ElevatedButton(
             onPressed: () {
+              double num = 15;
+              if (widget.itemPrice != null) {
+                num = widget.itemPrice!;
+              }
+              services.clientAnalytics.trackEventNum("confirm_preorder", num);
               showModalBottomSheet(
                 isScrollControlled: true,
                 shape: RoundedRectangleBorder(
