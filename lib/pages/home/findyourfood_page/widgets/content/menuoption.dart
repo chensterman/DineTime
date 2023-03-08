@@ -1,7 +1,6 @@
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 
 class MenuOption extends StatefulWidget {
@@ -11,7 +10,6 @@ class MenuOption extends StatefulWidget {
   final String itemImageRef;
   final List dietaryTags;
   final StorageService clientStorage;
-  final double paddingValue;
   const MenuOption({
     Key? key,
     required this.itemName,
@@ -20,7 +18,6 @@ class MenuOption extends StatefulWidget {
     required this.itemImageRef,
     required this.dietaryTags,
     required this.clientStorage,
-    required this.paddingValue,
   }) : super(key: key);
 
   @override
@@ -72,7 +69,7 @@ class _MenuOptionState extends State<MenuOption> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.all(widget.paddingValue),
+            padding: const EdgeInsets.all(15.0),
             child: Row(
               children: [
                 Expanded(

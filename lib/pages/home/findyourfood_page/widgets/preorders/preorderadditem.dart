@@ -1,342 +1,10 @@
-import 'dart:ffi';
-
-import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/services/storage.dart';
-import 'package:flutter/material.dart';
+import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
-import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
-import 'package:provider/provider.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/menuoption.dart';
+import 'package:flutter/material.dart';
 
-class Preorders extends StatelessWidget {
-  final List<r.MenuItem> menu;
-  const Preorders({
-    Key? key,
-    required this.menu,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Services services = Provider.of<Services>(context);
-    List<Widget> columnChildren = [];
-    num count = 0;
-    for (r.MenuItem menuItem in menu) {
-      columnChildren.add(MenuOption(
-        itemName: menuItem.itemName,
-        itemDesc: menuItem.itemDescription,
-        price: menuItem.itemPrice,
-        itemImageRef: menuItem.itemImageRef,
-        dietaryTags: menuItem.dietaryTags,
-        clientStorage: services.clientStorage,
-        paddingValue: 0.0,
-      ));
-      columnChildren.add(
-        const Divider(
-          color: Color.fromARGB(95, 158, 158, 158),
-          height: 1,
-        ),
-      );
-      count += 1;
-      if (count == 3) {
-        break;
-      }
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        preorderMainButton(context),
-      ],
-    );
-  }
-
-  Widget preorderMainButton(BuildContext context) {
-    Services services = Provider.of<Services>(context);
-    List<Widget> columnChildren = [];
-    ButtonStyle style = ElevatedButton.styleFrom(
-      foregroundColor: dineTimeColorScheme.onPrimary,
-      disabledBackgroundColor: dineTimeColorScheme.onSurface,
-      disabledForegroundColor: dineTimeColorScheme.primary,
-      backgroundColor: dineTimeColorScheme.primary,
-      textStyle: dineTimeTypography.bodySmall?.copyWith(
-        color: dineTimeColorScheme.background,
-      ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-    ); // 50 px height, inf width
-    for (r.MenuItem menuItem in menu) {
-      columnChildren.add(const SizedBox(
-        height: 10.0,
-      ));
-      columnChildren.add(
-        InkWell(
-          onTap: () {
-            // Show a bottom sheet with the details of the selected menu item
-            showModalBottomSheet(
-              isScrollControlled: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(10),
-                ),
-              ),
-              context: context,
-              builder: (context) => Stack(
-                alignment: Alignment.center,
-                children: [
-                  ItemDescription(
-                    itemName: menuItem.itemName,
-                    itemDesc: menuItem.itemDescription,
-                    price: menuItem.itemPrice,
-                    itemImageRef: menuItem.itemImageRef,
-                    dietaryTags: menuItem.dietaryTags,
-                    clientStorage: services.clientStorage,
-                  ),
-                  AddItemsBag(),
-                ],
-              ),
-            );
-          },
-          child: MenuOption(
-            itemName: menuItem.itemName,
-            itemDesc: menuItem.itemDescription,
-            price: menuItem.itemPrice,
-            itemImageRef: menuItem.itemImageRef,
-            dietaryTags: menuItem.dietaryTags,
-            clientStorage: services.clientStorage,
-            paddingValue: 0.0,
-          ),
-        ),
-      );
-      columnChildren.add(
-        const SizedBox(height: 12.0),
-      );
-      columnChildren.add(
-        const Divider(
-          color: Color.fromARGB(95, 158, 158, 158),
-          height: 1,
-        ),
-      );
-    }
-    return Positioned(
-      bottom: 40.0,
-      child: SizedBox(
-        width: 130,
-        height: 40,
-        child: Opacity(
-          opacity: 0.8,
-          child: ElevatedButton(
-            onPressed: () {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(10),
-                  ),
-                ),
-                context: context,
-                builder: (context) => Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    preorderMenu(context, columnChildren),
-                    viewPreorderButton(context),
-                  ],
-                ),
-              );
-            },
-            style: style,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'lib/assets/preorderfork.png',
-                  width: 14,
-                  height: 14,
-                ),
-                const SizedBox(
-                  width: 8.0,
-                ),
-                Text(
-                  "Pre-Order",
-                  style: TextStyle(
-                    fontSize: 14.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget viewPreorderButton(BuildContext context) {
-    Services services = Provider.of<Services>(context);
-    ButtonStyle style = ElevatedButton.styleFrom(
-      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      disabledBackgroundColor: Theme.of(context).colorScheme.onSurface,
-      disabledForegroundColor: dineTimeColorScheme.primary,
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      textStyle: Theme.of(context).textTheme.button,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-    ); // 50 px height, inf width
-    return Positioned(
-      bottom: 40.0,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.75,
-        height: 40,
-        child: Opacity(
-          opacity: 0.9,
-          child: ElevatedButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                ),
-                builder: (context) {
-                  return Material(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text('Mock Pre-Order Page'),
-                    ),
-                  );
-                },
-              );
-            },
-            style: style,
-            child: Row(
-              children: [
-                Image.asset(
-                  'lib/assets/cart_white.png',
-                  width: 20,
-                  height: 20,
-                ),
-                const SizedBox(
-                  width: 8.0,
-                ),
-                Text(
-                  "View Pre-Order",
-                  style: TextStyle(
-                    fontSize: 14.0,
-                  ),
-                ),
-                const SizedBox(
-                  width: 8.0,
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 20.0,
-                      height: 20.0,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Text(
-                      "3",
-                      style: TextStyle(
-                        color: dineTimeColorScheme.primary,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Text(
-                  "\$27.99",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget preorderMenu(BuildContext context, List<Widget> columnChildren) {
-    columnChildren.add(
-      const SizedBox(height: 70.0),
-    );
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.85,
-      child: DraggableScrollableSheet(
-        initialChildSize: 1.0,
-        builder: (_, controller) => Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Row(
-                    children: [
-                      const Image(
-                          image: AssetImage('lib/assets/back_arrow.png'),
-                          height: 12,
-                          width: 12),
-                      const SizedBox(width: 10),
-                      Text(
-                        "View Card",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            fontSize: 12.0,
-                            fontFamily: 'Lato',
-                            color: dineTimeColorScheme.primary),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 25.0),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Our Menu',
-                  style: Theme.of(context).textTheme.headline1?.copyWith(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: columnChildren,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ItemDescription extends StatefulWidget {
-  final String itemName;
-  final String itemDesc;
-  final num price;
-  final String itemImageRef;
-  final List dietaryTags;
-  final StorageService clientStorage;
-  const ItemDescription({
+class PreorderAddItem extends StatefulWidget {
+  const PreorderAddItem({
     Key? key,
     required this.itemName,
     required this.itemDesc,
@@ -346,13 +14,20 @@ class ItemDescription extends StatefulWidget {
     required this.clientStorage,
   }) : super(key: key);
 
+  final StorageService clientStorage;
+  final List dietaryTags;
+  final String itemDesc;
+  final String itemImageRef;
+  final String itemName;
+  final num price;
+
   @override
-  State<ItemDescription> createState() => _ItemDescriptionState();
+  State<PreorderAddItem> createState() => _PreorderAddItemState();
 }
 
-class _ItemDescriptionState extends State<ItemDescription> {
-  late final Future<ImageProvider<Object>?> _getPhoto;
+class _PreorderAddItemState extends State<PreorderAddItem> {
   int _counter = 0;
+  late final Future<ImageProvider<Object>?> _getPhoto;
   int? _selectedOptionIndex;
 
   @override
@@ -379,6 +54,16 @@ class _ItemDescriptionState extends State<ItemDescription> {
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        preorderAddItem(),
+        addItemButton(),
+      ],
+    );
+  }
+
+  Widget preorderAddItem() {
     final List<String> sizeOptions = [
       'Small (12 oz.)',
       'Large (18 oz.)',
@@ -396,7 +81,7 @@ class _ItemDescriptionState extends State<ItemDescription> {
     ];
 
     for (String diet in widget.dietaryTags) {
-      String imagePath = r.dietToImagePath[diet]!;
+      String imagePath = dietToImagePath[diet]!;
       pricingDietRowChildren.add(
         Image.asset(
           imagePath,
@@ -408,67 +93,69 @@ class _ItemDescriptionState extends State<ItemDescription> {
     }
     pricingDietRowChildren.add(Spacer());
     // Add the add subtract button to the pricingDietRowChildren list
-    pricingDietRowChildren.addAll([
-      SizedBox(
-        height: 28,
-        child: Row(
-          children: [
-            InkWell(
-              onTap: _decrementCounter,
-              child: Container(
-                width: 28,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: dineTimeColorScheme.primary,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    bottomLeft: Radius.circular(15),
+    pricingDietRowChildren.addAll(
+      [
+        SizedBox(
+          height: 28,
+          child: Row(
+            children: [
+              InkWell(
+                onTap: _decrementCounter,
+                child: Container(
+                  width: 28,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: dineTimeColorScheme.primary,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                    ),
                   ),
-                ),
-                child: Icon(
-                  Icons.remove,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Container(
-              width: 28,
-              height: 30,
-              decoration: BoxDecoration(
-                color: dineTimeColorScheme.primary,
-              ),
-              child: Center(
-                child: Text(
-                  '$_counter',
-                  style: TextStyle(
-                    fontSize: 16,
+                  child: Icon(
+                    Icons.remove,
                     color: Colors.white,
                   ),
                 ),
               ),
-            ),
-            InkWell(
-              onTap: _incrementCounter,
-              child: Container(
+              Container(
                 width: 28,
                 height: 30,
                 decoration: BoxDecoration(
                   color: dineTimeColorScheme.primary,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
+                ),
+                child: Center(
+                  child: Text(
+                    '$_counter',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
+              ),
+              InkWell(
+                onTap: _incrementCounter,
+                child: Container(
+                  width: 28,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: dineTimeColorScheme.primary,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.84,
       child: DraggableScrollableSheet(
@@ -692,28 +379,8 @@ class _ItemDescriptionState extends State<ItemDescription> {
       ),
     );
   }
-}
 
-class AddItemsBag extends StatefulWidget {
-  final Double? itemPrice;
-  final int? itemCount;
-  final String? option;
-  final String? specialInstructions;
-  const AddItemsBag({
-    Key? key,
-    this.itemPrice,
-    this.itemCount,
-    this.option,
-    this.specialInstructions,
-  }) : super(key: key);
-
-  @override
-  State<AddItemsBag> createState() => _AddItemsBagState();
-}
-
-class _AddItemsBagState extends State<AddItemsBag> {
-  @override
-  Widget build(BuildContext context) {
+  Widget addItemButton() {
     // Button styled with pimary colors on ElevatedButton class for filled effect
     ButtonStyle style = ElevatedButton.styleFrom(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -787,26 +454,4 @@ class _AddItemsBagState extends State<AddItemsBag> {
       ),
     );
   }
-}
-
-class MenuItem {
-  final String itemName;
-  final String itemDesc;
-  final num price;
-  final String itemImageRef;
-  final List<String> dietaryTags;
-  int count;
-  String? specialInstructions;
-  String? radioListTileChoice;
-
-  MenuItem({
-    required this.itemName,
-    required this.itemDesc,
-    required this.price,
-    required this.itemImageRef,
-    required this.dietaryTags,
-    this.count = 0,
-    this.specialInstructions,
-    this.radioListTileChoice,
-  });
 }
