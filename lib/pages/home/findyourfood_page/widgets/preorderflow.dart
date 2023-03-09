@@ -144,6 +144,7 @@ class Preorders extends StatelessWidget {
       textStyle: Theme.of(context).textTheme.button,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     ); // 50 px height, inf width
+    services.clientAnalytics.trackScreenView("preorder_menu", "Preorders");
     return Positioned(
       bottom: 40.0,
       child: SizedBox(
@@ -317,7 +318,8 @@ class Preorders extends StatelessWidget {
       'lib/assets/nut_free.png',
     ];
     //Mock Data
-
+    Services services = Provider.of<Services>(context);
+    services.clientAnalytics.trackScreenView("bag_screen", "Preorders");
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.84,
       child: DraggableScrollableSheet(

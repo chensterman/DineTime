@@ -15,6 +15,7 @@ class PreorderRecieptDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
     double height = MediaQuery.of(context).size.height;
+    services.clientAnalytics.trackScreenView("preorder_receipt", "Preorders");
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
