@@ -110,15 +110,20 @@ class PreorderItem {
 
 // Class defining a preorder bag
 class PreorderBag {
+  final String preorderId;
   final Restaurant restaurant;
-  final PopUpLocation? location;
+  final PopUpLocation location;
   final Timestamp timestamp;
   PreorderBag({
+    required this.preorderId,
     required this.restaurant,
     required this.location,
     required this.timestamp,
-  });
+  }) {
+    preorderCode = preorderId.substring(0, 5).toUpperCase();
+  }
 
+  late String preorderCode;
   final List<PreorderItem?> bag = [];
 
   // Handle adding new item, deleting if 0, etc.

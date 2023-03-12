@@ -101,14 +101,26 @@ class _FoodCardState extends State<FoodCard> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => PreorderBagBloc(
-                    preorderBag: r.PreorderBag(
-                  restaurant: widget.restaurant,
-                  location: widget.restaurant.upcomingLocations.isEmpty
-                      ? null
-                      : widget.restaurant.upcomingLocations[0],
-                  timestamp: Timestamp.now(),
-                ))),
+          create: (context) => PreorderBagBloc(
+            clientDB: widget.services.clientDB,
+            preorderBag: r.PreorderBag(
+              preorderId: "INITIAL",
+              restaurant: widget.restaurant,
+              location: widget.restaurant.upcomingLocations.isEmpty
+                  ? r.PopUpLocation(
+                      locationId: "123",
+                      locationAddress: "Dummy",
+                      locationDateStart: Timestamp.now(),
+                      locationDateEnd: Timestamp.now(),
+                      timestamp: Timestamp.now(),
+                      geolocation: const GeoPoint(0, 0),
+                      locationName: "Dummy",
+                    )
+                  : widget.restaurant.upcomingLocations[0],
+              timestamp: Timestamp.now(),
+            ),
+          ),
+        ),
       ],
       child: widget.isFront
           ? buildFrontCard(

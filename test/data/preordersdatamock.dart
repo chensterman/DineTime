@@ -81,12 +81,14 @@ class PreordersDataMock {
     );
 
     PreorderBag bag1 = PreorderBag(
+        preorderId: "ABCDE",
         restaurant: restaurant,
         location: restaurant.upcomingLocations[0],
         timestamp: Timestamp.now());
     bag1.updateBag(PreorderItem(quantity: 5, item: menuItem1));
 
     PreorderBag bag2 = PreorderBag(
+        preorderId: "ABCDE",
         restaurant: restaurant,
         location: restaurant.upcomingLocations[0],
         timestamp: Timestamp.now());
@@ -94,6 +96,7 @@ class PreordersDataMock {
     bag2.updateBag(PreorderItem(quantity: 2, item: menuItem2));
 
     PreorderBag bag3 = PreorderBag(
+        preorderId: "ABCDE",
         restaurant: restaurant,
         location: restaurant.upcomingLocations[0],
         timestamp: Timestamp.now());

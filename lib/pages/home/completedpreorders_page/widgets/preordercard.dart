@@ -119,7 +119,7 @@ class PreorderCard extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
-                                "\$$subtotal  ·  $preorderDateString  ·  Order #609",
+                                "\$$subtotal  ·  $preorderDateString  ·  Order #${preorderBag.preorderCode}",
                                 style: dineTimeTypography.bodyMedium?.copyWith(
                                   color: dineTimeColorScheme.onSurface,
                                 ),

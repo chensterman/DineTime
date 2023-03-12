@@ -41,7 +41,7 @@ class PreorderReceiptDisplay extends StatelessWidget {
       totalPrice += preorderItem.item.itemPrice * preorderItem.quantity;
     }
 
-    Timestamp dateStart = preorderBag.location!.locationDateStart;
+    Timestamp dateStart = preorderBag.location.locationDateStart;
     String periodStart = dateStart.toDate().hour > 12 ? "PM" : "AM";
     String timeZoneName = dateStart.toDate().timeZoneName;
     num hourStart = dateStart.toDate().hour % 12;
@@ -76,12 +76,29 @@ class PreorderReceiptDisplay extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Image(
+                  image: AssetImage('lib/assets/preordercheck_grey.png'),
+                  height: 18,
+                  width: 18),
+              const SizedBox(width: 15.0),
+              Text(
+                "Order #${preorderBag.preorderCode}",
+                style: dineTimeTypography.bodyMedium?.copyWith(
+                  color: dineTimeColorScheme.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Image(
                   image: AssetImage('lib/assets/locationsmallgrey.png'),
                   height: 18,
                   width: 18),
               const SizedBox(width: 15.0),
               Text(
-                preorderBag.location!.locationName,
+                preorderBag.location.locationName,
                 style: dineTimeTypography.bodyMedium?.copyWith(
                   color: dineTimeColorScheme.onSurface,
                 ),

@@ -101,13 +101,13 @@ class DatabaseServiceApp extends DatabaseService {
       String customerId) async* {
     Stream<QuerySnapshot> customerPreordersStream = preordersCollection
         .where('customer_ref', isEqualTo: customerCollection.doc(customerId))
-        .orderBy('date_ordered')
         .snapshots();
     await for (QuerySnapshot querySnapshot in customerPreordersStream) {
       List<r.PreorderBag> preorderBagList = [];
       for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        r.PreorderBag preorderBag = await preorderGet(documentSnapshot.id);
-        preorderBagList.add(preorderBag);
+        r.PreorderBag? preorderBag = await preorderGet(documentSnapshot.id);
+        preorderBagList.add(preorderBag!);
+        preorderBagList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
       }
       yield preorderBagList;
     }
@@ -260,15 +260,106 @@ class DatabaseServiceApp extends DatabaseService {
   }
 
   @override
-  Future<void> preorderCreate(String customerId, String restaurantId,
-      r.PreorderBag preorderBag) async {}
+  Future<r.MenuItem?> restaurantMenuItemGet(
+      String restaurantId, String itemId) async {
+    DocumentSnapshot doc = await restaurantCollection
+        .doc(restaurantId)
+        .collection("menu")
+        .doc(itemId)
+        .get();
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return r.MenuItem(
+      itemId: itemId,
+      itemName: data["item_name"],
+      itemPrice: data["item_price"],
+      timestamp: data["timestamp"],
+      dietaryTags: data["dietary_tags"],
+      itemImageRef: data["item_image_ref"],
+      itemDescription: data["item_desc"],
+    );
+  }
 
   @override
-  Future<r.PreorderBag> preorderGet(String preorderId) async {
-    r.Restaurant? restaurant = await restaurantGet("1fzf59lqoqrMVC4CyYUt");
-    return r.PreorderBag(
-        restaurant: restaurant!,
-        location: restaurant.upcomingLocations[0],
-        timestamp: Timestamp.now());
+  Future<r.PopUpLocation?> restaurantLocationGet(
+      String restaurantId, String locationId) async {
+    DocumentSnapshot doc = await restaurantCollection
+        .doc(restaurantId)
+        .collection("locations")
+        .doc(locationId)
+        .get();
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return r.PopUpLocation(
+      locationId: locationId,
+      locationAddress: data["location_address"],
+      locationDateStart: data["location_date_start"],
+      locationDateEnd: data["location_date_end"],
+      timestamp: data["timestamp"],
+      geolocation: data["geolocation"],
+      locationName: data["location_name"],
+    );
+  }
+
+  @override
+  Future<void> preorderCreate(
+      String customerId, r.PreorderBag preorderBag) async {
+    String restaurantId = preorderBag.restaurant.restaurantId;
+    DocumentReference newPreorder = preordersCollection.doc();
+    newPreorder.set({
+      "order_code": newPreorder.id.substring(0, 5).toUpperCase(),
+      "customer_ref": customerCollection.doc(customerId),
+      "restaurant_ref": restaurantCollection.doc(restaurantId),
+      "location_ref": restaurantCollection
+          .doc(restaurantId)
+          .collection("locations")
+          .doc(preorderBag.location.locationId),
+      "timestamp": Timestamp.now(),
+    });
+    for (r.PreorderItem? preorderItem in preorderBag.bag) {
+      newPreorder.collection("items").doc().set({
+        "menu_item_ref": restaurantCollection
+            .doc(restaurantId)
+            .collection("menu")
+            .doc(preorderItem!.item.itemId),
+        "quantity": preorderItem.quantity,
+      });
+    }
+  }
+
+  @override
+  Future<r.PreorderBag?> preorderGet(String preorderId) async {
+    DocumentSnapshot preorderSnapshot =
+        await preordersCollection.doc(preorderId).get();
+    if (!preorderSnapshot.exists) {
+      return null;
+    } else {
+      // Get initial restaurant information
+      Map<String, dynamic> preorderData =
+          preorderSnapshot.data() as Map<String, dynamic>;
+      r.Restaurant? restaurant =
+          await restaurantGet(preorderData["restaurant_ref"].id);
+      r.PopUpLocation? location = await restaurantLocationGet(
+          restaurant!.restaurantId, preorderData["location_ref"].id);
+      r.PreorderBag preorderBag = r.PreorderBag(
+        preorderId: preorderId,
+        restaurant: restaurant,
+        location: location!,
+        timestamp: preorderData["timestamp"],
+      );
+      List<r.PreorderItem?> bag = [];
+      QuerySnapshot itemsQuery =
+          await preordersCollection.doc(preorderId).collection("items").get();
+      for (DocumentSnapshot doc in itemsQuery.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        r.MenuItem? item = await restaurantMenuItemGet(
+            preorderData["restaurant_ref"].id, data["menu_item_ref"].id);
+        bag.add(r.PreorderItem(item: item!, quantity: data["quantity"]));
+      }
+
+      for (r.PreorderItem? preorderItem in bag) {
+        preorderBag.updateBag(preorderItem!);
+      }
+
+      return preorderBag;
+    }
   }
 }

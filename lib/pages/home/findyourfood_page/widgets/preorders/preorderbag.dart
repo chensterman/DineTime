@@ -200,6 +200,7 @@ class PreorderBag extends StatelessWidget {
       textStyle: dineTimeTypography.headlineSmall,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     ); // 50 px height, inf width
+    Services services = Provider.of<Services>(context);
     return Center(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.75,
@@ -208,6 +209,11 @@ class PreorderBag extends StatelessWidget {
           opacity: 0.9,
           child: ElevatedButton(
             onPressed: () {
+              preorderBagBloc.add(
+                PreorderBagSubmit(
+                  customerId: services.clientAuth.getCurrentUserUid()!,
+                ),
+              );
               Navigator.pop(context);
               // showModalBottomSheet(
               //   isScrollControlled: true,

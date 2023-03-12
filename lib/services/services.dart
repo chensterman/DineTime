@@ -53,9 +53,11 @@ abstract class DatabaseService {
   Stream<List<PreorderBag>> customerPreordersStream(String customerId);
   Future<List<Restaurant>> customerSwipe(String customerId);
   Future<Restaurant?> restaurantGet(String restaurantId);
-  Future<void> preorderCreate(
-      String customerId, String restaurantId, PreorderBag preorderBag);
-  Future<PreorderBag> preorderGet(String preorderId);
+  Future<MenuItem?> restaurantMenuItemGet(String restaurantId, String itemId);
+  Future<PopUpLocation?> restaurantLocationGet(
+      String restaurantId, String locationId);
+  Future<void> preorderCreate(String customerId, PreorderBag preorderBag);
+  Future<PreorderBag?> preorderGet(String preorderId);
 }
 
 abstract class StorageService {
