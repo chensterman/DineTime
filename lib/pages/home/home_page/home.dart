@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/findyourfood.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/findyourfood.dart';
 import 'package:dinetime_mobile_mvp/pages/home/favorites_page/favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/pages/home/completedpreorders_page/preorders.dart';
@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
               bottomNavigationBar: BottomNavBar(
                 currentIndex: _selectedIndex,
                 onTap: _onItemTapped,
-                items: <BottomNavigationBarItem>[
+                items: const <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: 'Home',

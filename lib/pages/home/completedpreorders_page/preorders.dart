@@ -48,13 +48,7 @@ class PreorderPage extends StatelessWidget {
                                   const EdgeInsets.only(left: 15, right: 15),
                               child: Text(
                                 "My Pre-Orders",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    ?.copyWith(
-                                      fontSize: 30.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                style: dineTimeTypography.headlineLarge,
                               ),
                             ),
                             const SizedBox(
@@ -66,12 +60,7 @@ class PreorderPage extends StatelessWidget {
                               ),
                               child: Text(
                                 '${restaurants.length} Orders',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1
-                                    ?.copyWith(
-                                      fontSize: 15,
-                                    ),
+                                style: dineTimeTypography.bodyLarge,
                               ),
                             ),
                             const SizedBox(

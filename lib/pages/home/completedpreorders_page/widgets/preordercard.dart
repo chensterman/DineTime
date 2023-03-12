@@ -76,13 +76,7 @@ class PreorderCard extends StatelessWidget {
                                       left: 20.0, top: 12.0, bottom: 5.0),
                                   child: Text(
                                     restaurant.restaurantName,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline1
-                                        ?.copyWith(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                    style: dineTimeTypography.headlineMedium,
                                   ),
                                 ),
                                 Padding(
@@ -102,12 +96,7 @@ class PreorderCard extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 20.0),
                               child: Text(
                                 "\$40.99  ·  Jan. 03, 2023  ·  Order #609",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                      fontSize: 12.0,
-                                    ),
+                                style: dineTimeTypography.bodyMedium,
                               ),
                             ),
                             Padding(
@@ -115,12 +104,7 @@ class PreorderCard extends StatelessWidget {
                                   const EdgeInsets.only(left: 20.0, top: 2.0),
                               child: Text(
                                 "Vegetable Biryani (3)  ·  Vegetable Samosas (1)",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                        fontSize: 12.0,
-                                        color: dineTimeColorScheme.primary),
+                                style: dineTimeTypography.bodyMedium,
                               ),
                             ),
                           ],

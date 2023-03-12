@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/blocs/preorderbag/preorderbag_bloc.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorders/preorderbutton.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/provider/cardprovider.dart';
 
@@ -95,16 +97,21 @@ class _FoodCardState extends State<FoodCard> {
     Size size = MediaQuery.of(context).size;
     double foodCardWidth = size.width * 0.98;
     double foodCardHeight = size.height * 0.77;
-    return widget.isFront
-        ? buildFrontCard(
-            foodCardWidth,
-            foodCardHeight,
-          )
-        : buildCard(
-            context,
-            foodCardWidth,
-            foodCardHeight,
-          );
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => PreorderBagBloc()),
+      ],
+      child: widget.isFront
+          ? buildFrontCard(
+              foodCardWidth,
+              foodCardHeight,
+            )
+          : buildCard(
+              context,
+              foodCardWidth,
+              foodCardHeight,
+            ),
+    );
   }
 
   Widget buildFrontCard(double width, double height) {
@@ -132,14 +139,14 @@ class _FoodCardState extends State<FoodCard> {
               children: [
                 buildCard(context, width, height),
                 const Stamps(),
-                PreorderButton(menu: widget.restaurant.menu),
-                // Visibility(
-                //   visible: _isBottomPreorderButtonVisible,
-                //   child: Positioned(
-                //     bottom: 20, // Distance from the bottom of the stack
-                //     child: PreorderButton(),
-                //   ),
-                // ),
+                PreorderButton(
+                  restaurantName: widget.restaurant.restaurantName,
+                  menu: widget.restaurant.menu,
+                  nextLocation: widget.restaurant.upcomingLocations.isEmpty
+                      ? null
+                      : widget.restaurant.upcomingLocations[0],
+                  isVisible: _isBottomPreorderButtonVisible,
+                ),
               ],
             ),
           );

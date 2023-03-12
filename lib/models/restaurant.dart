@@ -93,3 +93,36 @@ Map<String, String> dietToImagePath = {
   "Vegetarian": "lib/assets/vegetarian.png",
   "Nut Free": "lib/assets/nut_free.png",
 };
+
+// Class defining a preorder item
+class PreorderItem {
+  int quantity;
+  MenuItem item;
+  PreorderItem({
+    required this.quantity,
+    required this.item,
+  });
+
+  void updateQuantity(int newQuantity) {
+    quantity = newQuantity;
+  }
+}
+
+// Class defining a preorder bag
+class PreorderBag {
+  final List<PreorderItem?> bag = [];
+
+  // Handle adding new item, deleting if 0, etc.
+  void updateBag(PreorderItem preorderItem) {
+    int quantity = preorderItem.quantity;
+    String menuItemId = preorderItem.item.itemId;
+    PreorderItem? inBag = (bag.firstWhere((it) => it!.item.itemId == menuItemId,
+        orElse: () => null));
+
+    if (inBag != null) {
+      quantity == 0 ? bag.remove(inBag) : inBag.updateQuantity(quantity);
+    } else {
+      bag.add(preorderItem);
+    }
+  }
+}
