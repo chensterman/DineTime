@@ -41,12 +41,6 @@ class PreorderBag extends StatelessWidget {
               columnChildren.add(
                 const SizedBox(height: 12.0),
               );
-              columnChildren.add(
-                const Divider(
-                  color: Color.fromARGB(95, 158, 158, 158),
-                  height: 1,
-                ),
-              );
             }
 
             int totalQuantity = 0;
@@ -214,6 +208,7 @@ class PreorderBag extends StatelessWidget {
           opacity: 0.9,
           child: ElevatedButton(
             onPressed: () {
+              Navigator.pop(context);
               // showModalBottomSheet(
               //   isScrollControlled: true,
               //   shape: const RoundedRectangleBorder(
@@ -224,8 +219,6 @@ class PreorderBag extends StatelessWidget {
               //   context: context,
               //   builder: (context) => const PreorderConfirm(),
               // );
-              Navigator.pop(context);
-              Navigator.pop(context);
             },
             style: style,
             child: Row(

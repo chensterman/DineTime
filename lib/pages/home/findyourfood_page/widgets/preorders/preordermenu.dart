@@ -39,12 +39,6 @@ class PreorderMenu extends StatelessWidget {
       columnChildren.add(
         const SizedBox(height: 12.0),
       );
-      columnChildren.add(
-        const Divider(
-          color: Color.fromARGB(95, 158, 158, 158),
-          height: 1,
-        ),
-      );
     }
     return DraggableScrollableSheet(
       initialChildSize: 0.85,
@@ -127,6 +121,7 @@ class PreorderMenu extends StatelessWidget {
                   opacity: 0.9,
                   child: ElevatedButton(
                     onPressed: () {
+                      Navigator.pop(context);
                       showModalBottomSheet(
                         isScrollControlled: true,
                         shape: const RoundedRectangleBorder(

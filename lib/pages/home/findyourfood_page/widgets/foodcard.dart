@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/blocs/preorderbag/preorderbag_bloc.dart';
@@ -99,7 +100,15 @@ class _FoodCardState extends State<FoodCard> {
     double foodCardHeight = size.height * 0.77;
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => PreorderBagBloc()),
+        BlocProvider(
+            create: (context) => PreorderBagBloc(
+                    preorderBag: r.PreorderBag(
+                  restaurant: widget.restaurant,
+                  location: widget.restaurant.upcomingLocations.isEmpty
+                      ? null
+                      : widget.restaurant.upcomingLocations[0],
+                  timestamp: Timestamp.now(),
+                ))),
       ],
       child: widget.isFront
           ? buildFrontCard(

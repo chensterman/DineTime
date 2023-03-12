@@ -1,36 +1,56 @@
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
-import 'package:dinetime_mobile_mvp/pages/home/fooddisplay_page/fooddisplay.dart';
-import 'package:dinetime_mobile_mvp/pages/home/preorderreciept_page/preorderreciept.dart';
-import 'package:dinetime_mobile_mvp/pages/home/preorderreciept_page/preorderrecieptdisplay.dart';
-import 'package:dinetime_mobile_mvp/services/services.dart';
+import 'package:dinetime_mobile_mvp/pages/home/preorderreceipt_page/preorderreceipt.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Cards that display list items in saved
 class PreorderCard extends StatelessWidget {
   final Customer customer;
-  final Restaurant restaurant;
+  final PreorderBag preorderBag;
   const PreorderCard({
     super.key,
     required this.customer,
-    required this.restaurant,
+    required this.preorderBag,
   });
 
   final double _cardHeight = 140.0;
 
   @override
   Widget build(BuildContext context) {
-    Services services = Provider.of<Services>(context);
-    double? distance;
-
+    final List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    num subtotal = preorderBag.getSubtotal();
+    DateTime preorderDate = preorderBag.timestamp.toDate();
+    String preorderDateString =
+        "${months[preorderDate.month - 1]} ${preorderDate.day}, ${preorderDate.year}";
+    String preorderItemsString = "";
+    int count = 0;
+    for (PreorderItem? preorderItem in preorderBag.bag) {
+      preorderItemsString +=
+          "${preorderItem!.item.itemName} (${preorderItem.quantity})";
+      count += 1;
+      if (count != preorderBag.bag.length) {
+        preorderItemsString += "  ·  ";
+      }
+    }
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: SizedBox(
         width: 70,
-        height: 105,
+        height: _cardHeight,
         child: Container(
           decoration: BoxDecoration(
             boxShadow: [
@@ -55,7 +75,10 @@ class PreorderCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PreorderRecieptDisplay(),
+                    builder: (context) => PreorderReceipt(
+                      customer: customer,
+                      preorderBag: preorderBag,
+                    ),
                   ),
                 );
               },
@@ -75,12 +98,12 @@ class PreorderCard extends StatelessWidget {
                                   padding: const EdgeInsets.only(
                                       left: 20.0, top: 12.0, bottom: 5.0),
                                   child: Text(
-                                    restaurant.restaurantName,
+                                    preorderBag.restaurant.restaurantName,
                                     style: dineTimeTypography.headlineMedium,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
+                                const Padding(
+                                  padding: EdgeInsets.only(
                                       right: 20, top: 12.0, bottom: 5.0),
                                   child: Image(
                                     height: 15,
@@ -91,20 +114,28 @@ class PreorderCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Divider(),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: Text(
-                                "\$40.99  ·  Jan. 03, 2023  ·  Order #609",
-                                style: dineTimeTypography.bodyMedium,
-                              ),
-                            ),
+                            const Divider(),
                             Padding(
                               padding:
-                                  const EdgeInsets.only(left: 20.0, top: 2.0),
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
-                                "Vegetable Biryani (3)  ·  Vegetable Samosas (1)",
-                                style: dineTimeTypography.bodyMedium,
+                                "\$$subtotal  ·  $preorderDateString  ·  Order #609",
+                                style: dineTimeTypography.bodyMedium?.copyWith(
+                                  color: dineTimeColorScheme.onSurface,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(height: 5.0),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Text(
+                                preorderItemsString,
+                                style: dineTimeTypography.bodyMedium?.copyWith(
+                                  color: dineTimeColorScheme.primary,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],

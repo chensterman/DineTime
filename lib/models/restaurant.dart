@@ -110,6 +110,15 @@ class PreorderItem {
 
 // Class defining a preorder bag
 class PreorderBag {
+  final Restaurant restaurant;
+  final PopUpLocation? location;
+  final Timestamp timestamp;
+  PreorderBag({
+    required this.restaurant,
+    required this.location,
+    required this.timestamp,
+  });
+
   final List<PreorderItem?> bag = [];
 
   // Handle adding new item, deleting if 0, etc.
@@ -124,5 +133,14 @@ class PreorderBag {
     } else {
       bag.add(preorderItem);
     }
+  }
+
+  // Calculate total cost of preorder
+  num getSubtotal() {
+    num subtotal = 0;
+    for (PreorderItem? preorderItem in bag) {
+      subtotal += preorderItem!.item.itemPrice * preorderItem.quantity;
+    }
+    return subtotal;
   }
 }

@@ -12,6 +12,9 @@ class DatabaseServiceApp extends DatabaseService {
   // Access to 'customers' collection
   final CollectionReference customerCollection =
       FirebaseFirestore.instance.collection('customers');
+  // Access to 'preorders' collection
+  final CollectionReference preordersCollection =
+      FirebaseFirestore.instance.collection('preorders');
 
   // Add user document to 'users' collection and initialize fields
   @override
@@ -72,7 +75,7 @@ class DatabaseServiceApp extends DatabaseService {
         .delete();
   }
 
-  // Stream of specific customer document
+  // Stream of specific customer favorites
   @override
   Stream<List<r.Restaurant>> customerFavoritesStream(String customerId) async* {
     Stream<QuerySnapshot> customerFavoritesStream = customerCollection
@@ -89,6 +92,24 @@ class DatabaseServiceApp extends DatabaseService {
         }
       }
       yield restaurantList;
+    }
+  }
+
+  // Stream of specific customer preorders
+  @override
+  Stream<List<r.PreorderBag>> customerPreordersStream(
+      String customerId) async* {
+    Stream<QuerySnapshot> customerPreordersStream = preordersCollection
+        .where('customer_ref', isEqualTo: customerCollection.doc(customerId))
+        .orderBy('date_ordered')
+        .snapshots();
+    await for (QuerySnapshot querySnapshot in customerPreordersStream) {
+      List<r.PreorderBag> preorderBagList = [];
+      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        r.PreorderBag preorderBag = await preorderGet(documentSnapshot.id);
+        preorderBagList.add(preorderBag);
+      }
+      yield preorderBagList;
     }
   }
 
@@ -236,5 +257,18 @@ class DatabaseServiceApp extends DatabaseService {
         email: email,
       );
     }
+  }
+
+  @override
+  Future<void> preorderCreate(String customerId, String restaurantId,
+      r.PreorderBag preorderBag) async {}
+
+  @override
+  Future<r.PreorderBag> preorderGet(String preorderId) async {
+    r.Restaurant? restaurant = await restaurantGet("1fzf59lqoqrMVC4CyYUt");
+    return r.PreorderBag(
+        restaurant: restaurant!,
+        location: restaurant.upcomingLocations[0],
+        timestamp: Timestamp.now());
   }
 }

@@ -6,9 +6,10 @@ part 'preorderbag_event.dart';
 part 'preorderbag_state.dart';
 
 class PreorderBagBloc extends Bloc<PreorderBagEvent, PreorderBagState> {
-  final PreorderBag preorderBag = PreorderBag();
-
-  PreorderBagBloc() : super(PreorderBagData(preorderBag: PreorderBag())) {
+  final PreorderBag preorderBag;
+  PreorderBagBloc({
+    required this.preorderBag,
+  }) : super(PreorderBagData(preorderBag: preorderBag)) {
     on<PreorderBagUpdate>(_onPreorderBagUpdate);
   }
 

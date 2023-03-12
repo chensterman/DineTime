@@ -3,12 +3,15 @@ import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 
-import '../data/datamock.dart';
+import '../data/preordersdatamock.dart';
+import '../data/restaurantdatamock.dart';
 
 class DatabaseServiceMock extends DatabaseService {
   final List<Restaurant> _favoritedRestaurants =
-      DataMock().favoritedRestaurants;
-  final List<Restaurant> _swipeRestaurants = DataMock().swipeRestaurants;
+      RestaurantDataMock().favoritedRestaurants;
+  final List<Restaurant> _swipeRestaurants =
+      RestaurantDataMock().swipeRestaurants;
+  final List<PreorderBag> _preorders = PreordersDataMock().preorders;
 
   @override
   Future<void> customerCreate(String customerId) async {
@@ -65,6 +68,11 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
+  Stream<List<PreorderBag>> customerPreordersStream(String customerId) async* {
+    yield _preorders;
+  }
+
+  @override
   Future<List<Restaurant>> customerSwipe(String customerId) async {
     await Future.delayed(Duration.zero);
     return _swipeRestaurants;
@@ -76,5 +84,21 @@ class DatabaseServiceMock extends DatabaseService {
     return _swipeRestaurants
         .where((restaurant) => restaurant.restaurantId == restaurantId)
         .first;
+  }
+
+  @override
+  Future<void> preorderCreate(
+      String customerId, String restaurantId, PreorderBag preorderBag) async {
+    await Future.delayed(Duration.zero);
+    _preorders.add(preorderBag);
+  }
+
+  @override
+  Future<PreorderBag> preorderGet(String preorderId) async {
+    await Future.delayed(Duration.zero);
+    return PreorderBag(
+        restaurant: _favoritedRestaurants[0],
+        location: _favoritedRestaurants[0].upcomingLocations[0],
+        timestamp: Timestamp.now());
   }
 }

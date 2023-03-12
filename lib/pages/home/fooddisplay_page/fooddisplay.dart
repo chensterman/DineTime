@@ -18,10 +18,9 @@ class FoodDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
-    double height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: height * 0.08,
+          elevation: 0.0,
           backgroundColor: dineTimeColorScheme.onPrimary,
           leading: IconButton(
             icon: Icon(
@@ -31,7 +30,7 @@ class FoodDisplay extends StatelessWidget {
             onPressed: () {
               services.clientAnalytics
                   .trackScreenView('Favorites', 'Favorites');
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
           ),
         ),
