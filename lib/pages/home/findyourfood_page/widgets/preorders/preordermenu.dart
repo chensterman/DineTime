@@ -27,6 +27,7 @@ class PreorderMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
     List<Widget> columnChildren = [];
+    services.clientAnalytics.trackScreenView('preorder_menu', 'Preorders');
     for (MenuItem menuItem in menu) {
       columnChildren.add(const SizedBox(
         height: 10.0,
@@ -103,6 +104,7 @@ class PreorderMenu extends StatelessWidget {
       textStyle: dineTimeTypography.headlineSmall,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     ); // 50 px height, inf width
+    Services services = Provider.of<Services>(context);
     return BlocBuilder<PreorderBagBloc, PreorderBagState>(
         bloc: preorderBagBloc,
         builder: (context, state) {
@@ -121,6 +123,7 @@ class PreorderMenu extends StatelessWidget {
                   opacity: 0.9,
                   child: ElevatedButton(
                     onPressed: () {
+                      services.clientAnalytics.trackEvent("view_bag");
                       Navigator.pop(context);
                       showModalBottomSheet(
                         isScrollControlled: true,

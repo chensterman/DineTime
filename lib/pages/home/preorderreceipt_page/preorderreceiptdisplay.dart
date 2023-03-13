@@ -165,6 +165,7 @@ class PreorderReceiptDisplay extends StatelessWidget {
                   builder: (context) => FoodDisplay(
                     customer: customer,
                     restaurant: preorderBag.restaurant,
+                    origin: "Preorders",
                   ),
                 ),
               );

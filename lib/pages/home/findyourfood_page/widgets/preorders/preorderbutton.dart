@@ -2,8 +2,10 @@ import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/blocs/preorderbag/preorderbag_bloc.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorders/preordermenu.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
+import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class PreorderButton extends StatelessWidget {
   final String restaurantName;
@@ -20,6 +22,7 @@ class PreorderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Services services = Provider.of<Services>(context);
     PreorderBagBloc preorderBagBloc = BlocProvider.of<PreorderBagBloc>(context);
     return Visibility(
       visible: isVisible,
@@ -31,6 +34,7 @@ class PreorderButton extends StatelessWidget {
             isDisabled: nextLocation == null ? true : false,
             text: "Pre-Order",
             onPressed: () {
+              services.clientAnalytics.trackEvent('start_preorder');
               showModalBottomSheet(
                 isScrollControlled: true,
                 shape: const RoundedRectangleBorder(
