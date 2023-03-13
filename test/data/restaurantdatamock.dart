@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 
-class DataMock {
+class RestaurantDataMock {
   final List<Restaurant> favoritedRestaurants = [
     Restaurant(
       restaurantId: "0",

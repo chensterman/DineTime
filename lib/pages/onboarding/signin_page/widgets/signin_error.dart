@@ -1,3 +1,4 @@
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,12 +14,13 @@ class SignInError extends StatelessWidget {
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: Text(state.errorMessage,
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    ?.copyWith(color: Colors.red)),
+            child: Text(
+              state.errorMessage,
+              textAlign: TextAlign.center,
+              style: dineTimeTypography.bodySmall?.copyWith(
+                color: Colors.red,
+              ),
+            ),
           ),
         );
       } else {

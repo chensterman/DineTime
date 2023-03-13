@@ -23,19 +23,19 @@ class PreorderPage extends StatelessWidget {
     return Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),
         color: Colors.white,
-        child: StreamBuilder<List<Restaurant>>(
+        child: StreamBuilder<List<PreorderBag>>(
           // Customer document stream
-          stream: services.clientDB.customerFavoritesStream(
+          stream: services.clientDB.customerPreordersStream(
               services.clientAuth.getCurrentUserUid()!),
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               // On document loaded, convert document snapshot to map
-              List<Restaurant> restaurants = snapshot.data!;
+              List<PreorderBag> preorderBags = snapshot.data!;
               // Generate ListView of all saved restaurants
               return ListView.separated(
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 8.0),
-                itemCount: restaurants.length + 1,
+                itemCount: preorderBags.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     // Initial text widgetrs
@@ -49,13 +49,7 @@ class PreorderPage extends StatelessWidget {
                                   const EdgeInsets.only(left: 15, right: 15),
                               child: Text(
                                 "My Pre-Orders",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    ?.copyWith(
-                                      fontSize: 30.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                style: dineTimeTypography.headlineLarge,
                               ),
                             ),
                             const SizedBox(
@@ -66,13 +60,10 @@ class PreorderPage extends StatelessWidget {
                                 left: 15,
                               ),
                               child: Text(
-                                '${restaurants.length} Orders',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1
-                                    ?.copyWith(
-                                      fontSize: 15,
-                                    ),
+                                '${preorderBags.length} Orders',
+                                style: dineTimeTypography.bodyLarge?.copyWith(
+                                  color: dineTimeColorScheme.primary,
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -86,7 +77,7 @@ class PreorderPage extends StatelessWidget {
                   // Return widget to process all document references
                   return PreorderCard(
                     customer: customer,
-                    restaurant: restaurants[index - 1],
+                    preorderBag: preorderBags[index - 1],
                   );
                 },
               );

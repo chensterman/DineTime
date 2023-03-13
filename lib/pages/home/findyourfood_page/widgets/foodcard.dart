@@ -1,26 +1,29 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorderflow.dart';
+import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/blocs/preorderbag/preorderbag_bloc.dart';
+import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/preorders/preorderbutton.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/backgroundshadow.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/cuisinedetails.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/dietary.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/logo.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/menu.dart';
-import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/widgets/photogallery.dart';
-import 'package:dinetime_mobile_mvp/theme/colorscheme.dart';
+import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/provider/cardprovider.dart';
 
-import 'aboutandstory.dart';
-import 'background.dart';
-import 'contact.dart';
-import 'name.dart';
-import 'nextlocation.dart';
-import 'stamps.dart';
-import 'upcominglocations.dart';
+import 'content/backgroundshadow.dart';
+import 'content/cuisinedetails.dart';
+import 'content/dietary.dart';
+import 'content/logo.dart';
+import 'content/menu.dart';
+import 'content/photogallery.dart';
+import 'content/aboutandstory.dart';
+import 'content/background.dart';
+import 'content/contact.dart';
+import 'content/name.dart';
+import 'content/nextlocation.dart';
+import 'content/stamps.dart';
+import 'content/upcominglocations.dart';
 
 class FoodCard extends StatefulWidget {
   final Customer customer;
@@ -95,16 +98,41 @@ class _FoodCardState extends State<FoodCard> {
     Size size = MediaQuery.of(context).size;
     double foodCardWidth = size.width * 0.98;
     double foodCardHeight = size.height * 0.77;
-    return widget.isFront
-        ? buildFrontCard(
-            foodCardWidth,
-            foodCardHeight,
-          )
-        : buildCard(
-            context,
-            foodCardWidth,
-            foodCardHeight,
-          );
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => PreorderBagBloc(
+            clientDB: widget.services.clientDB,
+            preorderBag: r.PreorderBag(
+              preorderId: "INITIAL",
+              restaurant: widget.restaurant,
+              location: widget.restaurant.upcomingLocations.isEmpty
+                  ? r.PopUpLocation(
+                      locationId: "123",
+                      locationAddress: "Dummy",
+                      locationDateStart: Timestamp.now(),
+                      locationDateEnd: Timestamp.now(),
+                      timestamp: Timestamp.now(),
+                      geolocation: const GeoPoint(0, 0),
+                      locationName: "Dummy",
+                    )
+                  : widget.restaurant.upcomingLocations[0],
+              timestamp: Timestamp.now(),
+            ),
+          ),
+        ),
+      ],
+      child: widget.isFront
+          ? buildFrontCard(
+              foodCardWidth,
+              foodCardHeight,
+            )
+          : buildCard(
+              context,
+              foodCardWidth,
+              foodCardHeight,
+            ),
+    );
   }
 
   Widget buildFrontCard(double width, double height) {
@@ -132,14 +160,13 @@ class _FoodCardState extends State<FoodCard> {
               children: [
                 buildCard(context, width, height),
                 const Stamps(),
-                Visibility(
-                  visible: _isBottomPreorderButtonVisible,
-                  child: Positioned(
-                    bottom: 20, // Distance from the bottom of the stack
-                    child: Preorders(
-                      menu: widget.restaurant.menu,
-                    ),
-                  ),
+                PreorderButton(
+                  restaurantName: widget.restaurant.restaurantName,
+                  menu: widget.restaurant.menu,
+                  nextLocation: widget.restaurant.upcomingLocations.isEmpty
+                      ? null
+                      : widget.restaurant.upcomingLocations[0],
+                  isVisible: _isBottomPreorderButtonVisible,
                 ),
               ],
             ),

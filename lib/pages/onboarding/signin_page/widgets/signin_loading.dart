@@ -13,7 +13,7 @@ class SignInLoading extends StatelessWidget {
       if (state is fb.FormLoading) {
         return Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 20.0),
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: CircularProgressIndicator(
               color: dineTimeColorScheme.primary,
             ),
