@@ -59,12 +59,12 @@ class PreorderReceiptDisplay extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Pre-Order Receipt',
+            preorderBag.restaurant.restaurantName,
             style: dineTimeTypography.headlineMedium,
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 5),
           Text(
-            preorderBag.restaurant.restaurantName,
+            'Pre-Order Receipt',
             style: dineTimeTypography.bodyMedium?.copyWith(
               color: dineTimeColorScheme.primary,
             ),
@@ -72,6 +72,11 @@ class PreorderReceiptDisplay extends StatelessWidget {
           const SizedBox(height: 10.0),
           const Divider(),
           const SizedBox(height: 10.0),
+          Text(
+            'Order Details',
+            style: dineTimeTypography.headlineSmall,
+          ),
+          const SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -88,7 +93,7 @@ class PreorderReceiptDisplay extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10.0),
+          const SizedBox(height: 15.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -105,7 +110,7 @@ class PreorderReceiptDisplay extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10.0),
+          const SizedBox(height: 15.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
