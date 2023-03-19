@@ -65,6 +65,7 @@ class FoodListCard extends StatelessWidget {
                     builder: (context) => FoodDisplay(
                       customer: customer,
                       restaurant: restaurant,
+                      origin: "Favorites",
                     ),
                   ),
                 );

@@ -19,6 +19,7 @@ class PreorderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     Services services = Provider.of<Services>(context);
+    services.clientAnalytics.trackScreenView("preorder_history", "Preorders");
     return Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),
         color: Colors.white,

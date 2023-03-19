@@ -24,6 +24,7 @@ class PreorderBag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
+    services.clientAnalytics.trackScreenView('preorder_bag', 'Preorders');
     return BlocBuilder<PreorderBagBloc, PreorderBagState>(
         bloc: preorderBagBloc,
         builder: (context, state) {
@@ -209,6 +210,8 @@ class PreorderBag extends StatelessWidget {
           opacity: 0.9,
           child: ElevatedButton(
             onPressed: () {
+              services.clientAnalytics
+                  .trackEventNum('confirm_preorder', totalPrice.toDouble());
               preorderBagBloc.add(
                 PreorderBagSubmit(
                   customerId: services.clientAuth.getCurrentUserUid()!,

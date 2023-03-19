@@ -21,6 +21,7 @@ class PreorderReceiptDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
     List<Widget> columnChildren = [];
+    services.clientAnalytics.trackScreenView("preorder_receipt", "Preorders");
     for (PreorderItem? preorderItem in preorderBag.bag) {
       columnChildren.add(const SizedBox(
         height: 10.0,
@@ -164,6 +165,7 @@ class PreorderReceiptDisplay extends StatelessWidget {
                   builder: (context) => FoodDisplay(
                     customer: customer,
                     restaurant: preorderBag.restaurant,
+                    origin: "Preorders",
                   ),
                 ),
               );

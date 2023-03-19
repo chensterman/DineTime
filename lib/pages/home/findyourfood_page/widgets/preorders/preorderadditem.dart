@@ -3,6 +3,7 @@ import 'package:dinetime_mobile_mvp/pages/home/findyourfood_page/blocs/preorderb
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PreorderAddItem extends StatefulWidget {
   final MenuItem menuItem;
@@ -350,14 +351,14 @@ class _PreorderAddItemState extends State<PreorderAddItem> {
             ),
           ),
           const SizedBox(height: 25.0),
-          addItemButton(),
+          addItemButton(context),
           const SizedBox(height: 25.0),
         ],
       ),
     );
   }
 
-  Widget addItemButton() {
+  Widget addItemButton(BuildContext context) {
     // Button styled with pimary colors on ElevatedButton class for filled effect
     ButtonStyle style = ElevatedButton.styleFrom(
       foregroundColor: dineTimeColorScheme.onPrimary,
@@ -369,6 +370,7 @@ class _PreorderAddItemState extends State<PreorderAddItem> {
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     ); // 50 px height, inf width
+    Services services = Provider.of<Services>(context);
     return Center(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.75,
@@ -377,6 +379,8 @@ class _PreorderAddItemState extends State<PreorderAddItem> {
           opacity: 0.9,
           child: ElevatedButton(
             onPressed: () {
+              services.clientAnalytics
+                  .trackEventNum('add_to_bag', _quantity.toDouble());
               widget.preorderBagBloc.add(PreorderBagUpdate(
                   preorderItem: PreorderItem(
                       item: widget.menuItem, quantity: _quantity)));

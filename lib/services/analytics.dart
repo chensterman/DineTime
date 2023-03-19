@@ -13,6 +13,15 @@ class AnalyticsServiceApp extends AnalyticsService {
     );
   }
 
+  void trackEventNum(String eventName, double value) {
+    _analytics.logEvent(
+      name: eventName,
+      parameters: {
+        "value": value,
+      },
+    );
+  }
+
   @override
   void trackScreenView(String pageName, String screenClass) {
     _analytics.logScreenView(screenName: pageName, screenClass: screenClass);

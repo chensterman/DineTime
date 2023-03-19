@@ -9,9 +9,11 @@ import 'package:provider/provider.dart';
 class FoodDisplay extends StatelessWidget {
   final Customer customer;
   final Restaurant restaurant;
+  final String origin;
   const FoodDisplay({
     required this.customer,
     required this.restaurant,
+    required this.origin,
     super.key,
   });
 
@@ -28,8 +30,12 @@ class FoodDisplay extends StatelessWidget {
               color: dineTimeColorScheme.onBackground,
             ),
             onPressed: () {
-              services.clientAnalytics
-                  .trackScreenView('Favorites', 'Favorites');
+              if (origin == "Preorders") {
+                services.clientAnalytics
+                    .trackScreenView('preorder_receipt', origin);
+              } else {
+                services.clientAnalytics.trackScreenView(origin, origin);
+              }
               Navigator.pop(context);
             },
           ),
