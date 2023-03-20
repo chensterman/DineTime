@@ -6,6 +6,8 @@ import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/pages/home/favorites_page/favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/pages/home/completedpreorders_page/preorders.dart';
+import 'package:dinetime_mobile_mvp/pages/home/businessorders_page/businessorders.dart';
+import 'package:dinetime_mobile_mvp/pages/home/search_page/search.dart';
 
 class Home extends StatefulWidget {
   final Services services;
@@ -70,6 +72,12 @@ class _HomeState extends State<Home> {
               PreorderPage(
                 customer: customer,
               ),
+              BusinessOrderPage(
+                  // customer: customer,
+                  ),
+              Search(
+                customer: customer,
+              ),
             ];
             return Scaffold(
               extendBodyBehindAppBar: false,
@@ -81,18 +89,41 @@ class _HomeState extends State<Home> {
               bottomNavigationBar: BottomNavBar(
                 currentIndex: _selectedIndex,
                 onTap: _onItemTapped,
-                items: const <BottomNavigationBarItem>[
+                items: const [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
+                    icon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(Icons.home),
+                    ),
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite_border_rounded),
+                    icon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(Icons.favorite_border_rounded),
+                    ),
                     label: 'Favorites',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.checklist_rounded),
+                    icon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(Icons.checklist_rounded),
+                    ),
                     label: 'Preorders',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(Icons.shopping_cart_outlined),
+                    ),
+                    label: 'Orders',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(Icons.search),
+                    ),
+                    label: 'Directory',
                   ),
                 ],
               ),
