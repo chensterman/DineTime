@@ -24,6 +24,12 @@ class DatabaseServiceApp extends DatabaseService {
     });
   }
 
+  Future<bool> isCustomerUser(String uid) async {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('customers').doc(uid).get();
+    return snapshot.exists;
+  }
+
   // Update customer data
   @override
   Future<void> customerUpdate(
@@ -84,6 +90,22 @@ class DatabaseServiceApp extends DatabaseService {
         .orderBy('timestamp')
         .snapshots();
     await for (QuerySnapshot querySnapshot in customerFavoritesStream) {
+      List<r.Restaurant> restaurantList = [];
+      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        r.Restaurant? restaurant = await restaurantGet(documentSnapshot.id);
+        if (restaurant != null) {
+          restaurantList.add(restaurant);
+        }
+      }
+      yield restaurantList;
+    }
+  }
+
+  // Stream of all restaurants
+  @override
+  Stream<List<r.Restaurant>> customerAllStream() async* {
+    Stream<QuerySnapshot> customerAllStream = restaurantCollection.snapshots();
+    await for (QuerySnapshot querySnapshot in customerAllStream) {
       List<r.Restaurant> restaurantList = [];
       for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
         r.Restaurant? restaurant = await restaurantGet(documentSnapshot.id);

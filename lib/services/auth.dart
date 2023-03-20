@@ -11,16 +11,19 @@ class AuthServiceApp extends AuthService {
 
   // Get current user info if logged in - returned null if not
   @override
-  UserDT? getCurrentUser() {
+  Future<UserDT?> getCurrentUser() async {
     User? firebaseUser = _auth.currentUser;
     if (firebaseUser == null) {
       return null;
     } else {
       firebaseUser.reload();
+      bool isCustomer =
+          await DatabaseServiceApp().isCustomerUser(firebaseUser.uid);
       return UserDT(
         uid: firebaseUser.uid,
-        email: firebaseUser.email,
+        email: firebaseUser.email!,
         emailVerified: firebaseUser.emailVerified,
+        isCustomer: isCustomer,
       );
     }
   }
@@ -38,10 +41,13 @@ class AuthServiceApp extends AuthService {
       if (firebaseUser == null) {
         yield null;
       } else {
+        bool isCustomer =
+            await DatabaseServiceApp().isCustomerUser(firebaseUser.uid);
         UserDT user = UserDT(
           uid: firebaseUser.uid,
-          email: firebaseUser.email,
+          email: firebaseUser.email!,
           emailVerified: firebaseUser.emailVerified,
+          isCustomer: isCustomer,
         );
         yield user;
       }

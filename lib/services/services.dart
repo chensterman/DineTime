@@ -21,7 +21,7 @@ class Services {
 }
 
 abstract class AuthService {
-  UserDT? getCurrentUser();
+  Future<UserDT?> getCurrentUser();
   String? getCurrentUserUid();
   Stream<UserDT?> streamUserState();
   Future<void> signUp(String email, String password);
@@ -50,6 +50,7 @@ abstract class DatabaseService {
   Future<void> customerAddFavorite(String customerId, String restaurantId);
   Future<void> customerDeleteFavorite(String customerId, String restaurantId);
   Stream<List<Restaurant>> customerFavoritesStream(String customerId);
+  Stream<List<Restaurant>> customerAllStream();
   Stream<List<PreorderBag>> customerPreordersStream(String customerId);
   Future<List<Restaurant>> customerSwipe(String customerId);
   Future<Restaurant?> restaurantGet(String restaurantId);

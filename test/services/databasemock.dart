@@ -68,6 +68,11 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
+  Stream<List<Restaurant>> customerAllStream() async* {
+    yield _favoritedRestaurants;
+  }
+
+  @override
   Stream<List<PreorderBag>> customerPreordersStream(String customerId) async* {
     yield _preorders;
   }

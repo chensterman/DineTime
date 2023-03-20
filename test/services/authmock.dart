@@ -5,7 +5,8 @@ class AuthServiceMock extends AuthService {
   UserDT? _mockUser;
 
   @override
-  UserDT? getCurrentUser() {
+  Future<UserDT?> getCurrentUser() async {
+    await Future.delayed(Duration.zero);
     return _mockUser;
   }
 
@@ -19,8 +20,10 @@ class AuthServiceMock extends AuthService {
   }
 
   @override
-  Stream<UserDT?> streamUserState() {
-    return Stream.periodic(Duration.zero, (_) => getCurrentUser());
+  Stream<UserDT?> streamUserState() async* {
+    yield* Stream.periodic(const Duration(seconds: 1), (_) {
+      return getCurrentUser();
+    }).asyncMap((event) async => await event);
   }
 
   @override
@@ -30,6 +33,7 @@ class AuthServiceMock extends AuthService {
       uid: "123",
       email: "mock@test.com",
       emailVerified: false,
+      isCustomer: true,
     );
   }
 
@@ -40,6 +44,7 @@ class AuthServiceMock extends AuthService {
       uid: "123",
       email: "mock@test.com",
       emailVerified: true,
+      isCustomer: true,
     );
   }
 
@@ -61,6 +66,7 @@ class AuthServiceMock extends AuthService {
       uid: "123",
       email: "mock@test.com",
       emailVerified: true,
+      isCustomer: true,
     );
     ;
   }

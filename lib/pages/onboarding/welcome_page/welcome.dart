@@ -1,6 +1,6 @@
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/pages/home/home_page/home.dart';
+import 'package:dinetime_mobile_mvp/pages/root/home_page/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
