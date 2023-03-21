@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
+import 'package:dinetime_mobile_mvp/pages/owner_pages/commercereceipt_page/widgets/fulfillmentbutton.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
@@ -167,23 +168,9 @@ class CommerceReceipt extends StatelessWidget {
               ),
               const Divider(),
               const SizedBox(height: 10.0),
-              // ButtonFilled(
-              //   text: "View Pop-Up",
-              //   isDisabled: false,
-              //   onPressed: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         fullscreenDialog: true,
-              //         builder: (context) => FoodDisplay(
-              //           customer: customer,
-              //           restaurant: preorderBag.restaurant,
-              //           origin: "Preorders",
-              //         ),
-              //       ),
-              //     );
-              //   },
-              // ),
+              FulfillmentButton(
+                  preorderId: preorderBag.preorderId,
+                  fulfilled: preorderBag.fulfilled)
             ],
           ),
         ),

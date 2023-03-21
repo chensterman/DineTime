@@ -439,4 +439,11 @@ class DatabaseServiceApp extends DatabaseService {
       return preorderBag;
     }
   }
+
+  @override
+  Future<void> preorderUpdate(String preorderId, bool fulfilled) async {
+    await preordersCollection.doc(preorderId).update({
+      'fulfilled': fulfilled,
+    });
+  }
 }

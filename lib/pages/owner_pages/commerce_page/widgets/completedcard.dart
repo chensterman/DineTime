@@ -1,6 +1,4 @@
-import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
-import 'package:dinetime_mobile_mvp/pages/customer_pages/preorderreceipt_page/preorderreceipt.dart';
 import 'package:dinetime_mobile_mvp/pages/owner_pages/commercereceipt_page/commercereceipt.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';

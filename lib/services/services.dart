@@ -63,6 +63,7 @@ abstract class DatabaseService {
       String restaurantId, bool fulfilled);
   Future<void> preorderCreate(String customerId, PreorderBag preorderBag);
   Future<PreorderBag?> preorderGet(String preorderId);
+  Future<void> preorderUpdate(String preorderId, bool fulfilled);
 }
 
 abstract class StorageService {

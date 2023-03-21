@@ -153,4 +153,9 @@ class DatabaseServiceMock extends DatabaseService {
       fulfilled: false,
     );
   }
+
+  @override
+  Future<void> preorderUpdate(String preorderId, bool fulfilled) async {
+    await Future.delayed(Duration.zero);
+  }
 }
