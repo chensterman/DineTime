@@ -1,25 +1,24 @@
 import 'package:dinetime_mobile_mvp/models/customer.dart';
+import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:provider/provider.dart';
 
-import 'widgets/preordercard.dart';
-
 // Widget that displays list of saved restaurants for logged in customer
-class PreorderPage extends StatelessWidget {
-  final Customer customer;
-  const PreorderPage({
+class CompletedList extends StatelessWidget {
+  final Owner owner;
+  const CompletedList({
     Key? key,
-    required this.customer,
+    required this.owner,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     Services services = Provider.of<Services>(context);
-    services.clientAnalytics.trackScreenView("preorder_history", "Preorders");
+    // services.clientAnalytics.trackScreenView("preorder_history", "Preorders");
     return Container(
       padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),
       color: Colors.white,
@@ -73,10 +72,11 @@ class PreorderPage extends StatelessWidget {
                   );
                 }
                 // Return widget to process all document references
-                return PreorderCard(
-                  customer: customer,
-                  preorderBag: preorderBags[index - 1],
-                );
+                // return PreorderCard(
+                //   customer: customer,
+                //   preorderBag: preorderBags[index - 1],
+                // );
+                return Container();
               },
             );
           } else {

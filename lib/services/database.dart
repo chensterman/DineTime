@@ -1,20 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
+import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 
 import 'services.dart';
 
 // Contains all methods and data pertaining to the user database
 class DatabaseServiceApp extends DatabaseService {
-  // Access to 'restaurants' collection
-  final CollectionReference restaurantCollection =
-      FirebaseFirestore.instance.collection('restaurants');
   // Access to 'customers' collection
   final CollectionReference customerCollection =
       FirebaseFirestore.instance.collection('customers');
+  // Access to 'owners' collection
+  final CollectionReference ownerCollection =
+      FirebaseFirestore.instance.collection('owners');
+  // Access to 'restaurants' collection
+  final CollectionReference restaurantCollection =
+      FirebaseFirestore.instance.collection('restaurants');
   // Access to 'preorders' collection
   final CollectionReference preordersCollection =
       FirebaseFirestore.instance.collection('preorders');
+
+  Future<bool> isCustomerUser(String uid) async {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('customers').doc(uid).get();
+    return snapshot.exists;
+  }
 
   // Add user document to 'users' collection and initialize fields
   @override
@@ -22,12 +32,6 @@ class DatabaseServiceApp extends DatabaseService {
     await customerCollection.doc(customerId).set({
       'geolocation': null,
     });
-  }
-
-  Future<bool> isCustomerUser(String uid) async {
-    DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection('customers').doc(uid).get();
-    return snapshot.exists;
   }
 
   // Update customer data
@@ -50,7 +54,9 @@ class DatabaseServiceApp extends DatabaseService {
     if (snapshot.exists) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
       return Customer(
-          customerId: snapshot.id, geolocation: data['geolocation']);
+        customerId: snapshot.id,
+        geolocation: data['geolocation'],
+      );
     } else {
       return null;
     }
@@ -159,6 +165,26 @@ class DatabaseServiceApp extends DatabaseService {
       }
     }
     return restaurantList;
+  }
+
+  // Get owner data
+  @override
+  Future<Owner?> ownerGet(String ownerId) async {
+    DocumentSnapshot snapshot = await ownerCollection.doc(ownerId).get();
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      List<r.Restaurant> restaurants = [];
+      for (DocumentReference restaurantRef in data['restaurant_refs']) {
+        r.Restaurant? restaurant = await restaurantGet(restaurantRef.id);
+        restaurants.add(restaurant!);
+      }
+      return Owner(
+        ownerId: ownerId,
+        restaurants: restaurants,
+      );
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -321,6 +347,33 @@ class DatabaseServiceApp extends DatabaseService {
     );
   }
 
+  // Stream of specific customer preorders
+  @override
+  Stream<List<r.PreorderBag>> restaurantPreordersStream(
+    String restaurantId,
+    bool fulfilled,
+  ) async* {
+    Stream<QuerySnapshot> restaurantPreordersStream = preordersCollection
+        .where(
+          'restaurant_ref',
+          isEqualTo: restaurantCollection.doc(restaurantId),
+        )
+        .where(
+          'fulfilled',
+          isEqualTo: fulfilled,
+        )
+        .snapshots();
+    await for (QuerySnapshot querySnapshot in restaurantPreordersStream) {
+      List<r.PreorderBag> preorderBagList = [];
+      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        r.PreorderBag? preorderBag = await preorderGet(documentSnapshot.id);
+        preorderBagList.add(preorderBag!);
+        preorderBagList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+      }
+      yield preorderBagList;
+    }
+  }
+
   @override
   Future<void> preorderCreate(
       String customerId, r.PreorderBag preorderBag) async {
@@ -334,6 +387,7 @@ class DatabaseServiceApp extends DatabaseService {
           .doc(restaurantId)
           .collection("locations")
           .doc(preorderBag.location.locationId),
+      "fulfilled": false,
       "timestamp": Timestamp.now(),
     });
     for (r.PreorderItem? preorderItem in preorderBag.bag) {
@@ -366,6 +420,7 @@ class DatabaseServiceApp extends DatabaseService {
         restaurant: restaurant,
         location: location!,
         timestamp: preorderData["timestamp"],
+        fulfilled: preorderData["fulfilled"],
       );
       List<r.PreorderItem?> bag = [];
       QuerySnapshot itemsQuery =

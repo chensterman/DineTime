@@ -1,16 +1,15 @@
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/pages/customer_pages/preorderreceipt_page/preorderreceipt.dart';
+import 'package:dinetime_mobile_mvp/pages/owner_pages/commercereceipt_page/commercereceipt.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 
 // Cards that display list items in saved
-class BusinessCompletedCard extends StatelessWidget {
-  final Customer customer;
+class CompletedCard extends StatelessWidget {
   final PreorderBag preorderBag;
-  const BusinessCompletedCard({
+  const CompletedCard({
     super.key,
-    required this.customer,
     required this.preorderBag,
   });
 
@@ -75,8 +74,7 @@ class BusinessCompletedCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PreorderReceipt(
-                      customer: customer,
+                    builder: (context) => CommerceReceipt(
                       preorderBag: preorderBag,
                     ),
                   ),

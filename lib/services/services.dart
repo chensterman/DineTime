@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
+import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:flutter/material.dart';
@@ -53,10 +54,13 @@ abstract class DatabaseService {
   Stream<List<Restaurant>> customerAllStream();
   Stream<List<PreorderBag>> customerPreordersStream(String customerId);
   Future<List<Restaurant>> customerSwipe(String customerId);
+  Future<Owner?> ownerGet(String ownerId);
   Future<Restaurant?> restaurantGet(String restaurantId);
   Future<MenuItem?> restaurantMenuItemGet(String restaurantId, String itemId);
   Future<PopUpLocation?> restaurantLocationGet(
       String restaurantId, String locationId);
+  Stream<List<PreorderBag>> restaurantPreordersStream(
+      String restaurantId, bool fulfilled);
   Future<void> preorderCreate(String customerId, PreorderBag preorderBag);
   Future<PreorderBag?> preorderGet(String preorderId);
 }

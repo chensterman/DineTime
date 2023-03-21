@@ -81,25 +81,31 @@ class PreordersDataMock {
     );
 
     PreorderBag bag1 = PreorderBag(
-        preorderId: "ABCDE",
-        restaurant: restaurant,
-        location: restaurant.upcomingLocations[0],
-        timestamp: Timestamp.now());
+      preorderId: "ABCDE",
+      restaurant: restaurant,
+      location: restaurant.upcomingLocations[0],
+      timestamp: Timestamp.now(),
+      fulfilled: true,
+    );
     bag1.updateBag(PreorderItem(quantity: 5, item: menuItem1));
 
     PreorderBag bag2 = PreorderBag(
-        preorderId: "ABCDE",
-        restaurant: restaurant,
-        location: restaurant.upcomingLocations[0],
-        timestamp: Timestamp.now());
+      preorderId: "ABCDE",
+      restaurant: restaurant,
+      location: restaurant.upcomingLocations[0],
+      timestamp: Timestamp.now(),
+      fulfilled: true,
+    );
     bag2.updateBag(PreorderItem(quantity: 1, item: menuItem1));
     bag2.updateBag(PreorderItem(quantity: 2, item: menuItem2));
 
     PreorderBag bag3 = PreorderBag(
-        preorderId: "ABCDE",
-        restaurant: restaurant,
-        location: restaurant.upcomingLocations[0],
-        timestamp: Timestamp.now());
+      preorderId: "ABCDE",
+      restaurant: restaurant,
+      location: restaurant.upcomingLocations[0],
+      timestamp: Timestamp.now(),
+      fulfilled: false,
+    );
     bag3.updateBag(PreorderItem(quantity: 1, item: menuItem1));
     bag3.updateBag(PreorderItem(quantity: 3, item: menuItem2));
     bag3.updateBag(PreorderItem(quantity: 2, item: menuItem3));

@@ -1,20 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
-import 'package:dinetime_mobile_mvp/pages/customer_pages/fooddisplay_page/fooddisplay.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 
-import 'widgets/preorderreceiptitem.dart';
+import 'widgets/commercereceiptitem.dart';
 
-class PreorderReceipt extends StatelessWidget {
-  final Customer customer;
+class CommerceReceipt extends StatelessWidget {
   final PreorderBag preorderBag;
-  const PreorderReceipt({
+  const CommerceReceipt({
     super.key,
-    required this.customer,
     required this.preorderBag,
   });
 
@@ -27,7 +23,7 @@ class PreorderReceipt extends StatelessWidget {
       columnChildren.add(const SizedBox(
         height: 10.0,
       ));
-      columnChildren.add(PreorderReceiptItem(
+      columnChildren.add(CommerceReceiptItem(
           quantity: preorderItem!.quantity,
           menuItem: preorderItem.item,
           clientStorage: services.clientStorage));
@@ -171,23 +167,23 @@ class PreorderReceipt extends StatelessWidget {
               ),
               const Divider(),
               const SizedBox(height: 10.0),
-              ButtonFilled(
-                text: "View Pop-Up",
-                isDisabled: false,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (context) => FoodDisplay(
-                        customer: customer,
-                        restaurant: preorderBag.restaurant,
-                        origin: "Preorders",
-                      ),
-                    ),
-                  );
-                },
-              )
+              // ButtonFilled(
+              //   text: "View Pop-Up",
+              //   isDisabled: false,
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         fullscreenDialog: true,
+              //         builder: (context) => FoodDisplay(
+              //           customer: customer,
+              //           restaurant: preorderBag.restaurant,
+              //           origin: "Preorders",
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),

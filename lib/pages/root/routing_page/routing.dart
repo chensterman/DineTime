@@ -26,6 +26,7 @@ class Routing extends StatelessWidget {
           return const LocationPreferences();
         } else {
           return Home(
+            user: user,
             services: services,
           );
         }

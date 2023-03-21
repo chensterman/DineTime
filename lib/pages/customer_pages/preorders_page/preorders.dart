@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:provider/provider.dart';
 
-import 'widgets/searchcard.dart';
+import 'widgets/preordercard.dart';
 
 // Widget that displays list of saved restaurants for logged in customer
-class Search extends StatelessWidget {
+class PreorderPage extends StatelessWidget {
   final Customer customer;
-  const Search({
+  const PreorderPage({
     Key? key,
     required this.customer,
   }) : super(key: key);
@@ -19,22 +19,23 @@ class Search extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     Services services = Provider.of<Services>(context);
-    services.clientAnalytics.trackScreenView('Search', 'Search');
+    services.clientAnalytics.trackScreenView("preorder_history", "Preorders");
     return Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, top: height * 0.05),
         color: Colors.white,
-        child: StreamBuilder<List<Restaurant>>(
+        child: StreamBuilder<List<PreorderBag>>(
           // Customer document stream
-          stream: services.clientDB.customerAllStream(),
+          stream: services.clientDB.customerPreordersStream(
+              services.clientAuth.getCurrentUserUid()!),
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               // On document loaded, convert document snapshot to map
-              List<Restaurant> restaurants = snapshot.data!;
+              List<PreorderBag> preorderBags = snapshot.data!;
               // Generate ListView of all saved restaurants
               return ListView.separated(
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 8.0),
-                itemCount: restaurants.length + 1,
+                itemCount: preorderBags.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     // Initial text widgetrs
@@ -47,7 +48,7 @@ class Search extends StatelessWidget {
                               padding:
                                   const EdgeInsets.only(left: 15, right: 15),
                               child: Text(
-                                "Search",
+                                "My Pre-Orders",
                                 style: dineTimeTypography.headlineLarge,
                               ),
                             ),
@@ -59,7 +60,7 @@ class Search extends StatelessWidget {
                                 left: 15,
                               ),
                               child: Text(
-                                'Discover local pop-ups',
+                                '${preorderBags.length} Orders',
                                 style: dineTimeTypography.bodyLarge?.copyWith(
                                   color: dineTimeColorScheme.primary,
                                 ),
@@ -74,9 +75,9 @@ class Search extends StatelessWidget {
                     );
                   }
                   // Return widget to process all document references
-                  return SearchCard(
+                  return PreorderCard(
                     customer: customer,
-                    restaurant: restaurants[index - 1],
+                    preorderBag: preorderBags[index - 1],
                   );
                 },
               );

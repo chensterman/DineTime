@@ -118,6 +118,7 @@ class _FoodCardState extends State<FoodCard> {
                     )
                   : widget.restaurant.upcomingLocations[0],
               timestamp: Timestamp.now(),
+              fulfilled: false,
             ),
           ),
         ),
@@ -160,14 +161,6 @@ class _FoodCardState extends State<FoodCard> {
               children: [
                 buildCard(context, width, height),
                 const Stamps(),
-                PreorderButton(
-                  restaurantName: widget.restaurant.restaurantName,
-                  menu: widget.restaurant.menu,
-                  nextLocation: widget.restaurant.upcomingLocations.isEmpty
-                      ? null
-                      : widget.restaurant.upcomingLocations[0],
-                  isVisible: _isBottomPreorderButtonVisible,
-                ),
               ],
             ),
           );
@@ -196,134 +189,144 @@ class _FoodCardState extends State<FoodCard> {
     double startTracking = MediaQuery.of(context).size.height * 0.48;
     double opacitydelta = 1.0 / scrollLimit;
 
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: dineTimeColorScheme.onSurface, width: 1),
-          borderRadius: BorderRadius.circular(10)),
-      child: Center(
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (scrollNotification) {
-            // Notifications for Analytics
+    return Stack(alignment: Alignment.center, children: [
+      Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: dineTimeColorScheme.onSurface, width: 1),
+            borderRadius: BorderRadius.circular(10)),
+        child: Center(
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (scrollNotification) {
+              // Notifications for Analytics
 
-            if (scrollNotification is ScrollEndNotification) {
-              if (_controller.position.pixels < scrollLimit) {
-              } else if (_controller.position.pixels >= scrollLimit &&
-                  _controller.position.pixels < startTracking) {
-                if (widget.origin != null) {
-                  widget.services.clientAnalytics
-                      .trackScreenView('MainDetails', widget.origin!);
+              if (scrollNotification is ScrollEndNotification) {
+                if (_controller.position.pixels < scrollLimit) {
+                } else if (_controller.position.pixels >= scrollLimit &&
+                    _controller.position.pixels < startTracking) {
+                  if (widget.origin != null) {
+                    widget.services.clientAnalytics
+                        .trackScreenView('MainDetails', widget.origin!);
+                  } else {
+                    widget.services.clientAnalytics
+                        .trackScreenView('MainDetails', 'FYFPage');
+                  }
+                } else if (_controller.position.pixels >= startTracking &&
+                    _controller.position.pixels <
+                        startTracking + _aboutAndStoryHeight) {
+                  if (widget.origin != null) {
+                    widget.services.clientAnalytics
+                        .trackScreenView('AboutAndStory', widget.origin!);
+                  } else {
+                    widget.services.clientAnalytics
+                        .trackScreenView('AboutAndStory', 'FYFPage');
+                  }
+                } else if (_controller.position.pixels >=
+                        startTracking + _aboutAndStoryHeight &&
+                    _controller.position.pixels <
+                        startTracking + _photoGalleryHeight) {
+                  if (widget.origin != null) {
+                    widget.services.clientAnalytics
+                        .trackScreenView('PhotoGallery', widget.origin!);
+                  } else {
+                    widget.services.clientAnalytics
+                        .trackScreenView('PhotoGallery', 'FYFPage');
+                  }
+                } else if (_controller.position.pixels >=
+                        startTracking + _photoGalleryHeight &&
+                    _controller.position.pixels <
+                        startTracking + _dietaryOptionsHeight) {
+                  if (widget.origin != null) {
+                    widget.services.clientAnalytics
+                        .trackScreenView('DietOptions', widget.origin!);
+                  } else {
+                    widget.services.clientAnalytics
+                        .trackScreenView('DietOptions', 'FYFPage');
+                  }
+                } else if (_controller.position.pixels >=
+                        startTracking + _dietaryOptionsHeight &&
+                    _controller.position.pixels <
+                        startTracking + _menuItemsHeight) {
+                  if (widget.origin != null) {
+                    widget.services.clientAnalytics
+                        .trackScreenView('Menu', widget.origin!);
+                  } else {
+                    widget.services.clientAnalytics
+                        .trackScreenView('Menu', 'FYFPage');
+                  }
                 } else {
-                  widget.services.clientAnalytics
-                      .trackScreenView('MainDetails', 'FYFPage');
-                }
-              } else if (_controller.position.pixels >= startTracking &&
-                  _controller.position.pixels <
-                      startTracking + _aboutAndStoryHeight) {
-                if (widget.origin != null) {
-                  widget.services.clientAnalytics
-                      .trackScreenView('AboutAndStory', widget.origin!);
-                } else {
-                  widget.services.clientAnalytics
-                      .trackScreenView('AboutAndStory', 'FYFPage');
-                }
-              } else if (_controller.position.pixels >=
-                      startTracking + _aboutAndStoryHeight &&
-                  _controller.position.pixels <
-                      startTracking + _photoGalleryHeight) {
-                if (widget.origin != null) {
-                  widget.services.clientAnalytics
-                      .trackScreenView('PhotoGallery', widget.origin!);
-                } else {
-                  widget.services.clientAnalytics
-                      .trackScreenView('PhotoGallery', 'FYFPage');
-                }
-              } else if (_controller.position.pixels >=
-                      startTracking + _photoGalleryHeight &&
-                  _controller.position.pixels <
-                      startTracking + _dietaryOptionsHeight) {
-                if (widget.origin != null) {
-                  widget.services.clientAnalytics
-                      .trackScreenView('DietOptions', widget.origin!);
-                } else {
-                  widget.services.clientAnalytics
-                      .trackScreenView('DietOptions', 'FYFPage');
-                }
-              } else if (_controller.position.pixels >=
-                      startTracking + _dietaryOptionsHeight &&
-                  _controller.position.pixels <
-                      startTracking + _menuItemsHeight) {
-                if (widget.origin != null) {
-                  widget.services.clientAnalytics
-                      .trackScreenView('Menu', widget.origin!);
-                } else {
-                  widget.services.clientAnalytics
-                      .trackScreenView('Menu', 'FYFPage');
-                }
-              } else {
-                if (widget.origin != null) {
-                  widget.services.clientAnalytics
-                      .trackScreenView('UpcomingLocs', widget.origin!);
-                } else {
-                  widget.services.clientAnalytics
-                      .trackScreenView('UpcomingLocs', 'FYFPage');
+                  if (widget.origin != null) {
+                    widget.services.clientAnalytics
+                        .trackScreenView('UpcomingLocs', widget.origin!);
+                  } else {
+                    widget.services.clientAnalytics
+                        .trackScreenView('UpcomingLocs', 'FYFPage');
+                  }
                 }
               }
-            }
-            if (scrollNotification.metrics.pixels >= scrollLimit) {
-              setState(() {
-                _isMainDetailsVisible = false;
-                _isBottomPreorderButtonVisible = true;
-              });
-            } else {
-              setState(() {
-                _isMainDetailsVisible = true;
-                _isBottomPreorderButtonVisible = false;
-                if (scrollNotification.metrics.pixels <= 0) {
-                  _opacity = 0.0;
-                  _opacityPreorder = 0.0;
-                } else {
-                  _opacity = scrollNotification.metrics.pixels * opacitydelta;
-                  _opacityPreorder =
-                      scrollNotification.metrics.pixels * opacitydelta;
-                }
-                if (scrollNotification.metrics.pixels >= 1.0) {
-                  _opacityPreorder = 1.0;
-                }
-              });
-            }
-            return false;
-          },
-          child: SingleChildScrollView(
-            controller: _controller,
-            child: Scrollbar(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
-                    children: [
-                      Background(
-                        width: width,
-                        height: height - 3,
-                        restaurantCoverRef:
-                            widget.restaurant.restaurantCoverRef,
-                        services: widget.services,
-                      ),
-                      BackgroundShadow(width: width, height: height - 3),
-                      mainDetails(width, height)
-                    ],
-                  ),
-                  additionalDetails(),
-                  const SizedBox(height: 70.0), // For preorder button
-                ],
+              if (scrollNotification.metrics.pixels >= scrollLimit) {
+                setState(() {
+                  _isMainDetailsVisible = false;
+                  _isBottomPreorderButtonVisible = true;
+                });
+              } else {
+                setState(() {
+                  _isMainDetailsVisible = true;
+                  _isBottomPreorderButtonVisible = false;
+                  if (scrollNotification.metrics.pixels <= 0) {
+                    _opacity = 0.0;
+                    _opacityPreorder = 0.0;
+                  } else {
+                    _opacity = scrollNotification.metrics.pixels * opacitydelta;
+                    _opacityPreorder =
+                        scrollNotification.metrics.pixels * opacitydelta;
+                  }
+                  if (scrollNotification.metrics.pixels >= 1.0) {
+                    _opacityPreorder = 1.0;
+                  }
+                });
+              }
+              return false;
+            },
+            child: SingleChildScrollView(
+              controller: _controller,
+              child: Scrollbar(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(
+                      children: [
+                        Background(
+                          width: width,
+                          height: height - 3,
+                          restaurantCoverRef:
+                              widget.restaurant.restaurantCoverRef,
+                          services: widget.services,
+                        ),
+                        BackgroundShadow(width: width, height: height - 3),
+                        mainDetails(width, height)
+                      ],
+                    ),
+                    additionalDetails(),
+                    const SizedBox(height: 70.0), // For preorder button
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
-    );
+      PreorderButton(
+        restaurantName: widget.restaurant.restaurantName,
+        menu: widget.restaurant.menu,
+        nextLocation: widget.restaurant.upcomingLocations.isEmpty
+            ? null
+            : widget.restaurant.upcomingLocations[0],
+        isVisible: _isBottomPreorderButtonVisible,
+      ),
+    ]);
   }
 
   Widget mainDetails(double width, double height) {

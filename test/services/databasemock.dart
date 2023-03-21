@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
+import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 
@@ -84,6 +85,12 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
+  Future<Owner?> ownerGet(String ownerId) async {
+    await Future.delayed(Duration.zero);
+    return Owner(ownerId: ownerId, restaurants: []);
+  }
+
+  @override
   Future<Restaurant?> restaurantGet(String restaurantId) async {
     await Future.delayed(Duration.zero);
     return _swipeRestaurants
@@ -123,6 +130,12 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
+  Stream<List<PreorderBag>> restaurantPreordersStream(
+      String restaurantId, bool fulfilled) async* {
+    yield _preorders;
+  }
+
+  @override
   Future<void> preorderCreate(
       String customerId, PreorderBag preorderBag) async {
     await Future.delayed(Duration.zero);
@@ -133,9 +146,11 @@ class DatabaseServiceMock extends DatabaseService {
   Future<PreorderBag?> preorderGet(String preorderId) async {
     await Future.delayed(Duration.zero);
     return PreorderBag(
-        preorderId: "ABCDE",
-        restaurant: _favoritedRestaurants[0],
-        location: _favoritedRestaurants[0].upcomingLocations[0],
-        timestamp: Timestamp.now());
+      preorderId: "ABCDE",
+      restaurant: _favoritedRestaurants[0],
+      location: _favoritedRestaurants[0].upcomingLocations[0],
+      timestamp: Timestamp.now(),
+      fulfilled: false,
+    );
   }
 }

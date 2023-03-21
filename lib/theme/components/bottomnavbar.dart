@@ -15,13 +15,11 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get size of screen
-    double width = MediaQuery.of(context).size.width;
     // Container to add padding and reduce spacing between nav bar items
     return Container(
       color: dineTimeColorScheme.onPrimary,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * 0.25),
+        padding: const EdgeInsets.symmetric(horizontal: 25.0),
         child: BottomNavigationBar(
           iconSize: 32.0,
           items: items,
