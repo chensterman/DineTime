@@ -20,6 +20,11 @@ class AuthServiceMock extends AuthService {
   }
 
   @override
+  String? getCurrentUserEmail() {
+    return "test@mock.com";
+  }
+
+  @override
   Stream<UserDT?> streamUserState() async* {
     yield* Stream.periodic(const Duration(seconds: 1), (_) {
       return getCurrentUser();

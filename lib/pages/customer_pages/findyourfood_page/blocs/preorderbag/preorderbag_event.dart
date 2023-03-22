@@ -19,10 +19,12 @@ class PreorderBagUpdate extends PreorderBagEvent {
 
 class PreorderBagSubmit extends PreorderBagEvent {
   final String customerId;
+  final String customerEmail;
   const PreorderBagSubmit({
     required this.customerId,
+    required this.customerEmail,
   });
 
   @override
-  List<Object> get props => [customerId];
+  List<Object> get props => [customerId, customerEmail];
 }

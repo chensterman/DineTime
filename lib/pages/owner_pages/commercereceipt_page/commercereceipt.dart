@@ -39,7 +39,7 @@ class CommerceReceipt extends StatelessWidget {
     }
 
     Timestamp dateStart = preorderBag.location.locationDateStart;
-    String periodStart = dateStart.toDate().hour > 12 ? "PM" : "AM";
+    String periodStart = dateStart.toDate().hour >= 12 ? "PM" : "AM";
     String timeZoneName = dateStart.toDate().timeZoneName;
     num hourStart = dateStart.toDate().hour % 12;
     String hourStartString =
@@ -87,6 +87,23 @@ class CommerceReceipt extends StatelessWidget {
                 style: dineTimeTypography.headlineSmall,
               ),
               const SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Image(
+                      image: AssetImage('lib/assets/email_grey.png'),
+                      height: 18,
+                      width: 18),
+                  const SizedBox(width: 15.0),
+                  Text(
+                    preorderBag.customerEmail,
+                    style: dineTimeTypography.bodyMedium?.copyWith(
+                      color: dineTimeColorScheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

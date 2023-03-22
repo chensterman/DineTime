@@ -33,6 +33,11 @@ class AuthServiceApp extends AuthService {
     return _auth.currentUser?.uid;
   }
 
+  @override
+  String? getCurrentUserEmail() {
+    return _auth.currentUser?.email;
+  }
+
   // Stream that listens for authentication changes
   @override
   Stream<UserDT?> streamUserState() async* {

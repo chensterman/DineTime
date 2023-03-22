@@ -105,6 +105,7 @@ class _FoodCardState extends State<FoodCard> {
             clientDB: widget.services.clientDB,
             preorderBag: r.PreorderBag(
               preorderId: "INITIAL",
+              customerEmail: "initial",
               restaurant: widget.restaurant,
               location: widget.restaurant.upcomingLocations.isEmpty
                   ? r.PopUpLocation(

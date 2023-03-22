@@ -82,6 +82,7 @@ class PreordersDataMock {
 
     PreorderBag bag1 = PreorderBag(
       preorderId: "ABCDE",
+      customerEmail: "test@mock.com",
       restaurant: restaurant,
       location: restaurant.upcomingLocations[0],
       timestamp: Timestamp.now(),
@@ -91,6 +92,7 @@ class PreordersDataMock {
 
     PreorderBag bag2 = PreorderBag(
       preorderId: "ABCDE",
+      customerEmail: "test@mock.com",
       restaurant: restaurant,
       location: restaurant.upcomingLocations[0],
       timestamp: Timestamp.now(),
@@ -101,6 +103,7 @@ class PreordersDataMock {
 
     PreorderBag bag3 = PreorderBag(
       preorderId: "ABCDE",
+      customerEmail: "test@mock.com",
       restaurant: restaurant,
       location: restaurant.upcomingLocations[0],
       timestamp: Timestamp.now(),

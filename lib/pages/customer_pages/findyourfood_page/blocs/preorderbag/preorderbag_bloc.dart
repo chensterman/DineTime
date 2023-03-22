@@ -27,6 +27,7 @@ class PreorderBagBloc extends Bloc<PreorderBagEvent, PreorderBagState> {
   void _onPreorderBagSubmit(
       PreorderBagSubmit event, Emitter<PreorderBagState> emit) async {
     emit(PreorderBagLoading());
-    await clientDB.preorderCreate(event.customerId, preorderBag);
+    await clientDB.preorderCreate(
+        event.customerId, event.customerEmail, preorderBag);
   }
 }

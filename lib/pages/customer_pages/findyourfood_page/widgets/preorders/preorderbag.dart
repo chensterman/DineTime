@@ -214,6 +214,7 @@ class PreorderBag extends StatelessWidget {
               preorderBagBloc.add(
                 PreorderBagSubmit(
                   customerId: services.clientAuth.getCurrentUserUid()!,
+                  customerEmail: services.clientAuth.getCurrentUserEmail()!,
                 ),
               );
               Navigator.pop(context);

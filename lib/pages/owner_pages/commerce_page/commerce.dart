@@ -6,8 +6,7 @@ import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'widgets/pendingcard.dart';
-import 'widgets/completedcard.dart';
+import 'widgets/preordercard.dart';
 
 class Commerce extends StatefulWidget {
   final Restaurant restaurant;
@@ -67,7 +66,7 @@ class _CommerceState extends State<Commerce> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           color: Colors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,9 +212,7 @@ class _CommerceState extends State<Commerce> {
               itemCount: preorderBags.length,
               itemBuilder: (context, index) {
                 // Return widget to process all document references
-                return fulfilled
-                    ? CompletedCard(preorderBag: preorderBags[index])
-                    : PendingCard(preorderBag: preorderBags[index]);
+                return PreorderCard(preorderBag: preorderBags[index]);
               },
             );
           } else {
