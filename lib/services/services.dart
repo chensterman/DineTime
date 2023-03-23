@@ -5,6 +5,8 @@ import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
+import '../models/event.dart';
+
 class Services {
   final AuthService clientAuth;
   final LocationService clientLocation;
@@ -50,6 +52,7 @@ abstract class DatabaseService {
   Future<void> customerAddFavorite(String customerId, String restaurantId);
   Future<void> customerDeleteFavorite(String customerId, String restaurantId);
   Stream<List<Restaurant>> customerFavoritesStream(String customerId);
+  Stream<List<Event>> eventStream(String customerId);
   Stream<List<PreorderBag>> customerPreordersStream(String customerId);
   Future<List<Restaurant>> customerSwipe(String customerId);
   Future<Restaurant?> restaurantGet(String restaurantId);

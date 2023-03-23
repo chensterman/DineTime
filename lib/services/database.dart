@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:dinetime_mobile_mvp/models/event.dart' as e;
 
 import 'services.dart';
 
@@ -137,6 +138,13 @@ class DatabaseServiceApp extends DatabaseService {
       }
     }
     return restaurantList;
+  }
+
+  @override
+  Stream<List<e.Event>> eventStream(String customerId) async* {
+    // Implement
+    List<e.Event> eventList = [];
+    yield eventList;
   }
 
   @override

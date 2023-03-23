@@ -7,6 +7,8 @@ import 'package:dinetime_mobile_mvp/pages/home/favorites_page/favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/pages/home/completedpreorders_page/preorders.dart';
 
+import '../events/event_page.dart';
+
 class Home extends StatefulWidget {
   final Services services;
   const Home({
@@ -70,6 +72,9 @@ class _HomeState extends State<Home> {
               PreorderPage(
                 customer: customer,
               ),
+              Events(
+                customer: customer,
+              )
             ];
             return Scaffold(
               extendBodyBehindAppBar: false,
@@ -93,6 +98,10 @@ class _HomeState extends State<Home> {
                   BottomNavigationBarItem(
                     icon: Icon(Icons.checklist_rounded),
                     label: 'Preorders',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.checklist_rounded),
+                    label: 'Events',
                   ),
                 ],
               ),

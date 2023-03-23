@@ -18,6 +18,21 @@ TextTheme dineTimeTypography = TextTheme(
     fontFamily: 'Futura PT',
     color: dineTimeColorScheme.onBackground,
   ),
+  titleSmall: TextStyle(
+    fontSize: 20,
+    fontFamily: 'Futura PT',
+    color: dineTimeColorScheme.primary,
+  ),
+  displayMedium: TextStyle(
+    fontSize: 18,
+    fontFamily: 'Futura PT',
+    color: dineTimeColorScheme.onBackground,
+  ),
+  displaySmall: TextStyle(
+    fontSize: 14,
+    fontFamily: 'Futura PT',
+    color: dineTimeColorScheme.primary,
+  ),
   bodyLarge: TextStyle(
     fontSize: 18,
     fontFamily: 'Lato',

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
-
+import 'package:dinetime_mobile_mvp/models/event.dart';
 import '../data/preordersdatamock.dart';
 import '../data/restaurantdatamock.dart';
 
@@ -76,6 +76,15 @@ class DatabaseServiceMock extends DatabaseService {
   Future<List<Restaurant>> customerSwipe(String customerId) async {
     await Future.delayed(Duration.zero);
     return _swipeRestaurants;
+  }
+
+  @override
+  Stream<List<Event>> eventStream(String customerId) async* {
+    // Implement
+    print(customerId);
+    await Future.delayed(Duration.zero);
+    List<Event> eventList = [];
+    yield eventList;
   }
 
   @override
