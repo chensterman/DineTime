@@ -22,14 +22,14 @@ class VerifyEmail extends StatefulWidget {
 }
 
 class _VerifyEmailState extends State<VerifyEmail> {
-  late UserDT user;
+  late Future<UserDT?> userFuture;
   late Timer timer;
 
   @override
   void initState() {
     // Safe to assume user is not null because in order to get to this page,
     //  User had to have been created.
-    user = widget.services.clientAuth.getCurrentUser()!;
+    userFuture = widget.services.clientAuth.getCurrentUser();
     // Sends verification email
     widget.services.clientAuth.sendEmailVerification();
 
@@ -96,10 +96,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
   // Check that a user has responded to the verification email
   Future<void> checkEmailVerified() async {
     // Reloads current user info from Firebase Authentication
-    user = widget.services.clientAuth.getCurrentUser()!;
+    UserDT? user = await widget.services.clientAuth.getCurrentUser();
 
     // Send to onboarding if verified
-    if (user.emailVerified! && mounted) {
+    if (user!.emailVerified && mounted) {
       timer.cancel();
       widget.services.clientAnalytics.trackEvent('completed_sign_up');
       Navigator.of(context).pushReplacement(MaterialPageRoute(

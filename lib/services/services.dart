@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
+import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,9 @@ class Services {
 }
 
 abstract class AuthService {
-  UserDT? getCurrentUser();
+  Future<UserDT?> getCurrentUser();
   String? getCurrentUserUid();
+  String? getCurrentUserEmail();
   Stream<UserDT?> streamUserState();
   Future<void> signUp(String email, String password);
   Future<void> signIn(String email, String password);
@@ -50,14 +52,20 @@ abstract class DatabaseService {
   Future<void> customerAddFavorite(String customerId, String restaurantId);
   Future<void> customerDeleteFavorite(String customerId, String restaurantId);
   Stream<List<Restaurant>> customerFavoritesStream(String customerId);
+  Stream<List<Restaurant>> customerAllStream();
   Stream<List<PreorderBag>> customerPreordersStream(String customerId);
   Future<List<Restaurant>> customerSwipe(String customerId);
+  Future<Owner?> ownerGet(String ownerId);
   Future<Restaurant?> restaurantGet(String restaurantId);
   Future<MenuItem?> restaurantMenuItemGet(String restaurantId, String itemId);
   Future<PopUpLocation?> restaurantLocationGet(
       String restaurantId, String locationId);
-  Future<void> preorderCreate(String customerId, PreorderBag preorderBag);
+  Stream<List<PreorderBag>> restaurantPreordersStream(
+      String restaurantId, bool fulfilled);
+  Future<void> preorderCreate(
+      String customerId, String customerEmail, PreorderBag preorderBag);
   Future<PreorderBag?> preorderGet(String preorderId);
+  Future<void> preorderUpdate(String preorderId, bool fulfilled);
 }
 
 abstract class StorageService {

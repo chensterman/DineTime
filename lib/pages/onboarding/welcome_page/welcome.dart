@@ -1,6 +1,7 @@
+import 'package:dinetime_mobile_mvp/pages/root/routing_page/routing.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
-import 'package:dinetime_mobile_mvp/pages/home/home_page/home.dart';
+import 'package:dinetime_mobile_mvp/pages/root/home_page/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -57,9 +58,7 @@ class Welcome extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           fullscreenDialog: true,
-                          builder: (context) => Home(
-                            services: services,
-                          ),
+                          builder: (context) => const Routing(),
                         ),
                       );
                     },

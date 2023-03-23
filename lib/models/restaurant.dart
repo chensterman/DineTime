@@ -111,14 +111,18 @@ class PreorderItem {
 // Class defining a preorder bag
 class PreorderBag {
   final String preorderId;
+  final String customerEmail;
   final Restaurant restaurant;
   final PopUpLocation location;
   final Timestamp timestamp;
+  final bool fulfilled;
   PreorderBag({
     required this.preorderId,
+    required this.customerEmail,
     required this.restaurant,
     required this.location,
     required this.timestamp,
+    required this.fulfilled,
   }) {
     preorderCode = preorderId.substring(0, 5).toUpperCase();
   }
