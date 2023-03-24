@@ -1,5 +1,5 @@
 import 'package:dinetime_mobile_mvp/models/user.dart';
-import 'package:dinetime_mobile_mvp/pages/home/home_page/home.dart';
+import 'package:dinetime_mobile_mvp/pages/root/home_page/home.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/locationpreferences_page/locationpreferences.dart';
 import 'package:dinetime_mobile_mvp/pages/onboarding/verifyemail_page/verifyemail.dart';
 import 'package:dinetime_mobile_mvp/pages/root/routing_page/wrappers/auth_wrapper.dart';
@@ -21,17 +21,18 @@ class Routing extends StatelessWidget {
     if (user == null) {
       return const AuthWrapper();
     } else {
-      if (user.emailVerified!) {
+      if (user.emailVerified) {
         if (locationPermission == PermissionStatus.denied) {
           return const LocationPreferences();
         } else {
           return Home(
+            user: user,
             services: services,
           );
         }
       } else {
         return VerifyEmail(
-          email: user.email!,
+          email: user.email,
           services: services,
         );
       }
