@@ -136,10 +136,11 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
-  Future<void> preorderCreate(
+  Future<String> preorderCreate(
       String customerId, String customerEmail, PreorderBag preorderBag) async {
     await Future.delayed(Duration.zero);
     _preorders.add(preorderBag);
+    return "ABCDE";
   }
 
   @override

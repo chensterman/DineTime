@@ -203,18 +203,23 @@ class _CommerceState extends State<Commerce> {
           current == 1,
         ),
         builder: ((context, snapshot) {
-          if (snapshot.hasData) {
-            // On document loaded, convert document snapshot to map
-            List<PreorderBag> preorderBags = snapshot.data!;
-            // Generate ListView of all saved restaurants
-            return ListView.separated(
-              separatorBuilder: (context, index) => const SizedBox(height: 8.0),
-              itemCount: preorderBags.length,
-              itemBuilder: (context, index) {
-                // Return widget to process all document references
-                return PreorderCard(preorderBag: preorderBags[index]);
-              },
-            );
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasData) {
+              // On document loaded, convert document snapshot to map
+              List<PreorderBag> preorderBags = snapshot.data!;
+              // Generate ListView of all saved restaurants
+              return ListView.separated(
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 8.0),
+                itemCount: preorderBags.length,
+                itemBuilder: (context, index) {
+                  // Return widget to process all document references
+                  return PreorderCard(preorderBag: preorderBags[index]);
+                },
+              );
+            } else {
+              return const Text("Error");
+            }
           } else {
             return const LoadingScreen();
           }

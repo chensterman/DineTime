@@ -375,12 +375,13 @@ class DatabaseServiceApp extends DatabaseService {
   }
 
   @override
-  Future<void> preorderCreate(String customerId, String customerEmail,
+  Future<String> preorderCreate(String customerId, String customerEmail,
       r.PreorderBag preorderBag) async {
     String restaurantId = preorderBag.restaurant.restaurantId;
     DocumentReference newPreorder = preordersCollection.doc();
+    String orderCode = newPreorder.id.substring(0, 5).toUpperCase();
     newPreorder.set({
-      "order_code": newPreorder.id.substring(0, 5).toUpperCase(),
+      "order_code": orderCode,
       "customer_ref": customerCollection.doc(customerId),
       "customer_email": customerEmail,
       "restaurant_ref": restaurantCollection.doc(restaurantId),
@@ -400,6 +401,7 @@ class DatabaseServiceApp extends DatabaseService {
         "quantity": preorderItem.quantity,
       });
     }
+    return orderCode;
   }
 
   @override

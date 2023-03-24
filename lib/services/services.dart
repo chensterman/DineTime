@@ -62,7 +62,7 @@ abstract class DatabaseService {
       String restaurantId, String locationId);
   Stream<List<PreorderBag>> restaurantPreordersStream(
       String restaurantId, bool fulfilled);
-  Future<void> preorderCreate(
+  Future<String> preorderCreate(
       String customerId, String customerEmail, PreorderBag preorderBag);
   Future<PreorderBag?> preorderGet(String preorderId);
   Future<void> preorderUpdate(String preorderId, bool fulfilled);
