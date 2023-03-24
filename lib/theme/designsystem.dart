@@ -1,6 +1,7 @@
 // Exporting all design system aspects of the DineTime app
 export 'package:dinetime_mobile_mvp/theme/colorscheme.dart';
 export 'package:dinetime_mobile_mvp/theme/typography.dart';
+export 'package:dinetime_mobile_mvp/theme/event_ticket_icon.dart';
 export 'package:dinetime_mobile_mvp/theme/components/buttonfilled.dart';
 export 'package:dinetime_mobile_mvp/theme/components/buttonoutlined.dart';
 export 'package:dinetime_mobile_mvp/theme/components/inputtext.dart';

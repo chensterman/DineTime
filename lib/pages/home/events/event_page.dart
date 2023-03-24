@@ -109,10 +109,20 @@ class Events extends StatelessWidget {
                                     } else if (snapshot.connectionState ==
                                         ConnectionState.done) {
                                       String address = snapshot.data!;
-                                      return Text(
-                                        "Near $address",
-                                        style: dineTimeTypography.titleSmall,
-                                      );
+                                      return Row(children: [
+                                        Text("Near ",
+                                            style:
+                                                dineTimeTypography.titleSmall),
+                                        Text(address,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'Futura PT',
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color:
+                                                  dineTimeColorScheme.primary,
+                                            ))
+                                      ]);
                                     } else {
                                       return Text(
                                         "Retrieving location...",

@@ -35,7 +35,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  
+
   # Firebase
   firebase_core: ^2.1.1
   cloud_firestore: ^4.0.3
@@ -63,8 +63,7 @@ dependencies:
   flutter_image_slideshow: any
   page_view_indicators: ^2.0.0
   smooth_page_indicator: ^1.0.0+2
-  
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -124,3 +123,6 @@ flutter:
     - family: Lato
       fonts:
         - asset: fonts/Lato-Regular.ttf
+    - family: event_ticket
+      fonts:
+        - asset: fonts/event_ticket.ttf

@@ -17,7 +17,7 @@ class EventListCard extends StatelessWidget {
     required this.event,
   });
 
-  final double _cardHeight = 75.0;
+  final double _cardHeight = 95.0;
 
   @override
   Widget build(BuildContext context) {

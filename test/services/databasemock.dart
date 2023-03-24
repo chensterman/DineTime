@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
+import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/models/event.dart';
@@ -68,6 +69,11 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
+  Stream<List<Restaurant>> customerAllStream() async* {
+    yield _favoritedRestaurants;
+  }
+
+  @override
   Stream<List<PreorderBag>> customerPreordersStream(String customerId) async* {
     yield _preorders;
   }
@@ -85,6 +91,11 @@ class DatabaseServiceMock extends DatabaseService {
     await Future.delayed(Duration.zero);
     List<Event> eventList = [];
     yield eventList;
+  }
+
+  Future<Owner?> ownerGet(String ownerId) async {
+    await Future.delayed(Duration.zero);
+    return Owner(ownerId: ownerId, restaurants: []);
   }
 
   @override
@@ -127,8 +138,14 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
+  Stream<List<PreorderBag>> restaurantPreordersStream(
+      String restaurantId, bool fulfilled) async* {
+    yield _preorders;
+  }
+
+  @override
   Future<void> preorderCreate(
-      String customerId, PreorderBag preorderBag) async {
+      String customerId, String customerEmail, PreorderBag preorderBag) async {
     await Future.delayed(Duration.zero);
     _preorders.add(preorderBag);
   }
@@ -137,9 +154,17 @@ class DatabaseServiceMock extends DatabaseService {
   Future<PreorderBag?> preorderGet(String preorderId) async {
     await Future.delayed(Duration.zero);
     return PreorderBag(
-        preorderId: "ABCDE",
-        restaurant: _favoritedRestaurants[0],
-        location: _favoritedRestaurants[0].upcomingLocations[0],
-        timestamp: Timestamp.now());
+      preorderId: "ABCDE",
+      customerEmail: "test@mock.com",
+      restaurant: _favoritedRestaurants[0],
+      location: _favoritedRestaurants[0].upcomingLocations[0],
+      timestamp: Timestamp.now(),
+      fulfilled: false,
+    );
+  }
+
+  @override
+  Future<void> preorderUpdate(String preorderId, bool fulfilled) async {
+    await Future.delayed(Duration.zero);
   }
 }
