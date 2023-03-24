@@ -31,7 +31,7 @@ class PreorderButton extends StatelessWidget {
         child: SizedBox(
           width: 150.0,
           child: ButtonFilled(
-            isDisabled: nextLocation == null ? true : false,
+            isDisabled: true,
             text: "Pre-Order",
             onPressed: () {
               services.clientAnalytics.trackEvent('start_preorder');
