@@ -6,6 +6,7 @@ import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BuyTicket extends StatelessWidget {
   const BuyTicket({
@@ -160,7 +161,10 @@ class BuyTicket extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.75,
         height: 60,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            launchUrl(
+                Uri.parse('https://buy.stripe.com/test_28o5kz15lgF75Ta5kk'));
+          },
           style: style,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

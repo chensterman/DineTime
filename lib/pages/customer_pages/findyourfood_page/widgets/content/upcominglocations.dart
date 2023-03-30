@@ -69,7 +69,7 @@ class UpcomingLocations extends StatelessWidget {
   ) {
     String timeDisplay = "TBD";
     if (dateStart != null) {
-      String periodStart = dateStart.toDate().hour > 12 ? "PM" : "AM";
+      String periodStart = dateStart.toDate().hour >= 12 ? "PM" : "AM";
       String timeZoneName = dateStart.toDate().timeZoneName;
       num hourStart = dateStart.toDate().hour % 12;
       String hourStartString =
@@ -84,7 +84,7 @@ class UpcomingLocations extends StatelessWidget {
       num? minuteEnd;
       String? minuteEndString;
       if (dateEnd != null) {
-        periodEnd = dateEnd.toDate().hour > 12 ? "PM" : "AM";
+        periodEnd = dateEnd.toDate().hour >= 12 ? "PM" : "AM";
         hourEnd = dateEnd.toDate().hour % 12;
         hourEndString = (hourEnd / 10).floor() == 0 ? "0$hourEnd" : "$hourEnd";
         minuteEnd = dateEnd.toDate().minute;

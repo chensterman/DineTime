@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'preorderconfirm.dart';
 import 'preorderoption.dart';
 
 class PreorderBag extends StatelessWidget {
@@ -51,7 +52,7 @@ class PreorderBag extends StatelessWidget {
             }
 
             Timestamp dateStart = nextLocation.locationDateStart;
-            String periodStart = dateStart.toDate().hour > 12 ? "PM" : "AM";
+            String periodStart = dateStart.toDate().hour >= 12 ? "PM" : "AM";
             String timeZoneName = dateStart.toDate().timeZoneName;
             num hourStart = dateStart.toDate().hour % 12;
             String hourStartString =
@@ -178,6 +179,15 @@ class PreorderBag extends StatelessWidget {
                     //     ),
                     //   ),
                     // ),
+                    Text(
+                      "Note: You will need to complete your official payment at the Pop-Up. Pre-Ordering items only secures your place in line.",
+                      style: dineTimeTypography.bodySmall?.copyWith(
+                        color: dineTimeColorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
                     confirmPreorderButton(context, totalQuantity, totalPrice),
                   ],
                 ),
@@ -218,16 +228,19 @@ class PreorderBag extends StatelessWidget {
                 ),
               );
               Navigator.pop(context);
-              // showModalBottomSheet(
-              //   isScrollControlled: true,
-              //   shape: const RoundedRectangleBorder(
-              //     borderRadius: BorderRadius.vertical(
-              //       top: Radius.circular(10),
-              //     ),
-              //   ),
-              //   context: context,
-              //   builder: (context) => const PreorderConfirm(),
-              // );
+              showModalBottomSheet(
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(10),
+                  ),
+                ),
+                context: context,
+                builder: (context) => PreorderConfirm(
+                  restaurantName: restaurantName,
+                  totalPrice: totalPrice,
+                ),
+              );
             },
             style: style,
             child: Row(

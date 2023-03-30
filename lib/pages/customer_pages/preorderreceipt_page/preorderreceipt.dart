@@ -42,7 +42,7 @@ class PreorderReceipt extends StatelessWidget {
     }
 
     Timestamp dateStart = preorderBag.location.locationDateStart;
-    String periodStart = dateStart.toDate().hour > 12 ? "PM" : "AM";
+    String periodStart = dateStart.toDate().hour >= 12 ? "PM" : "AM";
     String timeZoneName = dateStart.toDate().timeZoneName;
     num hourStart = dateStart.toDate().hour % 12;
     String hourStartString =
