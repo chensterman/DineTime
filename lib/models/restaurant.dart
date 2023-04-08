@@ -12,6 +12,8 @@ class Restaurant {
   List<GalleryImage> gallery;
   List<MenuItem> menu;
   List<PopUpLocation> upcomingLocations;
+  bool preordersEnabled;
+  bool displayed;
   String? website;
   String? instagramHandle;
   String? email;
@@ -26,6 +28,8 @@ class Restaurant {
     required this.upcomingLocations,
     required this.bio,
     required this.cuisine,
+    required this.preordersEnabled,
+    required this.displayed,
     this.website,
     this.instagramHandle,
     this.email,

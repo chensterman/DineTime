@@ -11,12 +11,14 @@ class PreorderButton extends StatelessWidget {
   final String restaurantName;
   final List<MenuItem> menu;
   final PopUpLocation? nextLocation;
+  final bool preordersEnabled;
   final bool isVisible;
   const PreorderButton({
     Key? key,
     required this.restaurantName,
     required this.menu,
     required this.nextLocation,
+    required this.preordersEnabled,
     required this.isVisible,
   }) : super(key: key);
 
@@ -31,7 +33,7 @@ class PreorderButton extends StatelessWidget {
         child: SizedBox(
           width: 150.0,
           child: ButtonFilled(
-            isDisabled: true,
+            isDisabled: !preordersEnabled || nextLocation == null,
             text: "Pre-Order",
             onPressed: () {
               services.clientAnalytics.trackEvent('start_preorder');

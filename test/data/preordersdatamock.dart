@@ -43,6 +43,8 @@ class PreordersDataMock {
           locationName: "Location Name",
         ),
       ],
+      preordersEnabled: true,
+      displayed: true,
       bio:
           "This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio.",
       cuisine: "Pastry",

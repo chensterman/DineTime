@@ -53,6 +53,24 @@ class PreorderReceipt extends StatelessWidget {
     String pickupTime =
         "$hourStartString:$minuteStartString $periodStart $timeZoneName";
 
+    final List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+
+    String pickupDate =
+        '${months[dateStart.toDate().month - 1]} ${dateStart.toDate().day}, ${dateStart.toDate().year}';
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -133,7 +151,7 @@ class PreorderReceipt extends StatelessWidget {
                       width: 18),
                   const SizedBox(width: 15.0),
                   Text(
-                    'Pickup at $pickupTime',
+                    'Pickup at $pickupTime on $pickupDate',
                     style: dineTimeTypography.bodyMedium?.copyWith(
                       color: dineTimeColorScheme.onSurface,
                     ),

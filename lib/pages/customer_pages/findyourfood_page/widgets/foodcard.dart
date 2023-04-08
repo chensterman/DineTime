@@ -325,6 +325,7 @@ class _FoodCardState extends State<FoodCard> {
         nextLocation: widget.restaurant.upcomingLocations.isEmpty
             ? null
             : widget.restaurant.upcomingLocations[0],
+        preordersEnabled: widget.restaurant.preordersEnabled,
         isVisible: _isBottomPreorderButtonVisible,
       ),
     ]);
