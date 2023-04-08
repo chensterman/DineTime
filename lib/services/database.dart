@@ -151,7 +151,8 @@ class DatabaseServiceApp extends DatabaseService {
     List<String> customerFavoriteDocIds =
         customerFavoritesQuery.docs.map((doc) => doc.id).toList();
     // Get all restaurants and filter on what has already been saved by customer
-    QuerySnapshot restaurantQuery = await restaurantCollection.get();
+    QuerySnapshot restaurantQuery =
+        await restaurantCollection.where('displayed', isEqualTo: true).get();
     List<DocumentSnapshot> restaurantDocs = restaurantQuery.docs;
     restaurantDocs = restaurantDocs
         .where((snapshot) => !customerFavoriteDocIds.contains(snapshot.id))
@@ -212,6 +213,8 @@ class DatabaseServiceApp extends DatabaseService {
       String restaurantCoverRef = restaurantData['cover_location'];
       String bio = restaurantData['restaurant_bio'];
       String cuisine = restaurantData['cuisine'];
+      bool preordersEnabled = restaurantData['preorders_enabled'];
+      bool displayed = restaurantData['displayed'];
       String website = restaurantData['website'];
       String instagramHandle = restaurantData['instagram_handle'];
       String email = restaurantData['email'];
@@ -309,6 +312,8 @@ class DatabaseServiceApp extends DatabaseService {
         instagramHandle: instagramHandle,
         upcomingLocations: upcomingLocations,
         cuisine: cuisine,
+        preordersEnabled: preordersEnabled,
+        displayed: displayed,
         bio: bio,
         website: website,
         email: email,
