@@ -1,0 +1,321 @@
+[debug] [2023-04-08T20:00:53.699Z] ----------------------------------------------------------------------
+[debug] [2023-04-08T20:00:53.701Z] Command:       C:\nodejs\node.exe C:\Users\bryan\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-08T20:00:53.701Z] CLI Version:   11.25.3
+[debug] [2023-04-08T20:00:53.701Z] Platform:      win32
+[debug] [2023-04-08T20:00:53.701Z] Node Version:  v18.15.0
+[debug] [2023-04-08T20:00:53.702Z] Time:          Sat Apr 08 2023 16:00:53 GMT-0400 (Eastern Daylight Time)
+[debug] [2023-04-08T20:00:53.702Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-08T20:00:53.754Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-08T20:00:53.755Z] > authorizing via signed-in user (nieb@umich.edu)
+[debug] [2023-04-08T20:00:53.755Z] [iam] checking project dinetime-mvp-364902 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2023-04-08T20:00:53.756Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/dinetime-mvp-364902:testIamPermissions [none]
+[debug] [2023-04-08T20:00:53.756Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/dinetime-mvp-364902:testIamPermissions x-goog-quota-user=projects/dinetime-mvp-364902
+[debug] [2023-04-08T20:00:53.756Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dinetime-mvp-364902:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2023-04-08T20:00:54.408Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/dinetime-mvp-364902:testIamPermissions 200
+[debug] [2023-04-08T20:00:54.408Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/dinetime-mvp-364902:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2023-04-08T20:00:54.409Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/dinetime-mvp-364902/serviceAccounts/dinetime-mvp-364902@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-08T20:00:54.409Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/dinetime-mvp-364902/serviceAccounts/dinetime-mvp-364902@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-08T20:00:55.072Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/dinetime-mvp-364902/serviceAccounts/dinetime-mvp-364902@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-08T20:00:55.072Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/dinetime-mvp-364902/serviceAccounts/dinetime-mvp-364902@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-08T20:00:55.073Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 [none]
+[debug] [2023-04-08T20:00:55.766Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 200
+[debug] [2023-04-08T20:00:55.766Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 {"projectId":"dinetime-mvp-364902","projectNumber":"95378834531","displayName":"dinetime-mvp","name":"projects/dinetime-mvp-364902","resources":{"hostingSite":"dinetime-mvp-364902","realtimeDatabaseInstance":"dinetime-mvp-364902-default-rtdb","storageBucket":"dinetime-mvp-364902.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_6b3ccc7e-b758-455a-9a33-0fea24ceb6fb"}
+[debug] [2023-04-08T20:00:55.766Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 [none]
+[debug] [2023-04-08T20:00:56.402Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 200
+[debug] [2023-04-08T20:00:56.403Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 {"projectId":"dinetime-mvp-364902","projectNumber":"95378834531","displayName":"dinetime-mvp","name":"projects/dinetime-mvp-364902","resources":{"hostingSite":"dinetime-mvp-364902","realtimeDatabaseInstance":"dinetime-mvp-364902-default-rtdb","storageBucket":"dinetime-mvp-364902.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_6b3ccc7e-b758-455a-9a33-0fea24ceb6fb"}
+[info] 
+[info] === Deploying to 'dinetime-mvp-364902'...
+[info] 
+[info] i  deploying database, storage, firestore, functions, hosting 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] Running command: npm --prefix "$RESOURCE_DIR" run build
+[info] +  functions: Finished running predeploy script. 
+[info] i  database: checking rules syntax... 
+[debug] [2023-04-08T20:01:02.850Z] >>> [apiv2][query] GET https://firebasedatabase.googleapis.com/v1beta/projects/dinetime-mvp-364902/locations/-/instances/dinetime-mvp-364902-default-rtdb [none]
+[debug] [2023-04-08T20:01:03.708Z] <<< [apiv2][status] GET https://firebasedatabase.googleapis.com/v1beta/projects/dinetime-mvp-364902/locations/-/instances/dinetime-mvp-364902-default-rtdb 200
+[debug] [2023-04-08T20:01:03.709Z] <<< [apiv2][body] GET https://firebasedatabase.googleapis.com/v1beta/projects/dinetime-mvp-364902/locations/-/instances/dinetime-mvp-364902-default-rtdb {"name":"projects/95378834531/locations/us-central1/instances/dinetime-mvp-364902-default-rtdb","project":"projects/95378834531","databaseUrl":"https://dinetime-mvp-364902-default-rtdb.firebaseio.com","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[debug] [2023-04-08T20:01:03.711Z] >>> [apiv2][query] PUT https://dinetime-mvp-364902-default-rtdb.firebaseio.com/.settings/rules.json dryRun=true
+[debug] [2023-04-08T20:01:03.711Z] >>> [apiv2][body] PUT https://dinetime-mvp-364902-default-rtdb.firebaseio.com/.settings/rules.json "{\n  \"rules\": {\n    \".read\": \"auth != null\",\n    \".write\": \"auth != null\"\n  }\n}"
+[debug] [2023-04-08T20:01:04.260Z] <<< [apiv2][status] PUT https://dinetime-mvp-364902-default-rtdb.firebaseio.com/.settings/rules.json 200
+[debug] [2023-04-08T20:01:04.261Z] <<< [apiv2][body] PUT https://dinetime-mvp-364902-default-rtdb.firebaseio.com/.settings/rules.json {"status":"ok"}
+[info] +  database: rules syntax for database dinetime-mvp-364902-default-rtdb is valid 
+[debug] [2023-04-08T20:01:04.263Z] >>> [apiv2][query] GET https://appengine.googleapis.com/v1/apps/dinetime-mvp-364902 [none]
+[debug] [2023-04-08T20:01:04.874Z] <<< [apiv2][status] GET https://appengine.googleapis.com/v1/apps/dinetime-mvp-364902 200
+[debug] [2023-04-08T20:01:04.874Z] <<< [apiv2][body] GET https://appengine.googleapis.com/v1/apps/dinetime-mvp-364902 {"name":"apps/dinetime-mvp-364902","id":"dinetime-mvp-364902","authDomain":"gmail.com","locationId":"us-central","codeBucket":"staging.dinetime-mvp-364902.appspot.com","servingStatus":"SERVING","defaultHostname":"dinetime-mvp-364902.uc.r.appspot.com","defaultBucket":"dinetime-mvp-364902.appspot.com","serviceAccount":"dinetime-mvp-364902@appspot.gserviceaccount.com","gcrDomain":"us.gcr.io","databaseType":"CLOUD_FIRESTORE","featureSettings":{"splitHealthChecks":true,"useContainerOptimizedOs":true}}
+[info] i  firebase.storage: checking storage.rules for compilation errors... 
+[debug] [2023-04-08T20:01:04.877Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902:test [none]
+[debug] [2023-04-08T20:01:04.878Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902:test [omitted]
+[debug] [2023-04-08T20:01:05.527Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902:test 200
+[debug] [2023-04-08T20:01:05.527Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902:test {}
+[info] +  firebase.storage: rules file storage.rules compiled successfully 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2023-04-08T20:01:05.532Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902:test [none]
+[debug] [2023-04-08T20:01:05.532Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902:test [omitted]
+[debug] [2023-04-08T20:01:06.158Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902:test 200
+[debug] [2023-04-08T20:01:06.158Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902:test {}
+[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2023-04-08T20:01:06.161Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 [none]
+[debug] [2023-04-08T20:01:06.819Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 200
+[debug] [2023-04-08T20:01:06.819Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 {"projectId":"dinetime-mvp-364902","projectNumber":"95378834531","displayName":"dinetime-mvp","name":"projects/dinetime-mvp-364902","resources":{"hostingSite":"dinetime-mvp-364902","realtimeDatabaseInstance":"dinetime-mvp-364902-default-rtdb","storageBucket":"dinetime-mvp-364902.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_6b3ccc7e-b758-455a-9a33-0fea24ceb6fb"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2023-04-08T20:01:06.825Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/cloudfunctions.googleapis.com [none]
+[debug] [2023-04-08T20:01:06.825Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/dinetime-mvp-364902
+[debug] [2023-04-08T20:01:06.827Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/runtimeconfig.googleapis.com [none]
+[debug] [2023-04-08T20:01:06.827Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/dinetime-mvp-364902
+[debug] [2023-04-08T20:01:06.829Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/cloudbuild.googleapis.com [none]
+[debug] [2023-04-08T20:01:06.829Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/cloudbuild.googleapis.com x-goog-quota-user=projects/dinetime-mvp-364902
+[debug] [2023-04-08T20:01:06.830Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/artifactregistry.googleapis.com [none]
+[debug] [2023-04-08T20:01:06.830Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/artifactregistry.googleapis.com x-goog-quota-user=projects/dinetime-mvp-364902
+[debug] [2023-04-08T20:01:08.018Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/runtimeconfig.googleapis.com 200
+[debug] [2023-04-08T20:01:08.018Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2023-04-08T20:01:08.019Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/artifactregistry.googleapis.com 200
+[debug] [2023-04-08T20:01:08.020Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/artifactregistry.googleapis.com [omitted]
+[info] +  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2023-04-08T20:01:08.021Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/cloudfunctions.googleapis.com 200
+[debug] [2023-04-08T20:01:08.022Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/cloudfunctions.googleapis.com [omitted]
+[info] +  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2023-04-08T20:01:08.023Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/cloudbuild.googleapis.com 200
+[debug] [2023-04-08T20:01:08.024Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/dinetime-mvp-364902/services/cloudbuild.googleapis.com [omitted]
+[info] +  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2023-04-08T20:01:08.024Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902/adminSdkConfig [none]
+[debug] [2023-04-08T20:01:08.676Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902/adminSdkConfig 200
+[debug] [2023-04-08T20:01:08.676Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902/adminSdkConfig {"projectId":"dinetime-mvp-364902","databaseURL":"https://dinetime-mvp-364902-default-rtdb.firebaseio.com","storageBucket":"dinetime-mvp-364902.appspot.com","locationId":"us-central"}
+[debug] [2023-04-08T20:01:08.677Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/dinetime-mvp-364902/configs [none]
+[debug] [2023-04-08T20:01:09.354Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/dinetime-mvp-364902/configs 200
+[debug] [2023-04-08T20:01:09.355Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/dinetime-mvp-364902/configs {}
+[debug] [2023-04-08T20:01:09.358Z] Validating nodejs source
+[debug] [2023-04-08T20:01:10.903Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^11.5.0",
+    "firebase-functions": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.0.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2023-04-08T20:01:10.903Z] Building nodejs source
+[debug] [2023-04-08T20:01:10.904Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-04-08T20:01:10.911Z] Found firebase-functions binary at 'C:\flutter\dinetime\dinetime_mobile_mvp_v2\dinetime_mobile_mvp\functions\node_modules\.bin\firebase-functions'
+[debug] [2023-04-08T20:01:11.088Z] Serving at port 8901
+
+[debug] [2023-04-08T20:01:11.285Z] Got response from /__/functions.yaml {"endpoints":{"sendAddMessage":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.create","eventFilters":{"resource":"projects/dinetime-mvp-364902/databases/(default)/documents/collection/{documentId}"},"retry":false},"labels":{},"entryPoint":"sendAddMessage"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2023-04-08T20:01:11.290Z] shutdown requested via /__/quitquitquit
+
+[info] i  functions: preparing functions directory for uploading... 
+[info] i  functions: packaged C:\flutter\dinetime\dinetime_mobile_mvp_v2\dinetime_mobile_mvp\functions (82 KB) for uploading 
+[debug] [2023-04-08T20:01:11.351Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/-/functions [none]
+[debug] [2023-04-08T20:01:11.815Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/-/functions 200
+[debug] [2023-04-08T20:01:11.815Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/-/functions {}
+[debug] [2023-04-08T20:01:11.816Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/dinetime-mvp-364902/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2023-04-08T20:01:12.304Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/dinetime-mvp-364902/locations/-/functions 200
+[debug] [2023-04-08T20:01:12.304Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/dinetime-mvp-364902/locations/-/functions {}
+[debug] [2023-04-08T20:01:12.310Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 [none]
+[debug] [2023-04-08T20:01:12.482Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 200
+[debug] [2023-04-08T20:01:12.483Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dinetime-mvp-364902 {"projectId":"dinetime-mvp-364902","projectNumber":"95378834531","displayName":"dinetime-mvp","name":"projects/dinetime-mvp-364902","resources":{"hostingSite":"dinetime-mvp-364902","realtimeDatabaseInstance":"dinetime-mvp-364902-default-rtdb","storageBucket":"dinetime-mvp-364902.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_6b3ccc7e-b758-455a-9a33-0fea24ceb6fb"}
+[debug] [2023-04-08T20:01:12.488Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/dinetime-mvp-364902/versions [none]
+[debug] [2023-04-08T20:01:12.488Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/dinetime-mvp-364902/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2023-04-08T20:01:13.145Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/dinetime-mvp-364902/versions 200
+[debug] [2023-04-08T20:01:13.146Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/dinetime-mvp-364902/versions {"name":"projects/95378834531/sites/dinetime-mvp-364902/versions/368e0914a67bd22d","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2023-04-08T20:01:13.148Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases pageSize=10&pageToken=
+[debug] [2023-04-08T20:01:13.320Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases 200
+[debug] [2023-04-08T20:01:13.320Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases {"releases":[{"name":"projects/dinetime-mvp-364902/releases/cloud.firestore","rulesetName":"projects/dinetime-mvp-364902/rulesets/682d3182-09bc-4bb9-ba81-f65d3debd182","createTime":"2022-10-28T06:16:19.307371Z","updateTime":"2022-12-10T06:38:16.735819Z"},{"name":"projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com","rulesetName":"projects/dinetime-mvp-364902/rulesets/f1b54430-06bc-4cbc-8a0b-02530b71e0b6","createTime":"2022-12-03T23:13:25.902765Z","updateTime":"2022-12-26T22:07:10.955483Z"}]}
+[debug] [2023-04-08T20:01:13.332Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets/f1b54430-06bc-4cbc-8a0b-02530b71e0b6 [none]
+[debug] [2023-04-08T20:01:13.481Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets/f1b54430-06bc-4cbc-8a0b-02530b71e0b6 200
+[debug] [2023-04-08T20:01:13.481Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets/f1b54430-06bc-4cbc-8a0b-02530b71e0b6 [omitted]
+[info] i  storage: uploading rules storage.rules... 
+[debug] [2023-04-08T20:01:13.485Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets [none]
+[debug] [2023-04-08T20:01:13.485Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets [omitted]
+[debug] [2023-04-08T20:01:13.743Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets 200
+[debug] [2023-04-08T20:01:13.743Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets {"name":"projects/dinetime-mvp-364902/rulesets/a4e7f05f-d128-4bb6-86c8-9fec5bedef1f","source":{"files":[{"content":"rules_version = '2';\nservice firebase.storage {\n  match /b/{bucket}/o {\n    match /{allPaths=**} {\n      allow read, write: if false;\n    }\n  }\n}\n","name":"storage.rules"}]},"createTime":"2023-04-08T20:01:11.460303Z","metadata":{"services":["firebase.storage"]}}
+[debug] [2023-04-08T20:01:13.744Z] [rules] created ruleset projects/dinetime-mvp-364902/rulesets/a4e7f05f-d128-4bb6-86c8-9fec5bedef1f
+[info] i  firestore: deploying indexes... 
+[debug] [2023-04-08T20:01:13.746Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases pageSize=10&pageToken=
+[debug] [2023-04-08T20:01:13.749Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/dinetime-mvp-364902/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2023-04-08T20:01:13.916Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases 200
+[debug] [2023-04-08T20:01:13.917Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases {"releases":[{"name":"projects/dinetime-mvp-364902/releases/cloud.firestore","rulesetName":"projects/dinetime-mvp-364902/rulesets/682d3182-09bc-4bb9-ba81-f65d3debd182","createTime":"2022-10-28T06:16:19.307371Z","updateTime":"2022-12-10T06:38:16.735819Z"},{"name":"projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com","rulesetName":"projects/dinetime-mvp-364902/rulesets/f1b54430-06bc-4cbc-8a0b-02530b71e0b6","createTime":"2022-12-03T23:13:25.902765Z","updateTime":"2022-12-26T22:07:10.955483Z"}]}
+[debug] [2023-04-08T20:01:13.917Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets/682d3182-09bc-4bb9-ba81-f65d3debd182 [none]
+[debug] [2023-04-08T20:01:14.040Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/dinetime-mvp-364902/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2023-04-08T20:01:14.041Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/dinetime-mvp-364902/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2023-04-08T20:01:14.041Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/dinetime-mvp-364902/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2023-04-08T20:01:14.079Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets/682d3182-09bc-4bb9-ba81-f65d3debd182 200
+[debug] [2023-04-08T20:01:14.079Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/rulesets/682d3182-09bc-4bb9-ba81-f65d3debd182 [omitted]
+[info] i  firestore: latest version of firestore.rules already up to date, skipping upload... 
+[debug] [2023-04-08T20:01:14.254Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/dinetime-mvp-364902/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 200
+[debug] [2023-04-08T20:01:14.254Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/dinetime-mvp-364902/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* {"fields":[{"name":"projects/dinetime-mvp-364902/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[info] +  firestore: deployed indexes in firestore.indexes.json successfully for (default) database 
+[debug] [2023-04-08T20:01:14.257Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/us-central1/functions:generateUploadUrl [none]
+[debug] [2023-04-08T20:01:14.258Z] >>> [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/us-central1/functions:generateUploadUrl {}
+[debug] [2023-04-08T20:01:25.726Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/us-central1/functions:generateUploadUrl 200
+[debug] [2023-04-08T20:01:25.726Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/us-central1/functions:generateUploadUrl {"uploadUrl":"https://storage.googleapis.com/uploads-631641215781.us-central1.cloudfunctions.appspot.com/7fc0da30-19ca-4ba9-9b01-688ab008fcf7.zip?GoogleAccessId=service-95378834531@gcf-admin-robot.iam.gserviceaccount.com&Expires=1680985883&Signature=dMCMIKuAZ51AsRMqi%2BlqxCJa7Dj7wKk2OhcUSvpiVgryWgAnB22iWgIBcIyRQnmvufAWJmlJQ0wiLzYUunRVBzu8elb%2FvJOyJ1czl0nHEOhjUXztzp1VM5LRPj8qYi3XVDYBoUzZxIgQLePXqi%2BMwXZmUyXu%2B%2FCPZh2aW72F4G6siJp2%2FHaUJEsX8SA11owP4DNrCesAFUBVkd0H0x3Cha4jbXTFeOr6tzEqwjXd8JaELvR34TiAItMG1Xch%2FaNVlyP4a5dSZhkhB466hbOJt5clzWLt1%2FAbMw9%2BN9xz9qOHdlOnn4%2BsDVzh%2BvW0YnY4kRglTnDDW4E52sCC%2F7ft3Q%3D%3D"}
+[debug] [2023-04-08T20:01:25.727Z] >>> [apiv2][query] PUT https://storage.googleapis.com/uploads-631641215781.us-central1.cloudfunctions.appspot.com/7fc0da30-19ca-4ba9-9b01-688ab008fcf7.zip GoogleAccessId=service-95378834531%40gcf-admin-robot.iam.gserviceaccount.com&Expires=1680985883&Signature=dMCMIKuAZ51AsRMqi%2BlqxCJa7Dj7wKk2OhcUSvpiVgryWgAnB22iWgIBcIyRQnmvufAWJmlJQ0wiLzYUunRVBzu8elb%2FvJOyJ1czl0nHEOhjUXztzp1VM5LRPj8qYi3XVDYBoUzZxIgQLePXqi%2BMwXZmUyXu%2B%2FCPZh2aW72F4G6siJp2%2FHaUJEsX8SA11owP4DNrCesAFUBVkd0H0x3Cha4jbXTFeOr6tzEqwjXd8JaELvR34TiAItMG1Xch%2FaNVlyP4a5dSZhkhB466hbOJt5clzWLt1%2FAbMw9%2BN9xz9qOHdlOnn4%2BsDVzh%2BvW0YnY4kRglTnDDW4E52sCC%2F7ft3Q%3D%3D
+[debug] [2023-04-08T20:01:25.727Z] >>> [apiv2][body] PUT https://storage.googleapis.com/uploads-631641215781.us-central1.cloudfunctions.appspot.com/7fc0da30-19ca-4ba9-9b01-688ab008fcf7.zip [stream]
+[debug] [2023-04-08T20:01:26.085Z] <<< [apiv2][status] PUT https://storage.googleapis.com/uploads-631641215781.us-central1.cloudfunctions.appspot.com/7fc0da30-19ca-4ba9-9b01-688ab008fcf7.zip 200
+[debug] [2023-04-08T20:01:26.086Z] <<< [apiv2][body] PUT https://storage.googleapis.com/uploads-631641215781.us-central1.cloudfunctions.appspot.com/7fc0da30-19ca-4ba9-9b01-688ab008fcf7.zip [omitted]
+[info] +  functions: functions folder uploaded successfully 
+[info] i  hosting[dinetime-mvp-364902]: beginning deploy... 
+[info] i  hosting[dinetime-mvp-364902]: found 1 files in public 
+[debug] [2023-04-08T20:01:26.098Z] [hosting] uploading with 200 concurrency
+[debug] [2023-04-08T20:01:26.100Z] [hosting] hash cache [cHVibGlj] not populated
+[debug] [2023-04-08T20:01:26.107Z] [hosting] hash cache [cHVibGlj] stored for 1 files
+[debug] [2023-04-08T20:01:26.108Z] [hosting][hash queue][FINAL] {"max":2,"min":2,"avg":2,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":6}
+[debug] [2023-04-08T20:01:26.109Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/95378834531/sites/dinetime-mvp-364902/versions/368e0914a67bd22d:populateFiles [none]
+[debug] [2023-04-08T20:01:26.109Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/95378834531/sites/dinetime-mvp-364902/versions/368e0914a67bd22d:populateFiles {"files":{"/index.html":"d3cd18cf12b4f35e77d9f332cdae5b32205c2ffbcb7751ad912cb5859702a05d"}}
+[debug] [2023-04-08T20:01:26.464Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/95378834531/sites/dinetime-mvp-364902/versions/368e0914a67bd22d:populateFiles 200
+[debug] [2023-04-08T20:01:26.464Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/95378834531/sites/dinetime-mvp-364902/versions/368e0914a67bd22d:populateFiles {"uploadRequiredHashes":["d3cd18cf12b4f35e77d9f332cdae5b32205c2ffbcb7751ad912cb5859702a05d"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/dinetime-mvp-364902/versions/368e0914a67bd22d/files"}
+[debug] [2023-04-08T20:01:26.465Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/dinetime-mvp-364902/versions/368e0914a67bd22d/files/d3cd18cf12b4f35e77d9f332cdae5b32205c2ffbcb7751ad912cb5859702a05d [none]
+[debug] [2023-04-08T20:01:26.466Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/dinetime-mvp-364902/versions/368e0914a67bd22d/files/d3cd18cf12b4f35e77d9f332cdae5b32205c2ffbcb7751ad912cb5859702a05d [stream]
+[debug] [2023-04-08T20:01:26.467Z] [hosting][populate queue][FINAL] {"max":360,"min":360,"avg":360,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":362}
+[debug] [2023-04-08T20:01:26.467Z] [hosting] uploads queued: 1
+[debug] [2023-04-08T20:01:26.940Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/dinetime-mvp-364902/versions/368e0914a67bd22d/files/d3cd18cf12b4f35e77d9f332cdae5b32205c2ffbcb7751ad912cb5859702a05d 200
+[debug] [2023-04-08T20:01:26.941Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/dinetime-mvp-364902/versions/368e0914a67bd22d/files/d3cd18cf12b4f35e77d9f332cdae5b32205c2ffbcb7751ad912cb5859702a05d [stream]
+[debug] [2023-04-08T20:01:26.941Z] [hosting][upload queue][FINAL] {"max":477,"min":477,"avg":477,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":477}
+[info] +  hosting[dinetime-mvp-364902]: file upload complete 
+[debug] [2023-04-08T20:01:26.943Z] [hosting] deploy completed after 852ms
+[info] i  database: releasing rules... 
+[debug] [2023-04-08T20:01:26.946Z] >>> [apiv2][query] GET https://firebasedatabase.googleapis.com/v1beta/projects/dinetime-mvp-364902/locations/-/instances/dinetime-mvp-364902-default-rtdb [none]
+[debug] [2023-04-08T20:01:27.165Z] <<< [apiv2][status] GET https://firebasedatabase.googleapis.com/v1beta/projects/dinetime-mvp-364902/locations/-/instances/dinetime-mvp-364902-default-rtdb 200
+[debug] [2023-04-08T20:01:27.165Z] <<< [apiv2][body] GET https://firebasedatabase.googleapis.com/v1beta/projects/dinetime-mvp-364902/locations/-/instances/dinetime-mvp-364902-default-rtdb {"name":"projects/95378834531/locations/us-central1/instances/dinetime-mvp-364902-default-rtdb","project":"projects/95378834531","databaseUrl":"https://dinetime-mvp-364902-default-rtdb.firebaseio.com","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[debug] [2023-04-08T20:01:27.166Z] >>> [apiv2][query] PUT https://dinetime-mvp-364902-default-rtdb.firebaseio.com/.settings/rules.json 
+[debug] [2023-04-08T20:01:27.166Z] >>> [apiv2][body] PUT https://dinetime-mvp-364902-default-rtdb.firebaseio.com/.settings/rules.json "{\n  \"rules\": {\n    \".read\": \"auth != null\",\n    \".write\": \"auth != null\"\n  }\n}"
+[debug] [2023-04-08T20:01:27.405Z] <<< [apiv2][status] PUT https://dinetime-mvp-364902-default-rtdb.firebaseio.com/.settings/rules.json 200
+[debug] [2023-04-08T20:01:27.406Z] <<< [apiv2][body] PUT https://dinetime-mvp-364902-default-rtdb.firebaseio.com/.settings/rules.json {"status":"ok"}
+[info] +  database: rules for database dinetime-mvp-364902-default-rtdb released successfully 
+[debug] [2023-04-08T20:01:27.407Z] [rules] releasing firebase.storage/dinetime-mvp-364902.appspot.com with ruleset projects/dinetime-mvp-364902/rulesets/a4e7f05f-d128-4bb6-86c8-9fec5bedef1f
+[debug] [2023-04-08T20:01:27.408Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com [none]
+[debug] [2023-04-08T20:01:27.408Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com {"release":{"name":"projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com","rulesetName":"projects/dinetime-mvp-364902/rulesets/a4e7f05f-d128-4bb6-86c8-9fec5bedef1f"}}
+[debug] [2023-04-08T20:01:27.621Z] <<< [apiv2][status] PATCH https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com 200
+[debug] [2023-04-08T20:01:27.621Z] <<< [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com {"name":"projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com","rulesetName":"projects/dinetime-mvp-364902/rulesets/a4e7f05f-d128-4bb6-86c8-9fec5bedef1f","createTime":"2022-12-03T23:13:25.902765Z","updateTime":"2023-04-08T20:01:25.345367Z"}
+[debug] [2023-04-08T20:01:27.621Z] [rules] updated release projects/dinetime-mvp-364902/releases/firebase.storage/dinetime-mvp-364902.appspot.com
+[info] +  storage: released rules storage.rules to firebase.storage 
+[debug] [2023-04-08T20:01:27.622Z] [rules] releasing cloud.firestore/(default) with ruleset projects/dinetime-mvp-364902/rulesets/682d3182-09bc-4bb9-ba81-f65d3debd182
+[debug] [2023-04-08T20:01:27.622Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases/cloud.firestore/(default) [none]
+[debug] [2023-04-08T20:01:27.622Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases/cloud.firestore/(default) {"release":{"name":"projects/dinetime-mvp-364902/releases/cloud.firestore/(default)","rulesetName":"projects/dinetime-mvp-364902/rulesets/682d3182-09bc-4bb9-ba81-f65d3debd182"}}
+[debug] [2023-04-08T20:01:27.865Z] <<< [apiv2][status] PATCH https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases/cloud.firestore/(default) 200
+[debug] [2023-04-08T20:01:27.866Z] <<< [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/dinetime-mvp-364902/releases/cloud.firestore/(default) {"name":"projects/dinetime-mvp-364902/releases/cloud.firestore","rulesetName":"projects/dinetime-mvp-364902/rulesets/682d3182-09bc-4bb9-ba81-f65d3debd182","createTime":"2022-10-28T06:16:19.307371Z","updateTime":"2023-04-08T20:01:25.585502Z"}
+[debug] [2023-04-08T20:01:27.866Z] [rules] updated release projects/dinetime-mvp-364902/releases/cloud.firestore
+[info] +  firestore: released rules firestore.rules to cloud.firestore 
+[info] i  functions: creating Node.js 16 function sendAddMessage(us-central1)... 
+[debug] [2023-04-08T20:01:27.873Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/us-central1/functions [none]
+[debug] [2023-04-08T20:01:27.873Z] >>> [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/us-central1/functions {"name":"projects/dinetime-mvp-364902/locations/us-central1/functions/sendAddMessage","sourceUploadUrl":"https://storage.googleapis.com/uploads-631641215781.us-central1.cloudfunctions.appspot.com/7fc0da30-19ca-4ba9-9b01-688ab008fcf7.zip?GoogleAccessId=service-95378834531@gcf-admin-robot.iam.gserviceaccount.com&Expires=1680985883&Signature=dMCMIKuAZ51AsRMqi%2BlqxCJa7Dj7wKk2OhcUSvpiVgryWgAnB22iWgIBcIyRQnmvufAWJmlJQ0wiLzYUunRVBzu8elb%2FvJOyJ1czl0nHEOhjUXztzp1VM5LRPj8qYi3XVDYBoUzZxIgQLePXqi%2BMwXZmUyXu%2B%2FCPZh2aW72F4G6siJp2%2FHaUJEsX8SA11owP4DNrCesAFUBVkd0H0x3Cha4jbXTFeOr6tzEqwjXd8JaELvR34TiAItMG1Xch%2FaNVlyP4a5dSZhkhB466hbOJt5clzWLt1%2FAbMw9%2BN9xz9qOHdlOnn4%2BsDVzh%2BvW0YnY4kRglTnDDW4E52sCC%2F7ft3Q%3D%3D","entryPoint":"sendAddMessage","runtime":"nodejs16","dockerRegistry":"ARTIFACT_REGISTRY","labels":{"deployment-tool":"cli-firebase","firebase-functions-hash":"227cb4a0cb2cbed9a6ad6f92191a105ee09c61db"},"eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.create","resource":"projects/dinetime-mvp-364902/databases/(default)/documents/collection/{documentId}"},"minInstances":null,"maxInstances":null,"ingressSettings":null,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"dinetime-mvp-364902\",\"databaseURL\":\"https://dinetime-mvp-364902-default-rtdb.firebaseio.com\",\"storageBucket\":\"dinetime-mvp-364902.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"dinetime-mvp-364902","EVENTARC_CLOUD_EVENT_SOURCE":"projects/dinetime-mvp-364902/locations/us-central1/functions/sendAddMessage"},"serviceAccountEmail":null,"availableMemoryMb":null,"timeout":null,"vpcConnector":null,"vpcConnectorEgressSettings":null}
+[debug] [2023-04-08T20:01:28.164Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/us-central1/functions 403
+[debug] [2023-04-08T20:01:28.164Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/dinetime-mvp-364902/locations/us-central1/functions {"error":{"code":403,"message":"Unable to retrieve the repository metadata for projects/dinetime-mvp-364902/locations/us-central1/repositories/gcf-artifacts. Ensure that the Cloud Functions service account has 'artifactregistry.repositories.list' and 'artifactregistry.repositories.get' permissions. You can add the permissions by granting the role 'roles/artifactregistry.reader'.","status":"PERMISSION_DENIED"}}
+[warn] !  functions: failed to create function projects/dinetime-mvp-364902/locations/us-central1/functions/sendAddMessage 
+[error] Failed to create function projects/dinetime-mvp-364902/locations/us-central1/functions/sendAddMessage
+[debug] [2023-04-08T20:01:28.169Z] Total Function Deployment time: 297
+[debug] [2023-04-08T20:01:28.170Z] 1 Functions Deployed
+[debug] [2023-04-08T20:01:28.170Z] 1 Functions Errored
+[debug] [2023-04-08T20:01:28.170Z] 0 Function Deployments Aborted
+[debug] [2023-04-08T20:01:28.170Z] Average Function Deployment time: 295
+[info] 
+[info] Functions deploy had errors with the following functions:
+	sendAddMessage(us-central1)
+[info] i  functions: cleaning up build files... 
+[debug] [2023-04-08T20:01:28.173Z] >>> [apiv2][query] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/dinetime-mvp-364902/locations/us-central1/repositories/gcf-artifacts/packages/send_add_message [none]
+[debug] [2023-04-08T20:01:28.174Z] >>> [apiv2][query] GET https://us.gcr.io/v2/dinetime-mvp-364902/gcf/us-central1/tags/list [none]
+[debug] [2023-04-08T20:01:28.429Z] <<< [apiv2][status] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/dinetime-mvp-364902/locations/us-central1/repositories/gcf-artifacts/packages/send_add_message 404
+[debug] [2023-04-08T20:01:28.429Z] <<< [apiv2][body] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/dinetime-mvp-364902/locations/us-central1/repositories/gcf-artifacts/packages/send_add_message {"error":{"code":404,"message":"Package \"projects/dinetime-mvp-364902/locations/us-central1/repositories/gcf-artifacts/packages/send_add_message\" was not found.","status":"NOT_FOUND"}}
+[debug] [2023-04-08T20:01:29.404Z] <<< [apiv2][status] GET https://us.gcr.io/v2/dinetime-mvp-364902/gcf/us-central1/tags/list 200
+[debug] [2023-04-08T20:01:29.404Z] <<< [apiv2][body] GET https://us.gcr.io/v2/dinetime-mvp-364902/gcf/us-central1/tags/list {"child":[],"manifest":{},"name":"dinetime-mvp-364902/gcf/us-central1","tags":[]}
+[debug] [2023-04-08T20:01:29.405Z] Could not find image for function projects/dinetime-mvp-364902/locations/us-central1/functions/sendAddMessage
+[debug] [2023-04-08T20:01:29.405Z] Functions deploy failed.
+[debug] [2023-04-08T20:01:29.405Z] {
+  "endpoint": {
+    "id": "sendAddMessage",
+    "project": "dinetime-mvp-364902",
+    "region": "us-central1",
+    "entryPoint": "sendAddMessage",
+    "platform": "gcfv1",
+    "runtime": "nodejs16",
+    "eventTrigger": {
+      "eventType": "providers/cloud.firestore/eventTypes/document.create",
+      "retry": false,
+      "eventFilters": {
+        "resource": "projects/dinetime-mvp-364902/databases/(default)/documents/collection/{documentId}"
+      }
+    },
+    "labels": {
+      "deployment-tool": "cli-firebase"
+    },
+    "serviceAccount": null,
+    "ingressSettings": null,
+    "availableMemoryMb": null,
+    "timeoutSeconds": null,
+    "maxInstances": null,
+    "minInstances": null,
+    "vpc": null,
+    "environmentVariables": {
+      "FIREBASE_CONFIG": "{\"projectId\":\"dinetime-mvp-364902\",\"databaseURL\":\"https://dinetime-mvp-364902-default-rtdb.firebaseio.com\",\"storageBucket\":\"dinetime-mvp-364902.appspot.com\",\"locationId\":\"us-central\"}",
+      "GCLOUD_PROJECT": "dinetime-mvp-364902",
+      "EVENTARC_CLOUD_EVENT_SOURCE": "projects/dinetime-mvp-364902/locations/us-central1/functions/sendAddMessage"
+    },
+    "codebase": "default",
+    "targetedByOnly": false,
+    "hash": "227cb4a0cb2cbed9a6ad6f92191a105ee09c61db"
+  },
+  "op": "create",
+  "original": {
+    "name": "FirebaseError",
+    "children": [],
+    "context": {
+      "function": "projects/dinetime-mvp-364902/locations/us-central1/functions/sendAddMessage"
+    },
+    "exit": 1,
+    "message": "Failed to create function projects/dinetime-mvp-364902/locations/us-central1/functions/sendAddMessage",
+    "original": {
+      "name": "FirebaseError",
+      "children": [],
+      "context": {
+        "body": {
+          "error": {
+            "code": 403,
+            "message": "Unable to retrieve the repository metadata for projects/dinetime-mvp-364902/locations/us-central1/repositories/gcf-artifacts. Ensure that the Cloud Functions service account has 'artifactregistry.repositories.list' and 'artifactregistry.repositories.get' permissions. You can add the permissions by granting the role 'roles/artifactregistry.reader'.",
+            "status": "PERMISSION_DENIED"
+          }
+        },
+        "response": {
+          "statusCode": 403
+        }
+      },
+      "exit": 1,
+      "message": "HTTP Error: 403, Unable to retrieve the repository metadata for projects/dinetime-mvp-364902/locations/us-central1/repositories/gcf-artifacts. Ensure that the Cloud Functions service account has 'artifactregistry.repositories.list' and 'artifactregistry.repositories.get' permissions. You can add the permissions by granting the role 'roles/artifactregistry.reader'.",
+      "status": 403
+    },
+    "status": 403
+  }
+}
+[debug] [2023-04-08T20:01:29.408Z] Error: Failed to create function sendAddMessage in region us-central1
+    at C:\Users\bryan\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:48:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Fabricator.createV1Function (C:\Users\bryan\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:177:32)
+    at async Fabricator.createEndpoint (C:\Users\bryan\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:129:13)
+    at async handle (C:\Users\bryan\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:85:17)
+[error] 
+[error] Error: There was an error deploying functions

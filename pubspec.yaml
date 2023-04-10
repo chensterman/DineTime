@@ -43,7 +43,7 @@ dependencies:
   flutter_slidable: ^2.0.0
   firebase_storage: ^11.0.3
   firebase_analytics: ^10.0.7
-  firebase_messaging: ^14.2.1
+  firebase_messaging: ^14.3.0
   firebase_app_check: ^0.1.1+8
 
   # State management libraries
@@ -63,6 +63,7 @@ dependencies:
   flutter_image_slideshow: any
   page_view_indicators: ^2.0.0
   smooth_page_indicator: ^1.0.0+2
+  firebase_in_app_messaging: ^0.7.0+16
   
   
 dev_dependencies:

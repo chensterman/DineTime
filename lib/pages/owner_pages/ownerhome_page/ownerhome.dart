@@ -3,6 +3,7 @@ import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/pages/owner_pages/commerce_page/commerce.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class OwnerHome extends StatefulWidget {
@@ -26,6 +27,15 @@ class _OwnerHomeState extends State<OwnerHome> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() async {
+    super.initState();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    if (fcmToken != null) {
+      widget.services.clientDB.ownerAddToken(widget.user.uid, fcmToken);
+    }
   }
 
   @override

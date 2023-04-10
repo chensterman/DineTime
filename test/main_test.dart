@@ -1,6 +1,7 @@
 import 'package:dinetime_mobile_mvp/firebase_options.dart';
 import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/pages/root/start_page/start.dart';
+import 'package:dinetime_mobile_mvp/services/notifications.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,6 +43,7 @@ class MyAppTest extends StatelessWidget {
     clientDB: DatabaseServiceMock(),
     clientStorage: StorageServiceMock(),
     clientAnalytics: AnalyticsServiceMock(),
+    clientNotifications: NotificationsServiceApp(),
   );
 
   // This widget is the root of your application.

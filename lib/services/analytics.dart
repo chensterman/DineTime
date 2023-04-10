@@ -13,6 +13,7 @@ class AnalyticsServiceApp extends AnalyticsService {
     );
   }
 
+  @override
   void trackEventNum(String eventName, double value) {
     _analytics.logEvent(
       name: eventName,

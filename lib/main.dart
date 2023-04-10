@@ -1,6 +1,7 @@
 import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
+import 'package:dinetime_mobile_mvp/services/notifications.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
     clientDB: DatabaseServiceApp(),
     clientStorage: StorageServiceApp(),
     clientAnalytics: AnalyticsServiceApp(),
+    clientNotifications: NotificationsServiceApp(),
   );
 
   // This widget is the root of your application.

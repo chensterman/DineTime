@@ -188,6 +188,13 @@ class DatabaseServiceApp extends DatabaseService {
   }
 
   @override
+  Future<void> ownerAddToken(String ownerId, String token) async {
+    await ownerCollection.doc(ownerId).update({
+      "token": token,
+    });
+  }
+
+  @override
   Future<r.Restaurant?> restaurantGet(String restaurantId) async {
     DocumentSnapshot restaurantSnapshot =
         await restaurantCollection.doc(restaurantId).get();

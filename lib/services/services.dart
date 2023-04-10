@@ -3,6 +3,7 @@ import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/models/user.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -12,12 +13,14 @@ class Services {
   final DatabaseService clientDB;
   final StorageService clientStorage;
   final AnalyticsService clientAnalytics;
+  final NotificationsService clientNotifications;
   const Services({
     required this.clientAuth,
     required this.clientLocation,
     required this.clientDB,
     required this.clientStorage,
     required this.clientAnalytics,
+    required this.clientNotifications,
   });
 }
 
@@ -56,6 +59,7 @@ abstract class DatabaseService {
   Stream<List<PreorderBag>> customerPreordersStream(String customerId);
   Future<List<Restaurant>> customerSwipe(String customerId);
   Future<Owner?> ownerGet(String ownerId);
+  Future<void> ownerAddToken(String ownerId, String token);
   Future<Restaurant?> restaurantGet(String restaurantId);
   Future<MenuItem?> restaurantMenuItemGet(String restaurantId, String itemId);
   Future<PopUpLocation?> restaurantLocationGet(
@@ -76,4 +80,8 @@ abstract class AnalyticsService {
   void trackEvent(String eventName);
   void trackScreenView(String pageName, String screenClass);
   void trackEventNum(String eventName, double value);
+}
+
+abstract class NotificationsService {
+  Future<void> handleInAppMessage(RemoteMessage message, BuildContext context);
 }

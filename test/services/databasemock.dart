@@ -91,6 +91,11 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
+  Future<void> ownerAddToken(String ownerId, String token) async {
+    await Future.delayed(Duration.zero);
+  }
+
+  @override
   Future<Restaurant?> restaurantGet(String restaurantId) async {
     await Future.delayed(Duration.zero);
     return _swipeRestaurants

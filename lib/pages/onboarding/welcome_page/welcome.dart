@@ -54,13 +54,7 @@ class Welcome extends StatelessWidget {
                   ButtonOutlined(
                     text: "It's DineTime!",
                     onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (context) => const Routing(),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                 ],
