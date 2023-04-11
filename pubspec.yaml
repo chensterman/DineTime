@@ -63,6 +63,9 @@ dependencies:
   flutter_image_slideshow: any
   page_view_indicators: ^2.0.0
   smooth_page_indicator: ^1.0.0+2
+  dotted_border:
+  image_picker: ^0.8.7+1
+
 
 dev_dependencies:
   flutter_test:
