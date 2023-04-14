@@ -59,7 +59,7 @@ abstract class DatabaseService {
   Stream<List<PreorderBag>> customerPreordersStream(String customerId);
   Future<List<Restaurant>> customerSwipe(String customerId);
   Future<Owner?> ownerGet(String ownerId);
-  Future<void> ownerAddToken(String ownerId, String token);
+  Future<void> ownerAddToken(String ownerId);
   Future<Restaurant?> restaurantGet(String restaurantId);
   Future<MenuItem?> restaurantMenuItemGet(String restaurantId, String itemId);
   Future<PopUpLocation?> restaurantLocationGet(

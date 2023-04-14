@@ -4,12 +4,13 @@ import * as admin from "firebase-admin";
 admin.initializeApp();
 
 export const sendPreorderNotification = functions.firestore
-  .document("collection/{documentId}")
-  .onCreate(async (snapshot, context) => {
-    try {
-      const newValue = snapshot.data();
-      const restaurantRef = admin.firestore().doc(newValue.restaurant_ref);
-      /* eslint-disable*/
+    .document("preorders/{documentId}")
+    .onCreate(async (snapshot) => {
+      try {
+        console.log("Received");
+        const newValue = snapshot.data();
+        const restaurantRef = admin.firestore().doc(newValue.restaurant_ref);
+        /* eslint-disable*/
       const owners = admin.firestore().collection("owners").where("restaurant_refs", "==", restaurantRef);
       const tokens: string[] = [];
       owners.get().then((ownerSnapshot) => {

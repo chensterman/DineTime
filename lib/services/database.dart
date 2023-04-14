@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'services.dart';
 
@@ -188,9 +189,10 @@ class DatabaseServiceApp extends DatabaseService {
   }
 
   @override
-  Future<void> ownerAddToken(String ownerId, String token) async {
+  Future<void> ownerAddToken(String ownerId) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     await ownerCollection.doc(ownerId).update({
-      "token": token,
+      "token": fcmToken,
     });
   }
 

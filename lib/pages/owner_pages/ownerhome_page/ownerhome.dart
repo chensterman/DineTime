@@ -30,12 +30,9 @@ class _OwnerHomeState extends State<OwnerHome> {
   }
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    if (fcmToken != null) {
-      widget.services.clientDB.ownerAddToken(widget.user.uid, fcmToken);
-    }
+    widget.services.clientDB.ownerAddToken(widget.user.uid);
   }
 
   @override

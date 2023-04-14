@@ -91,7 +91,7 @@ class DatabaseServiceMock extends DatabaseService {
   }
 
   @override
-  Future<void> ownerAddToken(String ownerId, String token) async {
+  Future<void> ownerAddToken(String ownerId) async {
     await Future.delayed(Duration.zero);
   }
 
