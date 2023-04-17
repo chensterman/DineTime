@@ -21,21 +21,21 @@ class Routing extends StatelessWidget {
     if (user == null) {
       return const AuthWrapper();
     } else {
-      if (user.emailVerified) {
-        if (locationPermission == PermissionStatus.denied) {
-          return const LocationPreferences();
-        } else {
-          return Home(
-            user: user,
-            services: services,
-          );
-        }
+      // if (user.emailVerified) {
+      if (locationPermission == PermissionStatus.denied) {
+        return const LocationPreferences();
       } else {
-        return VerifyEmail(
-          email: user.email,
+        return Home(
+          user: user,
           services: services,
         );
       }
+      // } else {
+      //   return VerifyEmail(
+      //     email: user.email,
+      //     services: services,
+      //   );
+      // }
     }
   }
 }

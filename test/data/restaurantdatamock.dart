@@ -42,6 +42,8 @@ class RestaurantDataMock {
           locationName: "Location Name",
         ),
       ],
+      preordersEnabled: true,
+      displayed: true,
       bio:
           "This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio.",
       cuisine: "Pastry",
@@ -88,6 +90,8 @@ class RestaurantDataMock {
           locationName: "Location Name",
         ),
       ],
+      preordersEnabled: true,
+      displayed: true,
       bio:
           "This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio.",
       cuisine: "Chinese",
@@ -155,6 +159,8 @@ class RestaurantDataMock {
           locationName: "Location Name",
         ),
       ],
+      preordersEnabled: true,
+      displayed: true,
       bio:
           "This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio.",
       cuisine: "Indian",
@@ -168,6 +174,8 @@ class RestaurantDataMock {
       gallery: [],
       menu: [],
       upcomingLocations: [],
+      preordersEnabled: true,
+      displayed: true,
       bio:
           "This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio. This is a test bio.",
       cuisine: "Indian",
