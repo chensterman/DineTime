@@ -20,7 +20,7 @@ class EditGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageToDisplay = newImage ?? image;
+    final imageToDisplay = image;
 
     return GestureDetector(
       onTap: onTap,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/owner.dart';
@@ -65,6 +67,14 @@ abstract class DatabaseService {
       String restaurantId, String locationId);
   Stream<List<PreorderBag>> restaurantPreordersStream(
       String restaurantId, bool fulfilled);
+  Future<File> restaurantCoverPhotoGet(String restaurantId);
+  Future<Map<String, File>> restaurantGalleryGet(String restaurantId);
+  Future<void> restaurantUpdate(
+      Restaurant updateFields,
+      String restaurantId,
+      Map<String, File?>? galleryPhotos,
+      Map<String, File?>? menuPhotos,
+      File? coverPhoto);
   Future<void> preorderCreate(
       String customerId, String customerEmail, PreorderBag preorderBag);
   Future<PreorderBag?> preorderGet(String preorderId);

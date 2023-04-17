@@ -9,27 +9,55 @@ class Restaurant {
   String restaurantLogoRef;
   String restaurantCoverRef;
   int pricing;
+  bool? displayed;
   List<GalleryImage> gallery;
   List<MenuItem> menu;
   List<PopUpLocation> upcomingLocations;
   String? website;
   String? instagramHandle;
   String? email;
-  Restaurant({
-    required this.restaurantId,
-    required this.restaurantName,
-    required this.restaurantLogoRef,
-    required this.restaurantCoverRef,
-    required this.pricing,
-    required this.gallery,
-    required this.menu,
-    required this.upcomingLocations,
-    required this.bio,
-    required this.cuisine,
-    this.website,
-    this.instagramHandle,
-    this.email,
-  });
+  String? phoneNumber;
+  Restaurant(
+      {required this.restaurantId,
+      required this.restaurantName,
+      required this.restaurantLogoRef,
+      required this.restaurantCoverRef,
+      required this.pricing,
+      required this.gallery,
+      required this.menu,
+      required this.upcomingLocations,
+      required this.bio,
+      required this.cuisine,
+      this.displayed,
+      this.website,
+      this.instagramHandle,
+      this.email,
+      this.phoneNumber});
+  void updateEditFood(Restaurant newRestaurant, String updateType) {
+    if (updateType == "cover_photo") {
+      restaurantCoverRef = newRestaurant.restaurantCoverRef;
+    } else if (updateType == "photo_gallery") {
+      gallery = newRestaurant.gallery;
+    } else if (updateType == "business_name") {
+      restaurantName = newRestaurant.restaurantName;
+    } else if (updateType == "price_range") {
+      pricing = newRestaurant.pricing;
+    } else if (updateType == "cuisine_type") {
+      cuisine = newRestaurant.cuisine;
+    } else if (updateType == "our_story") {
+      bio = newRestaurant.bio;
+    } else if (updateType == "enable_preorders") {
+      displayed = newRestaurant.displayed;
+    } else if (updateType == "menu_items") {
+      menu = newRestaurant.menu;
+    } else if (updateType == "upcoming_locations") {
+      upcomingLocations = newRestaurant.upcomingLocations;
+    } else if (updateType == "email") {
+      email = newRestaurant.email;
+    } else if (updateType == "phone_number") {
+      phoneNumber = newRestaurant.phoneNumber;
+    }
+  }
 }
 
 // Gallery image data model for restaurants

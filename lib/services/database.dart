@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:dinetime_mobile_mvp/models/event.dart' as e;
+import 'package:dinetime_mobile_mvp/models/restaurant.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'services.dart';
 
@@ -20,7 +24,7 @@ class DatabaseServiceApp extends DatabaseService {
   // Access to 'preorders' collection
   final CollectionReference preordersCollection =
       FirebaseFirestore.instance.collection('preorders');
-
+  final FirebaseStorage storage = FirebaseStorage.instance;
   Future<bool> isCustomerUser(String uid) async {
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('customers').doc(uid).get();
@@ -316,6 +320,31 @@ class DatabaseServiceApp extends DatabaseService {
   }
 
   @override
+  Future<File> restaurantCoverPhotoGet(String restaurantId) async {
+    DocumentSnapshot doc = await restaurantCollection.doc(restaurantId).get();
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    final fileBytes = await storage.ref(data["cover_location"]).getData();
+    File coverPhoto = File.fromRawPath(fileBytes!);
+    return coverPhoto;
+  }
+
+  @override
+  Future<Map<String, File>> restaurantGalleryGet(String restaurantId) async {
+    var ref = await restaurantCollection
+        .doc(restaurantId)
+        .collection("gallery")
+        .get();
+    Map<String, File> gallery = <String, File>{};
+    for (DocumentSnapshot doc in ref.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      final fileBytes = await storage.ref(data["image_ref"]).getData();
+      File galleryPhoto = File.fromRawPath(fileBytes!);
+      gallery[doc.id] = galleryPhoto;
+    }
+    return gallery;
+  }
+
+  @override
   Future<r.MenuItem?> restaurantMenuItemGet(
       String restaurantId, String itemId) async {
     DocumentSnapshot doc = await restaurantCollection
@@ -379,6 +408,117 @@ class DatabaseServiceApp extends DatabaseService {
         preorderBagList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
       }
       yield preorderBagList;
+    }
+  }
+
+  @override
+  Future<void> restaurantUpdate(
+    r.Restaurant updateFields,
+    String restaurantId,
+    Map<String, File?>? galleryPhotos,
+    Map<String, File?>? menuPhotos,
+    File? coverPhoto,
+  ) async {
+    // Requires that file list be in the same order as updateFields's galleryImage list
+    Map<String, dynamic> updateValue = <String, dynamic>{};
+    updateValue["restaurant_name"] = updateFields.restaurantName;
+    updateValue["pricing"] = updateFields.pricing;
+    updateValue["cuisine"] = updateFields.cuisine;
+    updateValue["restaurant_bio"] = updateFields.bio;
+    if (updateFields.displayed != null) {
+      updateValue["displayed"] = updateFields.displayed;
+    }
+    if (updateFields.email != null) {
+      updateValue["email"] = updateFields.email;
+    }
+    if (updateFields.phoneNumber != null) {
+      updateValue["phone_number"] = updateFields.phoneNumber;
+    }
+    // Delete existing cover photo, add new one if given new photo
+
+    DocumentSnapshot doc = await restaurantCollection.doc(restaurantId).get();
+    var data = doc.data() as Map<String, dynamic>;
+    if (data["image_ref"] != updateValue["image_ref"]) {
+      await storage.ref(doc["image_ref"]).delete();
+      updateValue["image_ref"] = "";
+      if (coverPhoto != null) {
+        updateValue["image_ref"] = updateFields.restaurantCoverRef;
+        if (updateValue["image_ref"] != "") {
+          await storage.ref(updateValue["image_ref"]).putFile(coverPhoto);
+        }
+      }
+    }
+    await restaurantCollection
+        .doc(restaurantId)
+        .update({updateValue} as Map<String, dynamic>);
+
+    // To understand image updates: the protocol being used here is
+    // if the image is present in the map of images, then reupload image and update fields
+    // else if the the image is null and present in the map of images, then delete the image
+    // else if the image is not present in the map of images, only update fields
+    for (GalleryImage imageData in updateFields.gallery) {
+      DocumentReference ref = restaurantCollection
+          .doc(restaurantId)
+          .collection("gallery")
+          .doc(imageData.imageId);
+      ref.set({
+        "image_ref": imageData.imageRef,
+        "image_name": imageData.imageName,
+        "image_desc": imageData.imageDescription,
+        "image_timestamp": Timestamp.now()
+      });
+      if (galleryPhotos != null) {
+        File? upload = galleryPhotos[imageData.imageId];
+        if (upload != null) {
+          await storage.ref(imageData.imageRef).putFile(upload);
+          // Deletion case since upload is null but its key is in the galleryPhotos
+        } else if (galleryPhotos.containsKey(imageData.imageId)) {
+          ref.delete();
+          await storage.ref(imageData.imageRef).delete();
+        }
+      }
+    }
+    // Same protocol as above except we don't delete the menu item if image is deleted
+
+    for (MenuItem item in updateFields.menu) {
+      DocumentReference ref = restaurantCollection
+          .doc(restaurantId)
+          .collection("menu")
+          .doc(item.itemId);
+      ref.set({
+        "item_desc": item.itemDescription,
+        "item_image_ref": item.itemImageRef,
+        "item_name": item.itemName,
+        "item_price": item.itemPrice,
+        "timestamp": Timestamp.now(),
+        "dietary_tags": item.dietaryTags
+      });
+      if (menuPhotos != null) {
+        File? upload = menuPhotos[item.itemId];
+        if (upload != null) {
+          await storage.ref(item.itemImageRef).putFile(upload);
+        } else if (menuPhotos.containsKey(item.itemId)) {
+          await storage.ref(item.itemImageRef).delete();
+        }
+      }
+    }
+    for (PopUpLocation location in updateFields.upcomingLocations) {
+      DocumentReference ref = restaurantCollection
+          .doc(restaurantId)
+          .collection("menu")
+          .doc(location.locationId);
+      ref.set({
+        "location_address": location.locationAddress,
+        "location_date_start": location.locationDateStart,
+        "location_name": location.locationName,
+        "timestamp": Timestamp.now(),
+        "geolocation": location.geolocation,
+      });
+      if (location.locationDateEnd != null) {
+        ref.set({
+          "location_date_end": location.locationDateEnd,
+        });
+      }
     }
   }
 

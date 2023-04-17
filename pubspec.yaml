@@ -65,6 +65,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   dotted_border:
   image_picker: ^0.8.7+1
+  tuple: ^2.0.1
 
 
 dev_dependencies:

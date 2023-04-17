@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/owner.dart';
@@ -150,6 +152,25 @@ class DatabaseServiceMock extends DatabaseService {
     _preorders.add(preorderBag);
   }
 
+  @override
+  Future<File> restaurantCoverPhotoGet(String restaurantId) async {
+    await Future.delayed(Duration.zero);
+    return File("");
+  }
+
+  @override
+  Future<Map<String, File>> restaurantGalleryGet(String restaurantId) async {
+    await Future.delayed(Duration.zero);
+    return <String, File>{};
+  }
+
+  @override
+  Future<void> restaurantUpdate(
+      Restaurant updateFields,
+      String restaurantId,
+      Map<String, File?>? galleryPhotos,
+      Map<String, File?>? imagePhotos,
+      File? coverPhoto) async {}
   @override
   Future<PreorderBag?> preorderGet(String preorderId) async {
     await Future.delayed(Duration.zero);

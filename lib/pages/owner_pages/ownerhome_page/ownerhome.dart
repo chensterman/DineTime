@@ -1,10 +1,13 @@
 import 'package:dinetime_mobile_mvp/models/owner.dart';
+import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/pages/owner_pages/commerce_page/commerce.dart';
+import 'package:dinetime_mobile_mvp/pages/owner_pages/editfoodcard_page/bloc/editfoodcard_bloc.dart';
 import 'package:dinetime_mobile_mvp/pages/owner_pages/editfoodcard_page/editfoodcard.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:dinetime_mobile_mvp/pages/root/routing_page/routing.dart';
@@ -75,7 +78,9 @@ class _OwnerHomeState extends State<OwnerHome> {
             body: IndexedStack(
               index: _selectedIndex,
               children: [
-                EditFoodCard(restaurant: owner.restaurants[0]), // commerce page
+                EditFoodCard(
+                  restaurant: owner.restaurants[0],
+                ),
                 Commerce(restaurant: owner.restaurants[0]), // commerce page
               ],
             ),

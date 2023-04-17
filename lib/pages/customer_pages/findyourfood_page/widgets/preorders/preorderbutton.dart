@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import '../../blocs/preorderbag/preorderbag_bloc.dart';
 import 'preordermenu.dart';
@@ -31,10 +32,11 @@ class PreorderButton extends StatelessWidget {
         child: SizedBox(
           width: 150.0,
           child: ButtonFilled(
-            isDisabled: true,
+            isDisabled: false,
             text: "Pre-Order",
             onPressed: () {
               services.clientAnalytics.trackEvent('start_preorder');
+
               showModalBottomSheet(
                 isScrollControlled: true,
                 shape: const RoundedRectangleBorder(
@@ -46,7 +48,15 @@ class PreorderButton extends StatelessWidget {
                 builder: (context) => PreorderMenu(
                   restaurantName: restaurantName,
                   menu: menu,
-                  nextLocation: nextLocation!,
+                  // replace with nextLocation!
+                  nextLocation: PopUpLocation(
+                      locationId: "wef",
+                      locationAddress: "",
+                      locationDateStart: Timestamp(1, 2),
+                      locationDateEnd: Timestamp(1, 2),
+                      timestamp: Timestamp(1, 2),
+                      geolocation: GeoPoint(1, 1),
+                      locationName: ""),
                   preorderBagBloc: preorderBagBloc,
                 ),
               );

@@ -1,7 +1,10 @@
+import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
+import 'package:dinetime_mobile_mvp/pages/owner_pages/editfoodcard_page/bloc/editfoodcard_bloc.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -20,6 +23,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:path/path.dart';
+import 'package:tuple/tuple.dart';
 
 class EditFoodCard extends StatefulWidget {
   final Restaurant restaurant;
@@ -29,11 +34,14 @@ class EditFoodCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<EditFoodCard> createState() => _EditFoodCardState();
+  State<EditFoodCard> createState() => _EditFoodCardState(restaurant);
 }
 
 class _EditFoodCardState extends State<EditFoodCard> {
-  List<File> _images = [];
+  Restaurant editFields;
+  File? coverPhoto;
+  File? _imageProfile;
+  List<File> _galleryImages = [];
   List<File?> _newImages = List.generate(6, (_) => null);
   final textController = TextEditingController();
   final textController2 = TextEditingController();
@@ -41,12 +49,10 @@ class _EditFoodCardState extends State<EditFoodCard> {
   final textController4 = TextEditingController();
   File? _image;
   final ImagePicker _picker = ImagePicker();
-  File? _imageProfile;
   final ImagePicker _pickerProfile = ImagePicker();
-  bool _switchValue = false;
   final List<String> colorOptions = ['\$', '\$\$', '\$\$\$', '\$\$\$\$'];
   String _selectedOption = '';
-
+  _EditFoodCardState(this.editFields);
   void dispose() {
     textController.dispose();
     super.dispose();
@@ -69,8 +75,8 @@ class _EditFoodCardState extends State<EditFoodCard> {
 
   void deleteImage(int index) {
     setState(() {
-      if (_images.length > index) {
-        _images.removeAt(index);
+      if (_galleryImages.length > index) {
+        _galleryImages.removeAt(index);
       }
       if (_newImages.length > index) {
         _newImages.removeAt(index);
@@ -78,20 +84,25 @@ class _EditFoodCardState extends State<EditFoodCard> {
     });
   }
 
-  Future<void> _getImage() async {
+  Future<void> _getCoverImage() async {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        editFields.restaurantCoverRef =
+            "${editFields.restaurantName}/gallery/${basename(pickedFile.path)}";
+        coverPhoto = _image;
       } else {
         print('No image selected.');
       }
     });
   }
 
-  void _deleteImage() {
+  void _deleteCoverImage() {
     setState(() {
       _image = null;
+      editFields.restaurantCoverRef = "";
+      coverPhoto = _image;
     });
   }
 
@@ -119,6 +130,17 @@ class _EditFoodCardState extends State<EditFoodCard> {
     });
   }
 
+  Future<List<Tuple2<String, File>>> _getGalleryPhotos(
+      Services services, String restaurantId) async {
+    Map<String, File> photoMap =
+        await services.clientDB.restaurantGalleryGet(restaurantId);
+    List<Tuple2<String, File>> myList = photoMap.entries
+        .map((entry) => Tuple2(entry.key, entry.value))
+        .cast<Tuple2<String, File>>()
+        .toList();
+    return myList;
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -138,10 +160,16 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   style: dineTimeTypography.headlineMedium,
                 ),
                 const SizedBox(height: 20.0),
-                EditCoverPhoto(
-                  onTap: _getImage,
-                  onDelete: _deleteImage,
-                  image: _image,
+                FutureBuilder(
+                  future: services.clientDB
+                      .restaurantCoverPhotoGet(editFields.restaurantId),
+                  builder: (context, snapshot) {
+                    return EditCoverPhoto(
+                      onTap: _getCoverImage,
+                      onDelete: _deleteCoverImage,
+                      image: snapshot.data,
+                    );
+                  },
                 ),
                 const SizedBox(height: 20.0),
                 Text(
@@ -149,26 +177,31 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   style: dineTimeTypography.headlineMedium,
                 ),
                 const SizedBox(height: 20.0),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 20.0,
-                    crossAxisSpacing: 20.0,
-                    childAspectRatio: 1.0,
-                  ),
-                  itemCount: 6,
-                  itemBuilder: (BuildContext context, int index) {
-                    return EditGallery(
-                      onTap: () => getImage(index),
-                      onDelete: () => deleteImage(index),
-                      image: _images.length > index ? _images[index] : null,
-                      newImage:
-                          _newImages.length > index ? _newImages[index] : null,
-                    );
-                  },
-                ),
+                FutureBuilder(
+                    future:
+                        _getGalleryPhotos(services, editFields.restaurantId),
+                    builder: (context, snapshot) {
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 20.0,
+                          crossAxisSpacing: 20.0,
+                          childAspectRatio: 1.0,
+                        ),
+                        itemCount: 6,
+                        itemBuilder: (BuildContext context, int index) {
+                          return EditGallery(
+                            onTap: () => getImage(index),
+                            onDelete: () => deleteImage(index),
+                            image: _galleryImages.length > index
+                                ? snapshot.data![index].item2
+                                : null,
+                          );
+                        },
+                      );
+                    }),
                 const SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -213,15 +246,17 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   style: dineTimeTypography.bodyMedium,
                 ),
                 const SizedBox(height: 20.0),
-                TextField(
-                  controller: textController,
+                TextFormField(
                   maxLength: 50,
+                  initialValue: editFields.restaurantName,
+                  onChanged: (value) {
+                    editFields.restaurantName = value;
+                  },
                   style: TextStyle(
                     fontFamily: 'Lato',
                     fontSize: 14,
                   ),
                   decoration: InputDecoration(
-                    hintText: 'Enter your text here',
                     fillColor: Color(0xFFF6F6F6),
                     filled: true,
                     border: OutlineInputBorder(
@@ -241,7 +276,9 @@ class _EditFoodCardState extends State<EditFoodCard> {
                 const SizedBox(height: 20.0),
                 PriceOption(
                   options: colorOptions,
-                  onSelect: _onSelectOption,
+                  onSelect: (value) {
+                    _onSelectOption;
+                  },
                 ),
                 const SizedBox(height: 20.0),
                 CuisineType(),
@@ -256,9 +293,14 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   style: dineTimeTypography.bodyMedium,
                 ),
                 const SizedBox(height: 20.0),
-                TextField(
-                  controller: textController2,
+                TextFormField(
                   maxLength: 1500,
+                  initialValue: editFields.bio,
+                  onChanged: (value) {
+                    context.read<EditFoodCardBloc>().add(EditFoodCardUpdateBio(
+                          newBio: value,
+                        ));
+                  },
                   style: TextStyle(
                     fontFamily: 'Lato',
                     fontSize: 14,
@@ -290,10 +332,11 @@ class _EditFoodCardState extends State<EditFoodCard> {
                     ),
                     Spacer(),
                     CupertinoSwitch(
-                      value: _switchValue,
+                      value: editFields.displayed ?? false,
                       onChanged: (value) {
                         setState(() {
-                          _switchValue = value;
+                          editFields.displayed = value;
+                          print(editFields.displayed);
                         });
                       },
                       activeColor: dineTimeColorScheme.primary,
@@ -324,15 +367,14 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   style: dineTimeTypography.bodyMedium,
                 ),
                 const SizedBox(height: 10.0),
-                TextField(
-                  controller: textController3,
+                TextFormField(
                   maxLength: 50,
+                  initialValue: editFields.email ?? "",
                   style: TextStyle(
                     fontFamily: 'Lato',
                     fontSize: 14,
                   ),
                   decoration: InputDecoration(
-                    hintText: 'stephcurry@gmail.com',
                     fillColor: Color(0xFFF6F6F6),
                     filled: true,
                     border: OutlineInputBorder(
@@ -350,15 +392,14 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   style: dineTimeTypography.bodyMedium,
                 ),
                 const SizedBox(height: 10.0),
-                TextField(
-                  controller: textController4,
+                TextFormField(
+                  initialValue: editFields.phoneNumber ?? "",
                   maxLength: 12,
                   style: TextStyle(
                     fontFamily: 'Lato',
                     fontSize: 14,
                   ),
                   decoration: InputDecoration(
-                    hintText: '425-979-6447',
                     fillColor: Color(0xFFF6F6F6),
                     filled: true,
                     border: OutlineInputBorder(
