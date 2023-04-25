@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/firebase_options.dart';
 import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/pages/root/start_page/start.dart';
 import 'package:dinetime_mobile_mvp/services/notifications.dart';
-import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
@@ -23,11 +26,48 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await _configureFirebaseAuth();
+  await _configureFirebaseStorage();
+  _configureFirebaseFirestore();
+  _configureFirebaseFunctions();
+
   runApp(
     MyAppTest(
       page: const Start(),
     ),
   );
+}
+
+void _configureFirebaseFunctions() {
+  var host = "localhost";
+  var port = 9199;
+  FirebaseFunctions.instance.useFunctionsEmulator(host, port);
+  debugPrint('Using Firebase Functions emulator on: $host:$port');
+}
+
+Future<void> _configureFirebaseAuth() async {
+  var host = "localhost";
+  var port = 9099;
+  await FirebaseAuth.instance.useAuthEmulator(host, port);
+  debugPrint('Using Firebase Auth emulator on: $host:$port');
+}
+
+Future<void> _configureFirebaseStorage() async {
+  var host = "localhost";
+  var port = 9199;
+  await FirebaseStorage.instance.useStorageEmulator(host, port);
+  debugPrint('Using Firebase Storage emulator on: $host:$port');
+}
+
+void _configureFirebaseFirestore() {
+  var host = "localhost";
+  var port = 8080;
+  FirebaseFirestore.instance.settings = Settings(
+    host: '$host:$port',
+    sslEnabled: false,
+    persistenceEnabled: false,
+  );
+  debugPrint('Using Firebase Firestore emulator on: $host:$port');
 }
 
 class MyAppTest extends StatelessWidget {

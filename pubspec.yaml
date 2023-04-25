@@ -39,6 +39,7 @@ dependencies:
   # Firebase
   firebase_core: ^2.1.1
   cloud_firestore: ^4.0.3
+  cloud_functions: ^4.1.1
   firebase_auth: ^4.1.0
   flutter_slidable: ^2.0.0
   firebase_storage: ^11.0.3
