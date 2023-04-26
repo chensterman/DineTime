@@ -3,6 +3,7 @@ import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/notifications.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:firebase_core/firebase_core.dart';
