@@ -4,7 +4,10 @@ import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/pages/root/start_page/start.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
+<<<<<<< HEAD
 import 'package:dinetime_mobile_mvp/services/location.dart';
+=======
+>>>>>>> f0ee042 (local emulator suite config)
 import 'package:dinetime_mobile_mvp/services/notifications.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
@@ -83,7 +86,11 @@ class MyAppTest extends StatelessWidget {
 
   final services = Services(
     clientAuth: AuthServiceApp(),
+<<<<<<< HEAD
     clientLocation: LocationServiceApp(),
+=======
+    clientLocation: LocationServiceMock(),
+>>>>>>> f0ee042 (local emulator suite config)
     clientDB: DatabaseServiceApp(),
     clientStorage: StorageServiceApp(),
     clientAnalytics: AnalyticsServiceMock(),
