@@ -29,9 +29,7 @@ class CustomerHome extends StatefulWidget {
 
 class _CustomerHomeState extends State<CustomerHome> {
   int _selectedIndex = 0;
-  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  final FirebaseInAppMessaging _inAppMessaging =
-      FirebaseInAppMessaging.instance;
+
   // Update selected index for BottomNavBar
   void _onItemTapped(int index) {
     setState(() {
@@ -39,50 +37,12 @@ class _CustomerHomeState extends State<CustomerHome> {
     });
   }
 
-  Future<void> _handleNotifications() async {
-    if (Platform.isIOS) {
-      NotificationSettings settings = _messaging.requestPermission(
-        alert: true,
-        badge: true,
-        provisional: false,
-        sound: true,
-      ) as NotificationSettings;
-      if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-        return;
-      }
-    }
-    // Initialize Firebase in-app messaging
-    _inAppMessaging.setAutomaticDataCollectionEnabled(true);
-    // Register Firebase in-app messaging callback for messages received when app is terminated
-    FirebaseMessaging.instance.getInitialMessage().then((message) {
-      if (message != null && message.data["type"] == "event_reminder") {
-        widget.services.clientNotifications
-            .handleInAppMessage(message, context);
-      }
-    });
-
-    // Register Firebase messaging callback for messages received when app is in the foreground or background
-    FirebaseMessaging.onMessage.listen((message) {
-      if (message.data["type"] == "event_reminder") {
-        widget.services.clientNotifications
-            .handleInAppMessage(message, context);
-      }
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      if (message.data["type"] == "event_reminder") {
-        widget.services.clientNotifications
-            .handleInAppMessage(message, context);
-      }
-    });
-  }
-
   // Get user location, update the user data, and create address
-  Future<void> _updateUserLocation() async {
+  Future<void> _updateUserInfo() async {
     String customerId = widget.services.clientAuth.getCurrentUserUid()!;
+    await widget.services.clientDB.customerAddToken(customerId);
     GeoPoint? userLocation =
         await widget.services.clientLocation.getLocationData();
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    print(fcmToken);
     await widget.services.clientDB.customerUpdate(customerId, {
       'geolocation': userLocation,
     });
@@ -90,9 +50,12 @@ class _CustomerHomeState extends State<CustomerHome> {
 
   @override
   void initState() {
-    _updateUserLocation();
-    _handleNotifications();
     super.initState();
+    widget.services.clientNotifications.handleNotifications();
+    widget.services.clientNotifications.handleToken();
+    print('here');
+    _updateUserInfo();
+    // _handleNotifications();
   }
 
   @override

@@ -21,6 +21,14 @@ class DatabaseServiceApp extends DatabaseService {
   final CollectionReference preordersCollection =
       FirebaseFirestore.instance.collection('preorders');
 
+  @override
+  Future<void> customerAddToken(String customerId) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    await customerCollection.doc(customerId).update({
+      "token": fcmToken,
+    });
+  }
+
   Future<bool> isCustomerUser(String uid) async {
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('customers').doc(uid).get();

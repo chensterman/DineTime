@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>95378834531-n6sa5cka689u1iutsdmr78fuadpmk8ct.apps.googleusercontent.com</string>
+	<string>95378834531-tngbqljmp261ccc32kq0h03n3vatb89u.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.95378834531-n6sa5cka689u1iutsdmr78fuadpmk8ct</string>
+	<string>com.googleusercontent.apps.95378834531-tngbqljmp261ccc32kq0h03n3vatb89u</string>
 	<key>API_KEY</key>
 	<string>AIzaSyC5Kx29peiVIuo23P15TW0ogJBseoGgP9c</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.dmm</string>
+	<string>com.dinetime.dinetime</string>
 	<key>PROJECT_ID</key>
 	<string>dinetime-mvp-364902</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:95378834531:ios:300bf4e488911e8d28e456</string>
+	<string>1:95378834531:ios:d64553351f06267828e456</string>
+	<key>DATABASE_URL</key>
+	<string>https://dinetime-mvp-364902-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

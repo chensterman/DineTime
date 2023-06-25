@@ -58,6 +58,7 @@ abstract class DatabaseService {
   Stream<List<Restaurant>> customerAllStream();
   Stream<List<PreorderBag>> customerPreordersStream(String customerId);
   Future<List<Restaurant>> customerSwipe(String customerId);
+  Future<void> customerAddToken(String customerId);
   Future<Owner?> ownerGet(String ownerId);
   Future<void> ownerAddToken(String ownerId);
   Future<Restaurant?> restaurantGet(String restaurantId);
@@ -83,5 +84,7 @@ abstract class AnalyticsService {
 }
 
 abstract class NotificationsService {
-  Future<void> handleInAppMessage(RemoteMessage message, BuildContext context);
+  Future<void> handleNotifications();
+  Future<void> handleToken();
+  //Future<void> handleInAppMessage(RemoteMessage message, BuildContext context);
 }
