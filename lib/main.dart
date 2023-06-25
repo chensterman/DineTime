@@ -4,6 +4,7 @@ import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,8 @@ import 'services/location.dart';
 import 'pages/root/start_page/start.dart';
 import 'services/services.dart';
 
+import '.env';
+
 // Main function starts the app
 void main() async {
   // Required initialization functions to be run for Firebase
@@ -20,6 +23,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Stripe.publishableKey = stripePublishableKey;
   runApp(
     MyApp(),
   );

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'preorderconfirm.dart';
 import 'preorderoption.dart';
+import 'preorderpayment.dart';
 
 class PreorderBag extends StatelessWidget {
   final String restaurantName;
@@ -236,7 +237,8 @@ class PreorderBag extends StatelessWidget {
         child: Opacity(
           opacity: 0.9,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              await makePayment(totalPrice.toString());
               services.clientAnalytics
                   .trackEventNum('confirm_preorder', totalPrice.toDouble());
               preorderBagBloc.add(
@@ -245,6 +247,7 @@ class PreorderBag extends StatelessWidget {
                   customerEmail: services.clientAuth.getCurrentUserEmail()!,
                 ),
               );
+
               Navigator.pop(context);
               showModalBottomSheet(
                 isScrollControlled: true,
