@@ -63,6 +63,7 @@ dependencies:
   flutter_image_slideshow: any
   page_view_indicators: ^2.0.0
   smooth_page_indicator: ^1.0.0+2
+  cloud_functions: ^4.3.3
   
   
 dev_dependencies:
