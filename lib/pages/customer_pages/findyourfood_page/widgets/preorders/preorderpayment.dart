@@ -13,7 +13,8 @@ import 'package:dinetime_mobile_mvp/.env';
 Future<void> makePayment(String amount) async {
   try {
     //STEP 1: Create Payment Intent
-    var paymentIntent = await createPaymentIntent(amount, 'USD');
+    // All payments are in cents, so 1000 = $ 10
+    var paymentIntent = await createPaymentIntent('1000', 'USD');
 
     //STEP 2: Initialize Payment Sheet
     await Stripe.instance
