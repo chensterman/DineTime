@@ -59,11 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC5Kx29peiVIuo23P15TW0ogJBseoGgP9c',
-    appId: '1:95378834531:ios:300bf4e488911e8d28e456',
+    appId: '1:95378834531:ios:d64553351f06267828e456',
     messagingSenderId: '95378834531',
     projectId: 'dinetime-mvp-364902',
     storageBucket: 'dinetime-mvp-364902.appspot.com',
-    iosClientId: '95378834531-n6sa5cka689u1iutsdmr78fuadpmk8ct.apps.googleusercontent.com',
-    iosBundleId: 'com.example.dmm',
+    iosClientId:
+        '95378834531-tngbqljmp261ccc32kq0h03n3vatb89u.apps.googleusercontent.com',
+    iosBundleId: 'com.dinetime.dinetime',
   );
 }

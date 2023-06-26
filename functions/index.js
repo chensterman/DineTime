@@ -38,19 +38,21 @@ exports.sendPreorderNotification = functions.firestore
     //   })
 
       // Send message using Firebase Cloud Messaging
+      // var test = snapshot.data()
+      // var custRef = test.customer_ref;
+      // console.log(typeof(custRef));
+      // var testData = await custRef.get();
+      // console.log(testData.data().token);
       const payload = {
         notification: {
           title: "New Preorder!",
           body: "TESTING",
         },
+        token: "cR_ci6z1RbyyvZkOTP4AuP:APA91bEJhg-EqTLdImiipjd-wpHvFXQOBDIvUAXQ-FXei2ZjWoRYU4yS1cH-4cV3gZqfk98kKlVGwstA7QfZns-jHLhRaRD8OsAgijVd_XuJC0vC72-BQApX2yCE3TcgyTTppJwXuN-u",
       };
-      const tokens = ["dbqSVGn-zUyRs7_WWwFRXU:APA91bG9lyDVDMZOajiKWIYqc2nzLm1FcxoTasG9DtDnEgbBuRWPmvWwyGFjXmlz8HNInRAZrzd2m5MGUyWXwOm4pfg0Gm7c9R1a5MKA09nCX_DHMnTqqhTCFoItcZ1TY7irjSDHlR2J"];
       /* eslint-disable*/
-      const response = await admin.messaging().sendToDevice(tokens, payload);
+      const response = await admin.messaging().send(payload);
       console.log("Message sent successfully:", response); 
-      console.log(response.results[0].error);
-      console.log("shit");
-
       return null;
     // } catch (error) {
     //   console.error(error);

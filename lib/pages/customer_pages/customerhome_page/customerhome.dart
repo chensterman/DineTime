@@ -53,7 +53,6 @@ class _CustomerHomeState extends State<CustomerHome> {
     super.initState();
     widget.services.clientNotifications.handleNotifications();
     widget.services.clientNotifications.handleToken();
-    print('here');
     _updateUserInfo();
     // _handleNotifications();
   }
