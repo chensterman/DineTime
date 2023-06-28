@@ -5,6 +5,7 @@ import 'package:dinetime_mobile_mvp/pages/root/start_page/start.dart';
 import 'package:dinetime_mobile_mvp/services/auth.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/location.dart';
+import 'package:dinetime_mobile_mvp/services/notifications.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,10 +17,6 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 import 'services/analyticsmock.dart';
-import 'services/authmock.dart';
-import 'services/databasemock.dart';
-import 'services/locationmock.dart';
-import 'services/storagemock.dart';
 
 // Main function starts the app
 void main() async {
@@ -62,12 +59,17 @@ Future<void> _configureFirebaseStorage() async {
 
 void _configureFirebaseFirestore() {
   var host = "localhost";
-  var port = 8080;
-  FirebaseFirestore.instance.settings = Settings(
-    host: '$host:$port',
-    sslEnabled: false,
-    persistenceEnabled: false,
-  );
+  var port = 5002;
+  /* 
+  NO FUCKING CLUE WHY TUTORIALS SAY TO INCLUDE THE SHIT BELOW
+  IT JUST CRASHES THE CONNECTION TO THE IOS EMULATOR AND TOOK ME
+  TWO FUCKING HOURS TO FIGURE OUT TO REMOVE THE CODE
+  */
+  // FirebaseFirestore.instance.settings = Settings(
+  //   host: '$host:$port',
+  //   sslEnabled: false,
+  //   persistenceEnabled: false,
+  // );
   FirebaseFirestore.instance.useFirestoreEmulator(host, port);
   debugPrint('Using Firebase Firestore emulator on: $host:$port');
 }
@@ -85,6 +87,7 @@ class MyAppTest extends StatelessWidget {
     clientDB: DatabaseServiceApp(),
     clientStorage: StorageServiceApp(),
     clientAnalytics: AnalyticsServiceMock(),
+    clientNotifications: NotificationsServiceApp(),
   );
 
   // This widget is the root of your application.

@@ -3,9 +3,14 @@
 .flutter-plugins-dependencies
 .dart_tool/
 
+# Log files
+*.log
+
 # Build directory
 build/
 
 # Upload keystore
 upload-keystore.jks
 android/key.properties
+
+dinetime-mvp-364902-firebase-adminsdk-dpzss-bea2fed8c3.json

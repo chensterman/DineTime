@@ -3,6 +3,7 @@ import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/pages/owner_pages/commerce_page/commerce.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class OwnerHome extends StatefulWidget {
@@ -29,7 +30,14 @@ class _OwnerHomeState extends State<OwnerHome> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    widget.services.clientDB.ownerAddToken(widget.user.uid);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("lisa");
     return FutureBuilder(
       future: widget.services.clientDB.ownerGet(widget.user.uid),
       builder: (context, snapshot) {
