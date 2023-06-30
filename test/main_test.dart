@@ -13,6 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // Required initialization for Stripe to run
+  Stripe.publishableKey =
+      "pk_live_51MMR2pAmON0LxpMBJ2DoHfvN0RwY6aOESiAjTzmuXX3Y6H5SPNy61bX7bUNebIi7afsTkpu5BZCXDRg3bDeuIwsC00qilbuwgl";
+  Stripe.merchantIdentifier = 'DineTime';
+  await Stripe.instance.applySettings();
   await _configureFirebaseAuth();
   await _configureFirebaseStorage();
   _configureFirebaseFirestore();

@@ -10,11 +10,13 @@ import '../../blocs/preorderbag/preorderbag_bloc.dart';
 
 import 'package:dinetime_mobile_mvp/.env';
 
-Future<void> makePayment(String amount) async {
+Future<void> makePayment(
+    String amount, String restaurantName, String customerEmail) async {
   try {
     //STEP 1: Create Payment Intent
     // All payments are in cents, so 1000 = $ 10
-    var paymentIntent = await createPaymentIntent('1000', 'USD');
+    var paymentIntent =
+        await createPaymentIntent(amount, 'USD', restaurantName, customerEmail);
 
     //STEP 2: Initialize Payment Sheet
     await Stripe.instance
@@ -26,17 +28,19 @@ Future<void> makePayment(String amount) async {
                 merchantDisplayName: 'DineTime'))
         .then((value) {});
     //STEP 3: Display Payment sheet
-    displayPaymentSheet();
+    await displayPaymentSheet();
   } catch (err) {
-    throw Exception(err);
+    rethrow;
   }
 }
 
-createPaymentIntent(String amount, String currency) async {
+createPaymentIntent(String amount, String currency, String restaurantName,
+    String customerEmail) async {
   try {
     Map<String, dynamic> body = {
       'amount': amount,
       'currency': currency,
+      'description': "To $restaurantName From $customerEmail",
     };
 
     var response = await http.post(
@@ -49,7 +53,7 @@ createPaymentIntent(String amount, String currency) async {
     );
     return json.decode(response.body);
   } catch (err) {
-    throw Exception(err.toString());
+    rethrow;
   }
 }
 
@@ -60,8 +64,7 @@ displayPaymentSheet() async {
       // Add logic for handling preorder backend
     });
   } catch (e) {
-    // Do nothing
-    print('$e');
     print("Payment unsuccessful");
+    rethrow;
   }
 }

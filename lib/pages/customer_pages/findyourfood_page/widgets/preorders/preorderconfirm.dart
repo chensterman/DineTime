@@ -63,7 +63,7 @@ class _PreorderConfirmState extends State<PreorderConfirm> {
                   Padding(
                     padding: const EdgeInsets.only(left: 35.0, right: 35.0),
                     child: Text(
-                      "Congrats! You have skipped the line. Please complete your payment at ${widget.restaurantName}. You can check order details at the pre-orders tab.",
+                      "Congrats! You have skipped the line. You can check order details at the pre-orders tab.",
                       textAlign: TextAlign.center,
                       style: dineTimeTypography.bodyMedium?.copyWith(
                         color: dineTimeColorScheme.onSurface,
@@ -86,7 +86,7 @@ class _PreorderConfirmState extends State<PreorderConfirm> {
                   ),
                   const Spacer(),
                   Text(
-                    widget.totalPrice.toString(),
+                    "\$${widget.totalPrice}",
                     style: dineTimeTypography.headlineMedium?.copyWith(
                       color: dineTimeColorScheme.primary,
                     ),

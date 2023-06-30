@@ -16,8 +16,6 @@ import 'services/location.dart';
 import 'pages/root/start_page/start.dart';
 import 'services/services.dart';
 
-import '.env';
-
 // Main function starts the app
 void main() async {
   // Required initialization functions to be run for Firebase
@@ -25,7 +23,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Stripe.publishableKey = stripePublishableKey;
+  // Required initialization for Stripe to run
+  Stripe.publishableKey =
+      "pk_live_51MMR2pAmON0LxpMBJ2DoHfvN0RwY6aOESiAjTzmuXX3Y6H5SPNy61bX7bUNebIi7afsTkpu5BZCXDRg3bDeuIwsC00qilbuwgl";
+  Stripe.merchantIdentifier = 'DineTime';
+  await Stripe.instance.applySettings();
   runApp(
     MyApp(),
   );
