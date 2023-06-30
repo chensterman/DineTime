@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/owner.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'services.dart';
 
@@ -19,6 +20,14 @@ class DatabaseServiceApp extends DatabaseService {
   // Access to 'preorders' collection
   final CollectionReference preordersCollection =
       FirebaseFirestore.instance.collection('preorders');
+
+  @override
+  Future<void> customerAddToken(String customerId) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    await customerCollection.doc(customerId).update({
+      "token": fcmToken,
+    });
+  }
 
   Future<bool> isCustomerUser(String uid) async {
     DocumentSnapshot snapshot =
@@ -186,6 +195,14 @@ class DatabaseServiceApp extends DatabaseService {
     } else {
       return null;
     }
+  }
+
+  @override
+  Future<void> ownerAddToken(String ownerId) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    await ownerCollection.doc(ownerId).update({
+      "token": fcmToken,
+    });
   }
 
   @override
