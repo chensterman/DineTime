@@ -37,7 +37,6 @@ class _OwnerHomeState extends State<OwnerHome> {
 
   @override
   Widget build(BuildContext context) {
-    print("lisa");
     return FutureBuilder(
       future: widget.services.clientDB.ownerGet(widget.user.uid),
       builder: (context, snapshot) {
