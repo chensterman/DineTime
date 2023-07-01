@@ -38,9 +38,8 @@ class _CustomerHomeState extends State<CustomerHome> {
   }
 
   // Get user location, update the user data, and create address
-  Future<void> _updateUserInfo() async {
+  Future<void> _updateUserLocation() async {
     String customerId = widget.services.clientAuth.getCurrentUserUid()!;
-    await widget.services.clientDB.customerAddToken(customerId);
     GeoPoint? userLocation =
         await widget.services.clientLocation.getLocationData();
     await widget.services.clientDB.customerUpdate(customerId, {
@@ -48,12 +47,18 @@ class _CustomerHomeState extends State<CustomerHome> {
     });
   }
 
+  Future<void> _updateUserToken() async {
+    String customerId = widget.services.clientAuth.getCurrentUserUid()!;
+    await widget.services.clientDB.customerAddToken(customerId);
+  }
+
   @override
   void initState() {
     super.initState();
     widget.services.clientNotifications.handleNotifications();
     widget.services.clientNotifications.handleToken();
-    _updateUserInfo();
+    _updateUserLocation();
+    _updateUserToken();
     // _handleNotifications();
   }
 
