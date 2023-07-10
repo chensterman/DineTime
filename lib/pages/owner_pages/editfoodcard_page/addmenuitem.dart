@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:dinetime_mobile_mvp/pages/customer_pages/fooddisplay_page/fooddisplay.dart';
@@ -21,6 +22,15 @@ class AddMenuItem extends StatefulWidget {
 }
 
 class _AddMenuItemState extends State<AddMenuItem> {
+  MenuItem item = MenuItem(
+    itemName: "",
+    dietaryTags: [],
+    itemDescription: '',
+    itemPrice: 0,
+    itemId: '',
+    itemImageRef: '',
+    timestamp: Timestamp.now(),
+  );
   final double _cardHeight = 75.0;
   File? _image;
   final ImagePicker _picker = ImagePicker();
@@ -154,9 +164,14 @@ class _AddMenuItemState extends State<AddMenuItem> {
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                TextField(
+                                TextFormField(
                                   controller: textController1,
                                   maxLength: 50,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      item.itemName = value;
+                                    });
+                                  },
                                   style: TextStyle(
                                     fontFamily: 'Lato',
                                     fontSize: 14,
@@ -200,8 +215,13 @@ class _AddMenuItemState extends State<AddMenuItem> {
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                TextField(
+                                TextFormField(
                                   controller: textController2,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      item.itemDescription = value;
+                                    });
+                                  },
                                   maxLength: 200,
                                   style: TextStyle(
                                     fontFamily: 'Lato',
@@ -238,7 +258,7 @@ class _AddMenuItemState extends State<AddMenuItem> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Price",
+                                          "Price in USD (number only eg. 5.49)",
                                           style: dineTimeTypography.bodySmall,
                                         ),
                                         SizedBox(
@@ -246,8 +266,14 @@ class _AddMenuItemState extends State<AddMenuItem> {
                                         ),
                                         SizedBox(
                                           width: 150,
-                                          child: TextField(
+                                          child: TextFormField(
                                             controller: textController3,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                item.itemPrice =
+                                                    double.parse(value);
+                                              });
+                                            },
                                             maxLength: 20,
                                             style: TextStyle(
                                               fontFamily: 'Lato',
@@ -453,8 +479,7 @@ class _AddMenuItemState extends State<AddMenuItem> {
                                                                           Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.center,
-                                                                        children: <
-                                                                            Widget>[
+                                                                        children: <Widget>[
                                                                           Text(
                                                                             'Done',
                                                                             style:

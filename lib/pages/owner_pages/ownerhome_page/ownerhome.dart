@@ -6,6 +6,7 @@ import 'package:dinetime_mobile_mvp/pages/owner_pages/editfoodcard_page/bloc/edi
 import 'package:dinetime_mobile_mvp/pages/owner_pages/editfoodcard_page/editfoodcard.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,6 +34,12 @@ class _OwnerHomeState extends State<OwnerHome> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.services.clientDB.ownerAddToken(widget.user.uid);
   }
 
   @override

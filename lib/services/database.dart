@@ -7,6 +7,7 @@ import 'package:dinetime_mobile_mvp/models/restaurant.dart' as r;
 import 'package:dinetime_mobile_mvp/models/event.dart' as e;
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'services.dart';
 
@@ -25,6 +26,14 @@ class DatabaseServiceApp extends DatabaseService {
   final CollectionReference preordersCollection =
       FirebaseFirestore.instance.collection('preorders');
   final FirebaseStorage storage = FirebaseStorage.instance;
+  @override
+  Future<void> customerAddToken(String customerId) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    await customerCollection.doc(customerId).update({
+      "token": fcmToken,
+    });
+  }
+
   Future<bool> isCustomerUser(String uid) async {
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('customers').doc(uid).get();
@@ -198,6 +207,14 @@ class DatabaseServiceApp extends DatabaseService {
     // Implement
     List<e.Event> eventList = [];
     yield eventList;
+  }
+
+  @override
+  Future<void> ownerAddToken(String ownerId) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    await ownerCollection.doc(ownerId).update({
+      "token": fcmToken,
+    });
   }
 
   @override
@@ -459,7 +476,7 @@ class DatabaseServiceApp extends DatabaseService {
 
     // To understand image updates: the protocol being used here is
     // if the image is present in the map of images, then reupload image and update fields
-    // else if the the image is null and present in the map of images, then delete the image
+    // else if the the image file is null and present in the map of images, then delete the image
     // else if the image is not present in the map of images, only update fields
     for (GalleryImage imageData in updateFields.gallery) {
       DocumentReference ref = restaurantCollection

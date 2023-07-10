@@ -53,6 +53,14 @@ class _EditFoodCardState extends State<EditFoodCard> {
   final List<String> colorOptions = ['\$', '\$\$', '\$\$\$', '\$\$\$\$'];
   String _selectedOption = '';
   _EditFoodCardState(this.editFields);
+  void _editMenuItems(int index, MenuItem menuUpdates) {
+    setState(() => editFields.menu[index] = menuUpdates);
+  }
+
+  void _addMenuItems(List<MenuItem> menuItems) {
+    setState(() => menuItems.forEach((item) => editFields.menu.add(item)));
+  }
+
   void dispose() {
     textController.dispose();
     super.dispose();
@@ -85,7 +93,7 @@ class _EditFoodCardState extends State<EditFoodCard> {
   }
 
   Future<void> _getCoverImage() async {
-    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -108,7 +116,7 @@ class _EditFoodCardState extends State<EditFoodCard> {
 
   Future<void> _getImageProfile() async {
     final pickedFile =
-        await _pickerProfile.getImage(source: ImageSource.gallery);
+        await _pickerProfile.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
         _imageProfile = File(pickedFile.path);
@@ -161,9 +169,11 @@ class _EditFoodCardState extends State<EditFoodCard> {
                 ),
                 const SizedBox(height: 20.0),
                 FutureBuilder(
+                  // use clientServices.getPhoto instead, this doesn't work
                   future: services.clientDB
                       .restaurantCoverPhotoGet(editFields.restaurantId),
                   builder: (context, snapshot) {
+                    print(snapshot.data == null);
                     return EditCoverPhoto(
                       onTap: _getCoverImage,
                       onDelete: _deleteCoverImage,
@@ -250,7 +260,9 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   maxLength: 50,
                   initialValue: editFields.restaurantName,
                   onChanged: (value) {
-                    editFields.restaurantName = value;
+                    setState(() {
+                      editFields.restaurantName = value;
+                    });
                   },
                   style: TextStyle(
                     fontFamily: 'Lato',
@@ -277,7 +289,7 @@ class _EditFoodCardState extends State<EditFoodCard> {
                 PriceOption(
                   options: colorOptions,
                   onSelect: (value) {
-                    _onSelectOption;
+                    _onSelectOption(value);
                   },
                 ),
                 const SizedBox(height: 20.0),
@@ -297,9 +309,13 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   maxLength: 1500,
                   initialValue: editFields.bio,
                   onChanged: (value) {
-                    context.read<EditFoodCardBloc>().add(EditFoodCardUpdateBio(
-                          newBio: value,
-                        ));
+                    setState(() {
+                      editFields.bio = value;
+                    });
+
+                    // context.read<EditFoodCardBloc>().add(EditFoodCardUpdateBio(
+                    //       newBio: value,
+                    //     ));
                   },
                   style: TextStyle(
                     fontFamily: 'Lato',
@@ -336,7 +352,6 @@ class _EditFoodCardState extends State<EditFoodCard> {
                       onChanged: (value) {
                         setState(() {
                           editFields.displayed = value;
-                          print(editFields.displayed);
                         });
                       },
                       activeColor: dineTimeColorScheme.primary,
@@ -344,7 +359,10 @@ class _EditFoodCardState extends State<EditFoodCard> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                EditMenu(),
+                EditMenu(
+                    callback: _editMenuItems,
+                    item: editFields.menu[0],
+                    index: 0),
                 const SizedBox(height: 20.0),
                 AddMenuItem(),
                 const SizedBox(height: 20.0),
@@ -370,6 +388,11 @@ class _EditFoodCardState extends State<EditFoodCard> {
                 TextFormField(
                   maxLength: 50,
                   initialValue: editFields.email ?? "",
+                  onChanged: (value) {
+                    setState(() {
+                      editFields.email = value;
+                    });
+                  },
                   style: TextStyle(
                     fontFamily: 'Lato',
                     fontSize: 14,
@@ -394,6 +417,11 @@ class _EditFoodCardState extends State<EditFoodCard> {
                 const SizedBox(height: 10.0),
                 TextFormField(
                   initialValue: editFields.phoneNumber ?? "",
+                  onChanged: (value) {
+                    setState(() {
+                      editFields.phoneNumber = value;
+                    });
+                  },
                   maxLength: 12,
                   style: TextStyle(
                     fontFamily: 'Lato',

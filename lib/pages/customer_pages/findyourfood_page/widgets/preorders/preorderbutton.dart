@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class PreorderButton extends StatelessWidget {
+  final AuthService clientAuth;
   final String restaurantName;
   final List<MenuItem> menu;
   final PopUpLocation? nextLocation;
@@ -16,6 +17,7 @@ class PreorderButton extends StatelessWidget {
   final bool isVisible;
   const PreorderButton({
     Key? key,
+    required this.clientAuth,
     required this.restaurantName,
     required this.menu,
     required this.nextLocation,
@@ -48,6 +50,7 @@ class PreorderButton extends StatelessWidget {
                 ),
                 context: context,
                 builder: (context) => PreorderMenu(
+                  clientAuth: clientAuth,
                   restaurantName: restaurantName,
                   menu: menu,
                   // replace with nextLocation!

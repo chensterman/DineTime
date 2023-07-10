@@ -320,6 +320,7 @@ class _FoodCardState extends State<FoodCard> {
         ),
       ),
       PreorderButton(
+        clientAuth: widget.services.clientAuth,
         restaurantName: widget.restaurant.restaurantName,
         menu: widget.restaurant.menu,
         nextLocation: widget.restaurant.upcomingLocations.isEmpty

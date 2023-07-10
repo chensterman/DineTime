@@ -1,9 +1,12 @@
 import 'package:dinetime_mobile_mvp/models/user.dart';
 import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
+import 'package:dinetime_mobile_mvp/services/notifications.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +23,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // Required initialization for Stripe to run
+  Stripe.publishableKey =
+      "pk_live_51MMR2pAmON0LxpMBJ2DoHfvN0RwY6aOESiAjTzmuXX3Y6H5SPNy61bX7bUNebIi7afsTkpu5BZCXDRg3bDeuIwsC00qilbuwgl";
+  Stripe.merchantIdentifier = 'DineTime';
+  await Stripe.instance.applySettings();
   runApp(
     MyApp(),
   );
@@ -37,6 +45,7 @@ class MyApp extends StatelessWidget {
     clientDB: DatabaseServiceApp(),
     clientStorage: StorageServiceApp(),
     clientAnalytics: AnalyticsServiceApp(),
+    clientNotifications: NotificationsServiceApp(),
   );
 
   // This widget is the root of your application.

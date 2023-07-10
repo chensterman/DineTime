@@ -15,19 +15,29 @@ import 'dart:io';
 
 // Cards that display list items in saved
 class EditMenu extends StatefulWidget {
+  final Function(int, MenuItem) callback;
+  final MenuItem item;
+  final int index;
   const EditMenu({
     Key? key,
+    required this.callback,
+    required this.item,
+    required this.index,
   }) : super(key: key);
 
   @override
-  _EditMenuState createState() => _EditMenuState();
+  _EditMenuState createState() => _EditMenuState(callback, item, index);
 }
 
 class _EditMenuState extends State<EditMenu> {
+  final Function(int, MenuItem) callback;
+  MenuItem item;
+  final int index;
   final double _cardHeight = 75.0;
   File? _image;
   final ImagePicker _picker = ImagePicker();
   String _selectedOption = '';
+  _EditMenuState(this.callback, this.item, this.index);
   final textController1 = TextEditingController();
   final textController2 = TextEditingController();
   final textController3 = TextEditingController();
@@ -129,10 +139,12 @@ class _EditMenuState extends State<EditMenu> {
                         Row(
                           children: [
                             IconButton(
-                              icon: Icon(Icons.arrow_back_rounded, size: 30),
-                              color: dineTimeColorScheme.primary,
-                              onPressed: () => Navigator.pop(context),
-                            ),
+                                icon: Icon(Icons.arrow_back_rounded, size: 30),
+                                color: dineTimeColorScheme.primary,
+                                onPressed: () => {
+                                      callback(index, item),
+                                      Navigator.pop(context),
+                                    }),
                           ],
                         ),
                         SingleChildScrollView(
@@ -182,15 +194,20 @@ class _EditMenuState extends State<EditMenu> {
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                TextField(
+                                TextFormField(
                                   controller: textController1,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      item.itemName = value;
+                                    });
+                                  },
                                   maxLength: 50,
                                   style: TextStyle(
                                     fontFamily: 'Lato',
                                     fontSize: 14,
                                   ),
                                   decoration: InputDecoration(
-                                    hintText: 'Vegetable Samosas',
+                                    hintText: item.itemName,
                                     fillColor: Color(0xFFF6F6F6),
                                     filled: true,
                                     border: OutlineInputBorder(
@@ -228,15 +245,20 @@ class _EditMenuState extends State<EditMenu> {
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                TextField(
+                                TextFormField(
                                   controller: textController2,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      item.itemDescription = value;
+                                    });
+                                  },
                                   maxLength: 200,
                                   style: TextStyle(
                                     fontFamily: 'Lato',
                                     fontSize: 14,
                                   ),
                                   decoration: InputDecoration(
-                                    hintText: 'Write a description',
+                                    hintText: item.itemDescription,
                                     fillColor: Color(0xFFF6F6F6),
                                     filled: true,
                                     border: OutlineInputBorder(
@@ -266,7 +288,7 @@ class _EditMenuState extends State<EditMenu> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Price",
+                                          "Price in USD (number only eg. 5.49)",
                                           style: dineTimeTypography.bodySmall,
                                         ),
                                         SizedBox(
@@ -274,15 +296,22 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         SizedBox(
                                           width: 150,
-                                          child: TextField(
+                                          child: TextFormField(
                                             controller: textController3,
                                             maxLength: 20,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                item.itemPrice =
+                                                    double.parse(value);
+                                              });
+                                            },
                                             style: TextStyle(
                                               fontFamily: 'Lato',
                                               fontSize: 14,
                                             ),
                                             decoration: InputDecoration(
-                                              hintText: '\$0.00',
+                                              hintText:
+                                                  item.itemPrice.toString(),
                                               fillColor: Color(0xFFF6F6F6),
                                               filled: true,
                                               border: OutlineInputBorder(
@@ -481,8 +510,7 @@ class _EditMenuState extends State<EditMenu> {
                                                                           Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.center,
-                                                                        children: <
-                                                                            Widget>[
+                                                                        children: <Widget>[
                                                                           Text(
                                                                             'Done',
                                                                             style:

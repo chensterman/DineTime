@@ -71,6 +71,7 @@ class EditCoverPhoto extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   padding: EdgeInsets.all(4.0),
+                  // Make this icon actually delete the stored image
                   child: Icon(
                     Icons.close,
                     color: Colors.white,

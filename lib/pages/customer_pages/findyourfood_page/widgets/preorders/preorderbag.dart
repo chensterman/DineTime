@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import '../../blocs/preorderbag/preorderbag_bloc.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
@@ -9,13 +10,16 @@ import 'package:provider/provider.dart';
 
 import 'preorderconfirm.dart';
 import 'preorderoption.dart';
+import 'preorderpayment.dart';
 
 class PreorderBag extends StatelessWidget {
+  final AuthService clientAuth;
   final String restaurantName;
   final PopUpLocation nextLocation;
   final PreorderBagBloc preorderBagBloc;
   const PreorderBag({
     Key? key,
+    required this.clientAuth,
     required this.restaurantName,
     required this.nextLocation,
     required this.preorderBagBloc,
@@ -197,12 +201,12 @@ class PreorderBag extends StatelessWidget {
                     //     ),
                     //   ),
                     // ),
-                    Text(
-                      "Note: You will need to complete your official payment at the Pop-Up. Pre-Ordering items only secures your place in line.",
-                      style: dineTimeTypography.bodySmall?.copyWith(
-                        color: dineTimeColorScheme.primary,
-                      ),
-                    ),
+                    // Text(
+                    //   "Note: You will need to complete your official payment at the Pop-Up. Pre-Ordering items only secures your place in line.",
+                    //   style: dineTimeTypography.bodySmall?.copyWith(
+                    //     color: dineTimeColorScheme.primary,
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 20.0,
                     ),
@@ -236,29 +240,57 @@ class PreorderBag extends StatelessWidget {
         child: Opacity(
           opacity: 0.9,
           child: ElevatedButton(
-            onPressed: () {
-              services.clientAnalytics
-                  .trackEventNum('confirm_preorder', totalPrice.toDouble());
-              preorderBagBloc.add(
-                PreorderBagSubmit(
-                  customerId: services.clientAuth.getCurrentUserUid()!,
-                  customerEmail: services.clientAuth.getCurrentUserEmail()!,
-                ),
-              );
-              Navigator.pop(context);
-              showModalBottomSheet(
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(10),
+            onPressed: () async {
+              try {
+                await makePayment((totalPrice * 100).toString(), restaurantName,
+                        clientAuth.getCurrentUserEmail()!)
+                    .then((value) {
+                  services.clientAnalytics
+                      .trackEventNum('confirm_preorder', totalPrice.toDouble());
+                  preorderBagBloc.add(
+                    PreorderBagSubmit(
+                      customerId: services.clientAuth.getCurrentUserUid()!,
+                      customerEmail: services.clientAuth.getCurrentUserEmail()!,
+                    ),
+                  );
+                  Navigator.pop(context);
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(10),
+                      ),
+                    ),
+                    context: context,
+                    builder: (context) => PreorderConfirm(
+                      restaurantName: restaurantName,
+                      totalPrice: totalPrice,
+                    ),
+                  );
+                }).onError((error, stackTrace) {
+                  throw Exception(error);
+                });
+              } on StripeException catch (e) {
+                print('Error is:---> $e');
+                AlertDialog(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          ),
+                          Text("Payment Failed"),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                context: context,
-                builder: (context) => PreorderConfirm(
-                  restaurantName: restaurantName,
-                  totalPrice: totalPrice,
-                ),
-              );
+                );
+              } catch (e) {
+                print(e);
+              }
             },
             style: style,
             child: Row(

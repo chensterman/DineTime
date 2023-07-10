@@ -11,12 +11,14 @@ import 'package:provider/provider.dart';
 import 'preorderoption.dart';
 
 class PreorderMenu extends StatelessWidget {
+  final AuthService clientAuth;
   final String restaurantName;
   final List<MenuItem> menu;
   final PopUpLocation nextLocation;
   final PreorderBagBloc preorderBagBloc;
   const PreorderMenu({
     Key? key,
+    required this.clientAuth,
     required this.restaurantName,
     required this.menu,
     required this.nextLocation,
@@ -134,6 +136,7 @@ class PreorderMenu extends StatelessWidget {
                         ),
                         context: context,
                         builder: (context) => p.PreorderBag(
+                          clientAuth: clientAuth,
                           restaurantName: restaurantName,
                           nextLocation: nextLocation,
                           preorderBagBloc: preorderBagBloc,
