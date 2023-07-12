@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -48,6 +45,16 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
+  static const FirebaseOptions web = FirebaseOptions(
+      apiKey: "AIzaSyCUnjZGe8MoQ3uEjrzVZtE14Yjbu9uJ_1U",
+      authDomain: "dinetime-mvp-364902.firebaseapp.com",
+      databaseURL: "https://dinetime-mvp-364902-default-rtdb.firebaseio.com",
+      projectId: "dinetime-mvp-364902",
+      storageBucket: "dinetime-mvp-364902.appspot.com",
+      messagingSenderId: "95378834531",
+      appId: "1:95378834531:web:164e19929a71a55928e456",
+      measurementId: "G-E997S837ZS");
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyClqbFZ-CdetXMwEg0BmIN_5gyF3WbgeSE',

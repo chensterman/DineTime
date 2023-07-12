@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class CuisineDetails extends StatelessWidget {
   final String cuisine;
   final int pricing;
-  final GeoPoint customerLocation;
+  final GeoPoint? customerLocation;
   final List<PopUpLocation> locations;
   final bool onMainDetails;
   const CuisineDetails({
@@ -24,9 +24,9 @@ class CuisineDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
     double? distance;
-    if (locations.isNotEmpty) {
-      distance = services.clientLocation
-          .distanceBetweenTwoPoints(customerLocation, locations[0].geolocation);
+    if (locations.isNotEmpty && customerLocation != null) {
+      distance = services.clientLocation.distanceBetweenTwoPoints(
+          customerLocation!, locations[0].geolocation);
     }
     String infoText = distance != null
         ? '$cuisine  ·  ${'\$' * pricing}  ·  $distance mi'

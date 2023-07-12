@@ -1,11 +1,10 @@
 import 'package:dinetime_mobile_mvp/models/user.dart';
+import 'package:dinetime_mobile_mvp/pages/root/routing_page/routing.dart';
 import 'package:dinetime_mobile_mvp/services/analytics.dart';
 import 'package:dinetime_mobile_mvp/services/database.dart';
 import 'package:dinetime_mobile_mvp/services/notifications.dart';
 import 'package:dinetime_mobile_mvp/services/storage.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:location/location.dart';
@@ -15,6 +14,7 @@ import 'services/auth.dart';
 import 'services/location.dart';
 import 'pages/root/start_page/start.dart';
 import 'services/services.dart';
+import 'dart:html' as html;
 
 // Main function starts the app
 void main() async {
@@ -62,10 +62,26 @@ class MyApp extends StatelessWidget {
             value: services.clientLocation.getLocationPermissionStatus(),
             initialData: PermissionStatus.granted),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'DineTime Demo',
-        home: Start(),
+        initialRoute: "/",
+        // Routing mainly only for web use
+        routes: {
+          "/": (context) => const Start(),
+          "/business": (context) => const Start(),
+        },
+        onGenerateRoute: (settings) {
+          //in your example: settings.name = "/post?id=123"
+          final settingsUri = Uri.parse(settings.name!);
+          print(settingsUri);
+          //settingsUri.queryParameters is a map of all the query keys and values
+          final businessId = settingsUri.queryParameters['id'];
+          return MaterialPageRoute(
+              builder: (_) => Routing(
+                    businessId: businessId.toString(),
+                  )); // Pass it to BarPage.
+        },
       ),
     );
   }

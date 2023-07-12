@@ -5,6 +5,7 @@ import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 class FoodDisplay extends StatelessWidget {
   final Customer customer;
@@ -21,25 +22,27 @@ class FoodDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     Services services = Provider.of<Services>(context);
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: dineTimeColorScheme.onPrimary,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: dineTimeColorScheme.onBackground,
-            ),
-            onPressed: () {
-              if (origin == "Preorders") {
-                services.clientAnalytics
-                    .trackScreenView('preorder_receipt', origin);
-              } else {
-                services.clientAnalytics.trackScreenView(origin, origin);
-              }
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        appBar: kIsWeb
+            ? null
+            : AppBar(
+                elevation: 0.0,
+                backgroundColor: dineTimeColorScheme.onPrimary,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: dineTimeColorScheme.onBackground,
+                  ),
+                  onPressed: () {
+                    if (origin == "Preorders") {
+                      services.clientAnalytics
+                          .trackScreenView('preorder_receipt', origin);
+                    } else {
+                      services.clientAnalytics.trackScreenView(origin, origin);
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
         body: Center(
           child: FoodCard(
               customer: customer,

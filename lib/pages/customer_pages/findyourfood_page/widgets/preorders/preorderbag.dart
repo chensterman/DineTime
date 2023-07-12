@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/restaurant.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_stripe_web/flutter_stripe_web.dart';
 import '../../blocs/preorderbag/preorderbag_bloc.dart';
 import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
@@ -207,9 +208,9 @@ class PreorderBag extends StatelessWidget {
                     //     color: dineTimeColorScheme.primary,
                     //   ),
                     // ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
+                    // const SizedBox(
+                    //   height: 20.0,
+                    // ),
                     confirmPreorderButton(context, totalQuantity, totalPrice),
                   ],
                 ),

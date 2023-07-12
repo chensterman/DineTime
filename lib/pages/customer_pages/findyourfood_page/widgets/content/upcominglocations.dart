@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class UpcomingLocations extends StatelessWidget {
   final List<PopUpLocation> popUpLocations;
-  final GeoPoint customerLocation;
+  final GeoPoint? customerLocation;
   const UpcomingLocations({
     Key? key,
     required this.popUpLocations,
@@ -99,8 +99,11 @@ class UpcomingLocations extends StatelessWidget {
     }
 
     Services services = Provider.of<Services>(context);
-    double distance = services.clientLocation
-        .distanceBetweenTwoPoints(customerLocation, geocode);
+    double? distance;
+    if (customerLocation != null) {
+      distance = services.clientLocation
+          .distanceBetweenTwoPoints(customerLocation!, geocode);
+    }
     String infoText = "$distance mi - $timeDisplay";
     return ListCard(
       height: 60.0,

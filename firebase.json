@@ -22,7 +22,8 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "public",
+    "site": "dinetime",
+    "public": "build/web",
     "ignore": [
       "firebase.json",
       "**/.*",

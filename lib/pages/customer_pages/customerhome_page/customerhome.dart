@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/models/user.dart';
-import 'package:dinetime_mobile_mvp/pages/owner_pages/commerce_page/commerce.dart';
 import 'package:dinetime_mobile_mvp/pages/customer_pages/findyourfood_page/findyourfood.dart';
 import 'package:dinetime_mobile_mvp/pages/customer_pages/preorders_page/preorders.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
@@ -11,8 +8,7 @@ import 'package:dinetime_mobile_mvp/services/services.dart';
 import 'package:dinetime_mobile_mvp/pages/customer_pages/favorites_page/favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:dinetime_mobile_mvp/pages/customer_pages/search_page/search.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
+import 'package:flutter/foundation.dart';
 
 class CustomerHome extends StatefulWidget {
   final Services services;
@@ -55,8 +51,10 @@ class _CustomerHomeState extends State<CustomerHome> {
   @override
   void initState() {
     super.initState();
-    widget.services.clientNotifications.handleNotifications();
-    widget.services.clientNotifications.handleToken();
+    if (!kIsWeb) {
+      widget.services.clientNotifications.handleNotifications();
+      widget.services.clientNotifications.handleToken();
+    }
     _updateUserLocation();
     _updateUserToken();
     // _handleNotifications();

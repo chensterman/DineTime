@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinetime_mobile_mvp/pages/root/routing_page/routing.dart';
 import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:dinetime_mobile_mvp/models/customer.dart';
@@ -46,6 +47,9 @@ class FindYourFoodLayout extends StatelessWidget {
 
   Widget topLocationBar(BuildContext context) {
     Services services = Provider.of<Services>(context);
+    GeoPoint displayLocation = customer.geolocation == null
+        ? const GeoPoint(47, -122)
+        : customer.geolocation!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: Row(
@@ -69,8 +73,7 @@ class FindYourFoodLayout extends StatelessWidget {
             width: 13.0,
           ),
           FutureBuilder(
-            future: services.clientLocation
-                .geoPointToAddress(customer.geolocation!),
+            future: services.clientLocation.geoPointToAddress(displayLocation),
             builder: (context, AsyncSnapshot<String?> snapshot) {
               if (snapshot.hasError) {
                 return Text(

@@ -293,27 +293,25 @@ class _FoodCardState extends State<FoodCard> {
             },
             child: SingleChildScrollView(
               controller: _controller,
-              child: Scrollbar(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
-                      children: [
-                        Background(
-                          width: width,
-                          height: height - 3,
-                          restaurantCoverRef:
-                              widget.restaurant.restaurantCoverRef,
-                          services: widget.services,
-                        ),
-                        BackgroundShadow(width: width, height: height - 3),
-                        mainDetails(width, height)
-                      ],
-                    ),
-                    additionalDetails(),
-                    const SizedBox(height: 70.0), // For preorder button
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: [
+                      Background(
+                        width: width,
+                        height: height - 3,
+                        restaurantCoverRef:
+                            widget.restaurant.restaurantCoverRef,
+                        services: widget.services,
+                      ),
+                      BackgroundShadow(width: width, height: height - 3),
+                      mainDetails(width, height)
+                    ],
+                  ),
+                  additionalDetails(),
+                  const SizedBox(height: 70.0), // For preorder button
+                ],
               ),
             ),
           ),
@@ -360,7 +358,7 @@ class _FoodCardState extends State<FoodCard> {
                 CuisineDetails(
                   cuisine: widget.restaurant.cuisine,
                   pricing: widget.restaurant.pricing,
-                  customerLocation: widget.customer.geolocation!,
+                  customerLocation: widget.customer.geolocation,
                   locations: widget.restaurant.upcomingLocations,
                   onMainDetails: true,
                 ),
@@ -399,7 +397,7 @@ class _FoodCardState extends State<FoodCard> {
           CuisineDetails(
             cuisine: widget.restaurant.cuisine,
             pricing: widget.restaurant.pricing,
-            customerLocation: widget.customer.geolocation!,
+            customerLocation: widget.customer.geolocation,
             locations: widget.restaurant.upcomingLocations,
             onMainDetails: false,
           ),
@@ -439,7 +437,7 @@ class _FoodCardState extends State<FoodCard> {
           const SizedBox(height: 10.0),
           UpcomingLocations(
             key: _upcomingLocationsKey,
-            customerLocation: widget.customer.geolocation!,
+            customerLocation: widget.customer.geolocation,
             popUpLocations: widget.restaurant.upcomingLocations,
           ),
         ],
