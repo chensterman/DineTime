@@ -245,7 +245,7 @@ class _AddMenuItemState extends State<AddMenuItem> {
                                           height: 10.0,
                                         ),
                                         SizedBox(
-                                          width: 150,
+                                          width: 120,
                                           child: TextField(
                                             controller: textController3,
                                             maxLength: 20,
@@ -477,7 +477,7 @@ class _AddMenuItemState extends State<AddMenuItem> {
                                             );
                                           },
                                           child: SizedBox(
-                                            width: 200,
+                                            width: 180,
                                             height: 57,
                                             child: Container(
                                               height: 40,

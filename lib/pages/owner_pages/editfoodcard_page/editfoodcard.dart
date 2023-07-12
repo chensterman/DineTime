@@ -79,7 +79,7 @@ class _EditFoodCardState extends State<EditFoodCard> {
   }
 
   Future<void> _getImage() async {
-    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -97,7 +97,7 @@ class _EditFoodCardState extends State<EditFoodCard> {
 
   Future<void> _getImageProfile() async {
     final pickedFile =
-        await _pickerProfile.getImage(source: ImageSource.gallery);
+        await _pickerProfile.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
         _imageProfile = File(pickedFile.path);
@@ -126,254 +126,286 @@ class _EditFoodCardState extends State<EditFoodCard> {
     Services services = Provider.of<Services>(context);
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Cover Photo",
-                  style: dineTimeTypography.headlineMedium,
-                ),
-                const SizedBox(height: 20.0),
-                EditCoverPhoto(
-                  onTap: _getImage,
-                  onDelete: _deleteImage,
-                  image: _image,
-                ),
-                const SizedBox(height: 20.0),
-                Text(
-                  "Photo Gallery",
-                  style: dineTimeTypography.headlineMedium,
-                ),
-                const SizedBox(height: 20.0),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 20.0,
-                    crossAxisSpacing: 20.0,
-                    childAspectRatio: 1.0,
-                  ),
-                  itemCount: 6,
-                  itemBuilder: (BuildContext context, int index) {
-                    return EditGallery(
-                      onTap: () => getImage(index),
-                      onDelete: () => deleteImage(index),
-                      image: _images.length > index ? _images[index] : null,
-                      newImage:
-                          _newImages.length > index ? _newImages[index] : null,
-                    );
-                  },
-                ),
-                const SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Tap to Edit or Replace Photos',
-                      style: dineTimeTypography.labelMedium?.copyWith(
-                        color: Colors.grey,
-                        fontStyle: FontStyle.italic,
-                      ),
+                      "Cover Photo",
+                      style: dineTimeTypography.headlineMedium,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                Text(
-                  "Business Information",
-                  style: dineTimeTypography.headlineMedium,
-                ),
-                const SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
+                    const SizedBox(height: 20.0),
+                    EditCoverPhoto(
+                      onTap: _getImage,
+                      onDelete: _deleteImage,
+                      image: _image,
+                    ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "Photo Gallery",
+                      style: dineTimeTypography.headlineMedium,
+                    ),
+                    const SizedBox(height: 20.0),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 20.0,
+                        crossAxisSpacing: 20.0,
+                        childAspectRatio: 1.0,
+                      ),
+                      itemCount: 6,
+                      itemBuilder: (BuildContext context, int index) {
+                        return EditGallery();
+                      },
+                    ),
+                    const SizedBox(height: 20.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Profile Picture",
-                          style: dineTimeTypography.bodySmall,
-                        ),
-                        const SizedBox(height: 10.0),
-                        EditProfilePic(
-                          onTap: _getImageProfile,
-                          onDelete: _deleteImageProfile,
-                          image: _imageProfile,
+                          'Tap to Edit or Replace Photos',
+                          style: dineTimeTypography.labelMedium?.copyWith(
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ],
-                    )
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                Text(
-                  "Business Name",
-                  style: dineTimeTypography.bodyMedium,
-                ),
-                const SizedBox(height: 20.0),
-                TextField(
-                  controller: textController,
-                  maxLength: 50,
-                  style: TextStyle(
-                    fontFamily: 'Lato',
-                    fontSize: 14,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Enter your text here',
-                    fillColor: Color(0xFFF6F6F6),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
                     ),
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  minLines: 1,
-                  maxLines: 1,
-                ),
-                const SizedBox(height: 20.0),
-                Text(
-                  "Price Range",
-                  style: dineTimeTypography.bodyMedium,
-                ),
-                const SizedBox(height: 20.0),
-                PriceOption(
-                  options: colorOptions,
-                  onSelect: _onSelectOption,
-                ),
-                const SizedBox(height: 20.0),
-                CuisineType(),
-                const SizedBox(height: 20.0),
-                Text(
-                  "Our Story",
-                  style: dineTimeTypography.headlineMedium,
-                ),
-                const SizedBox(height: 20.0),
-                Text(
-                  "About",
-                  style: dineTimeTypography.bodyMedium,
-                ),
-                const SizedBox(height: 20.0),
-                TextField(
-                  controller: textController2,
-                  maxLength: 1500,
-                  style: TextStyle(
-                    fontFamily: 'Lato',
-                    fontSize: 14,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Our Story',
-                    fillColor: Color(0xFFF6F6F6),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  minLines: 10,
-                  maxLines: 20,
-                ),
-                const SizedBox(height: 20.0),
-                Text(
-                  "Our Menu",
-                  style: dineTimeTypography.headlineMedium,
-                ),
-                const SizedBox(height: 20.0),
-                Row(
-                  children: [
+                    const SizedBox(height: 20.0),
                     Text(
-                      "Enable Preorders",
+                      "Business Information",
+                      style: dineTimeTypography.headlineMedium,
+                    ),
+                    const SizedBox(height: 20.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "Profile Picture",
+                              style: dineTimeTypography.bodySmall,
+                            ),
+                            const SizedBox(height: 10.0),
+                            EditProfilePic(
+                              onTap: _getImageProfile,
+                              onDelete: _deleteImageProfile,
+                              image: _imageProfile,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "Business Name",
                       style: dineTimeTypography.bodyMedium,
                     ),
-                    Spacer(),
-                    CupertinoSwitch(
-                      value: _switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                      activeColor: dineTimeColorScheme.primary,
+                    const SizedBox(height: 20.0),
+                    TextField(
+                      controller: textController,
+                      maxLength: 50,
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 14,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Enter your text here',
+                        fillColor: Color(0xFFF6F6F6),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      minLines: 1,
+                      maxLines: 1,
                     ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "Price Range",
+                      style: dineTimeTypography.bodyMedium,
+                    ),
+                    const SizedBox(height: 20.0),
+                    PriceOption(
+                      options: colorOptions,
+                      onSelect: _onSelectOption,
+                    ),
+                    const SizedBox(height: 20.0),
+                    CuisineType(),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "Our Story",
+                      style: dineTimeTypography.headlineMedium,
+                    ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "About",
+                      style: dineTimeTypography.bodyMedium,
+                    ),
+                    const SizedBox(height: 20.0),
+                    TextField(
+                      controller: textController2,
+                      maxLength: 1500,
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 14,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Our Story',
+                        fillColor: Color(0xFFF6F6F6),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      minLines: 10,
+                      maxLines: 20,
+                    ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "Our Menu",
+                      style: dineTimeTypography.headlineMedium,
+                    ),
+                    const SizedBox(height: 20.0),
+                    Row(
+                      children: [
+                        Text(
+                          "Enable Preorders",
+                          style: dineTimeTypography.bodyMedium,
+                        ),
+                        Spacer(),
+                        CupertinoSwitch(
+                          value: _switchValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _switchValue = value;
+                            });
+                          },
+                          activeColor: dineTimeColorScheme.primary,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20.0),
+                    EditMenu(),
+                    const SizedBox(height: 20.0),
+                    AddMenuItem(),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "Upcoming Locations",
+                      style: dineTimeTypography.headlineMedium,
+                    ),
+                    const SizedBox(height: 20.0),
+                    EditUpcomingLocations(),
+                    const SizedBox(height: 20.0),
+                    AddUpcomingLocations(),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "General Information",
+                      style: dineTimeTypography.headlineMedium,
+                    ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "Email",
+                      style: dineTimeTypography.bodyMedium,
+                    ),
+                    const SizedBox(height: 10.0),
+                    TextField(
+                      controller: textController3,
+                      maxLength: 50,
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 14,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'stephcurry@gmail.com',
+                        fillColor: Color(0xFFF6F6F6),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      minLines: 1,
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 10.0),
+                    Text(
+                      "Phone Number",
+                      style: dineTimeTypography.bodyMedium,
+                    ),
+                    const SizedBox(height: 10.0),
+                    TextField(
+                      controller: textController4,
+                      maxLength: 12,
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 14,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: '425-979-6447',
+                        fillColor: Color(0xFFF6F6F6),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      minLines: 1,
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 100),
                   ],
                 ),
-                const SizedBox(height: 20.0),
-                EditMenu(),
-                const SizedBox(height: 20.0),
-                AddMenuItem(),
-                const SizedBox(height: 20.0),
-                Text(
-                  "Upcoming Locations",
-                  style: dineTimeTypography.headlineMedium,
-                ),
-                const SizedBox(height: 20.0),
-                EditUpcomingLocations(),
-                const SizedBox(height: 20.0),
-                AddUpcomingLocations(),
-                const SizedBox(height: 20.0),
-                Text(
-                  "General Information",
-                  style: dineTimeTypography.headlineMedium,
-                ),
-                const SizedBox(height: 20.0),
-                Text(
-                  "Email",
-                  style: dineTimeTypography.bodyMedium,
-                ),
-                const SizedBox(height: 10.0),
-                TextField(
-                  controller: textController3,
-                  maxLength: 50,
-                  style: TextStyle(
-                    fontFamily: 'Lato',
-                    fontSize: 14,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'stephcurry@gmail.com',
-                    fillColor: Color(0xFFF6F6F6),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FractionallySizedBox(
+                  widthFactor: 0.5,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      primary: dineTimeColorScheme.primary,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      minimumSize: Size(double.infinity, 45),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Save Changes',
+                            style: dineTimeTypography.headlineSmall
+                                ?.copyWith(color: Colors.white, fontSize: 16.0),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  keyboardType: TextInputType.multiline,
-                  minLines: 1,
-                  maxLines: 1,
                 ),
-                const SizedBox(height: 10.0),
-                Text(
-                  "Phone Number",
-                  style: dineTimeTypography.bodyMedium,
-                ),
-                const SizedBox(height: 10.0),
-                TextField(
-                  controller: textController4,
-                  maxLength: 12,
-                  style: TextStyle(
-                    fontFamily: 'Lato',
-                    fontSize: 14,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: '425-979-6447',
-                    fillColor: Color(0xFFF6F6F6),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  minLines: 1,
-                  maxLines: 1,
-                ),
-                const SizedBox(height: 200),
+                const SizedBox(height: 20),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

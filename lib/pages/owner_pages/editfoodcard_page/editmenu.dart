@@ -273,7 +273,7 @@ class _EditMenuState extends State<EditMenu> {
                                           height: 10.0,
                                         ),
                                         SizedBox(
-                                          width: 150,
+                                          width: 120,
                                           child: TextField(
                                             controller: textController3,
                                             maxLength: 20,
@@ -505,7 +505,7 @@ class _EditMenuState extends State<EditMenu> {
                                             );
                                           },
                                           child: SizedBox(
-                                            width: 200,
+                                            width: 170,
                                             height: 57,
                                             child: Container(
                                               height: 40,
