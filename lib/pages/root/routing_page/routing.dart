@@ -20,20 +20,23 @@ class Routing extends StatelessWidget {
   @override
   Widget build(context) {
     final user = Provider.of<UserDT?>(context);
-    // final locationPermission = Provider.of<PermissionStatus>(context);
     final services = Provider.of<Services>(context);
     if (user == null) {
       return const AuthWrapper();
     } else {
-      if (kIsWeb && businessId != null) {
+      // Web logic here
+      final url = Uri.base.toString();
+      final index = url.indexOf("=");
+      final businessId = url.substring(index + 1);
+      print(businessId);
+      if (kIsWeb && index != -1) {
         return BusinessById(
-            restaurantId: businessId!, services: services, user: user);
-      } else {
-        return Home(
-          user: user,
-          services: services,
-        );
+            restaurantId: businessId, services: services, user: user);
       }
+      return Home(
+        user: user,
+        services: services,
+      );
     }
   }
 }

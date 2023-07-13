@@ -41,7 +41,6 @@ class NotificationsServiceApp extends NotificationsService {
   Future<void> saveTokenToDatabase(String token) async {
     // Assume user is logged in for this example
     String? userId = FirebaseAuth.instance.currentUser?.uid;
-    print(token);
     await FirebaseFirestore.instance
         .collection('customers')
         .doc(userId)

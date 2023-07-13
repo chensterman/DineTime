@@ -14,7 +14,6 @@ import 'services/auth.dart';
 import 'services/location.dart';
 import 'pages/root/start_page/start.dart';
 import 'services/services.dart';
-import 'dart:html' as html;
 
 // Main function starts the app
 void main() async {
@@ -58,23 +57,21 @@ class MyApp extends StatelessWidget {
         }),
         StreamProvider<UserDT?>.value(
             value: services.clientAuth.streamUserState(), initialData: null),
-        StreamProvider<PermissionStatus>.value(
-            value: services.clientLocation.getLocationPermissionStatus(),
-            initialData: PermissionStatus.granted),
+        // StreamProvider<PermissionStatus>.value(
+        //     value: services.clientLocation.getLocationPermissionStatus(),
+        //     initialData: PermissionStatus.granted),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'DineTime Demo',
-        initialRoute: "/",
         // Routing mainly only for web use
         routes: {
           "/": (context) => const Start(),
-          "/business": (context) => const Start(),
+          "/business": (context) => const Text("No business id provided"),
         },
         onGenerateRoute: (settings) {
           //in your example: settings.name = "/post?id=123"
           final settingsUri = Uri.parse(settings.name!);
-          print(settingsUri);
           //settingsUri.queryParameters is a map of all the query keys and values
           final businessId = settingsUri.queryParameters['id'];
           return MaterialPageRoute(

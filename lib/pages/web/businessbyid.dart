@@ -26,7 +26,6 @@ class _BusinessByIdState extends State<BusinessById> {
   Future<Map> _getData() async {
     Restaurant? restaurant =
         await widget.services.clientDB.restaurantGet(widget.restaurantId);
-    print(restaurant);
     Customer? customer =
         await widget.services.clientDB.customerGet(widget.user.uid);
     return {
