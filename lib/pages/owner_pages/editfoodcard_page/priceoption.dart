@@ -2,28 +2,43 @@ import 'package:dinetime_mobile_mvp/theme/designsystem.dart';
 import 'package:flutter/material.dart';
 
 class PriceOption extends StatefulWidget {
-  final List<String> options;
-  final Function(String) onSelect;
+  final int selected;
+  final Function(int) onSelect;
 
-  PriceOption({required this.options, required this.onSelect});
+  PriceOption({
+    required this.selected,
+    required this.onSelect,
+  });
 
   @override
   _PriceOptionState createState() => _PriceOptionState();
 }
 
 class _PriceOptionState extends State<PriceOption> {
-  String? _selectedOption;
+  final List<int> _options = const [1, 2, 3, 4];
+  int? _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    // This allows us to intilize states of fields with constructor argument
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _selected = widget.selected;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        for (var option in widget.options)
+        for (var option in _options)
           GestureDetector(
             onTap: () {
               setState(() {
-                _selectedOption = option;
+                _selected = option;
               });
               widget.onSelect(option);
             },
@@ -36,17 +51,18 @@ class _PriceOptionState extends State<PriceOption> {
                   color: dineTimeColorScheme.primary,
                   width: 1.0,
                 ),
-                color: _selectedOption == option
+                color: _selected == option
                     ? dineTimeColorScheme.primary
                     : Colors.white,
               ),
-              margin: EdgeInsets.symmetric(horizontal: 5.0),
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
               child: Center(
                 child: Text(
-                  option,
+                  "\$" * option,
                   style: TextStyle(
-                    color: _selectedOption == option
+                    color: _selected == option
                         ? Colors.white
                         : dineTimeColorScheme.primary,
                     fontSize: 12.0,
